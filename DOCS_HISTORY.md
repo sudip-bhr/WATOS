@@ -1,1 +1,2 @@
 - 2026-01-04 10:00:00: Initial project architecture and design patterns (Log: 2026-01-04 10:00:00)
+- 2026-01-11 10:00:00: Drafting internal documentation for ML pipeline (Log: 2026-01-11 10:00:00)
