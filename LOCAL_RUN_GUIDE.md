@@ -1,77 +1,142 @@
-# WATOS Local Setup Guide
+# 🚀 WATOS Local Setup Guide
 
-Follow these steps to run the WATOS AI Platform on your local machine.
-
-## 1. Prerequisites
-Ensure you have the following installed:
-*   **Python 3.9+**
-*   **Node.js 18+** (with npm or yarn)
-*   **PostgreSQL** (running locally or via Docker)
-*   **Redis** (required for Celery task queuing)
-
-## 2. Environment Configuration
-From the project root:
-1.  Copy `.env.example` to `.env`:
-    ```bash
-    cp .env.example .env
-    ```
-2.  Update the values in `.env` (especially `DATABASE_URL` and `REDIS_URL`).
-
-## 3. Backend Setup (FastAPI)
-1.  Navigate to the backend directory:
-    ```bash
-    cd watos-backend
-    ```
-2.  Create and activate a virtual environment:
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # Mac/Linux
-    # venv\Scripts\activate   # Windows
-    ```
-3.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-4.  Run database migrations:
-    ```bash
-    alembic upgrade head
-    ```
-5.  Start the FastAPI server:
-    ```bash
-    uvicorn app.main:app --reload
-    ```
-    The backend will be available at `http://localhost:8000`.
-
-## 4. Background Workers (Celery)
-In a **new terminal tab** (with venv activated):
-1.  Navigate to `watos-backend`.
-2.  Start the Celery worker:
-    ```bash
-    celery -A app.workers.tasks worker --loglevel=info
-    ```
-
-## 5. Frontend Setup (React/Vite)
-In a **new terminal tab**:
-1.  Navigate to the frontend directory:
-    ```bash
-    cd watos-frontend
-    ```
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
-3.  Start the development server:
-    ```bash
-    npm run dev
-    ```
-    The frontend will be available at `http://localhost:5173`.
-
-## 6. Accessing the Platform
-1.  Open `http://localhost:5173` in your browser.
-2.  **Initial User**: Since the database is empty, you need to create your first user. Use the registration page if implemented, or manually insert a user with the `admin` role into the `users` table to access Analytics and Admin features.
+Welcome to the **WATOS (Workload Analysis & Task Optimization System)**. This guide will help you get the full stack running on your local machine for development and testing.
 
 ---
-### 💡 Troubleshooting
-*   **Redis Connection**: Ensure Redis is running (`redis-cli ping` should return `PONG`).
-*   **CORS**: If the frontend can't connect, verify `ALLOWED_ORIGINS` in your `.env`.
-*   **Database**: Ensure the PostgreSQL database specified in `DATABASE_URL` exists.
+
+## 🏗️ System Architecture
+
+```mermaid
+graph TD
+    A[React Frontend] <--> B[FastAPI Backend]
+    B <--> C[(PostgreSQL)]
+    B <--> D[Redis]
+    D <--> E[Celery Workers]
+    E <--> F[ML Models / Inference]
+```
+
+---
+
+## 1. Prerequisites
+
+Ensure your system has the following installed:
+- **Python 3.9+**
+- **Node.js 18+** (with npm)
+- **PostgreSQL 13+**
+- **Redis** (required for background tasks and caching)
+
+---
+
+## 2. Environment Setup
+
+From the root directory:
+
+1. Create a `.env` file from the template:
+   ```bash
+   # We don't provide .env.example in the repo for security, 
+   # but you can use the template below:
+   touch .env
+   ```
+2. Add the following configuration to `.env`:
+   ```env
+   # Database
+   DATABASE_URL=postgresql+asyncpg://postgres:postgres@localhost:5432/watos
+   
+   # Redis / Celery
+   REDIS_URL=redis://localhost:6379/0
+   
+   # Security
+   SECRET_KEY=generate-a-safe-random-string-here
+   ALGORITHM=HS256
+   
+   # MLflow (Optional)
+   MLFLOW_TRACKING_URI=mlruns
+   ```
+
+---
+
+## 3. Backend Setup (FastAPI)
+
+1. **Navigate and Virtual Env**:
+   ```bash
+   cd watos-backend
+   python -m venv venv
+   source venv/bin/activate  # Windows: venv\Scripts\activate
+   ```
+
+2. **Install Dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Database Initialization**:
+   ```bash
+   # 1. Run migrations
+   alembic upgrade head
+   
+   # 2. Seed initial data (Includes Admin, Operator, and Member users)
+   python seed.py
+   ```
+   > [!TIP]
+   > Use `python seed.py --reset` if you ever want to wipe and restart your test data.
+
+4. **Start the API Server**:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+   Backend URL: `http://localhost:8000`  
+   Interactive Docs: `http://localhost:8000/docs`
+
+---
+
+## 4. Background Services (Celery)
+
+The platform uses Celery for ML inference, automated task assignment, and notifications.
+
+In a **separate terminal** (with venv activated):
+```bash
+cd watos-backend
+celery -A app.workers.tasks worker --loglevel=info
+```
+
+---
+
+## 5. Frontend Setup (React/Vite)
+
+1. **Navigate and Install**:
+   ```bash
+   cd ../watos-frontend
+   npm install
+   ```
+
+2. **Start Development Server**:
+   ```bash
+   npm run dev
+   ```
+   Frontend URL: `http://localhost:5173`
+
+---
+
+## 6. Test Credentials
+
+The seeder creates a professional environment with predefined roles. Use these to log in:
+
+| Role | Email Prefix | Password | Features |
+| :--- | :--- | :--- | :--- |
+| **👑 Admin** | `admin.*` | `Test@1234` | Full access, Organization settings, ML Config |
+| **🔧 Operator** | `ops.*` | `Test@1234` | Task assignment, Team Analytics, Workload Management |
+| **💻 Member** | `dev.*` | `Test@1234` | Personal Tasks, Performance Tracking |
+
+> [!NOTE]
+> Check the terminal output after running `python seed.py` for the exact generated email addresses.
+
+---
+
+## 💡 Troubleshooting
+
+- **Redis Error**: Ensure Redis is running (`redis-cli ping`).
+- **Database Connection**: Verify your `DATABASE_URL` in `.env` and ensure the `watos` database exists in PostgreSQL.
+- **ML Models**: The system expects models in `watos-backend/app/ml/models/`. These are included in the repo, but ensure they aren't corrupted.
+
+---
+© 2026 WATOS Team. Built with FastAPI, React, and Intelligence.
