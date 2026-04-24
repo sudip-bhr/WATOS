@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { useNotifications } from '../../hooks/useNotifications'
 import { format } from 'date-fns'
 import { motion, AnimatePresence } from 'framer-motion'
-import { getNavForRole } from '@/lib/roles'
+import { getNavForRole, getRoleHome } from '@/lib/roles'
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -68,7 +68,7 @@ const Sidebar = () => {
       <div className="flex flex-col h-screen w-72 bg-zinc-50 border-r border-zinc-100/80 z-20 shadow-[10px_0_40px_rgba(0,0,0,0.02)]">
         {/* Logo + Bell */}
         <div className="flex items-center justify-between h-20 px-8">
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate(user ? getRoleHome(user.role) : '/')}>
             <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center shadow-xl shadow-zinc-900/20 group-hover:scale-110 transition-transform">
               <Brain size={18} className="text-white" />
             </div>
@@ -83,7 +83,7 @@ const Sidebar = () => {
           >
             <Bell size={17} className="text-zinc-500" />
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] rounded-full bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center px-1 shadow-md">
+              <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 rounded-full bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center px-1 shadow-md">
                 {unreadCount > 9 ? '9+' : unreadCount}
               </span>
             )}

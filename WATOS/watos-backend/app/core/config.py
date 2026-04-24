@@ -40,7 +40,8 @@ class Settings(BaseSettings):
     VAPID_PUBLIC_KEY: str = ""
 
     class Config:
-        env_file = ".env"
+        # Allow running from either repo root or watos-backend directory.
+        env_file = (".env", "../.env")
         env_file_encoding = "utf-8"
 
 

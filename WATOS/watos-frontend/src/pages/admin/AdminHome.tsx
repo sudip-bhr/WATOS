@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useAuthStore } from '@/store/authStore'
+import { useState, useEffect } from 'react'
+import client from '@/api/client'
 import { 
   ShieldCheck, Users, Brain, LayoutGrid, Settings, 
-  ChevronRight, Activity, Database, Key 
+  ChevronRight, Activity, Database, Key, AlertTriangle, UserCog
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -16,43 +18,77 @@ const AdminHome = () => {
   const navigate = useNavigate()
   const { user } = useAuthStore()
 
+  const [imbalance, setImbalance] = useState<{ imbalance_score: number; team_utilizations: any[] } | null>(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    client.get('/workload/imbalance')
+      .then(r => setImbalance(r.data))
+      .catch(console.error)
+      .finally(() => setLoading(false))
+  }, [])
+
   const adminModules = [
     {
-      category: 'System & Security',
+      category: 'Workload Monitoring',
       items: [
-        { label: 'Audit Logs', desc: 'System-wide activity monitoring & compliance tracking.', path: '/admin/audit', icon: Activity, color: 'text-violet-500', bg: 'bg-violet-50 group-hover:bg-violet-100' },
-        { label: 'Organization Settings', desc: 'Global configurations, roles, and security policies.', path: '/admin/org', icon: Settings, color: 'text-zinc-500', bg: 'bg-zinc-100 group-hover:bg-zinc-200' },
+        { label: 'Workload Overview', desc: 'Monitor team-wide utilization and identify bottlenecks.', path: '/admin/workload', icon: Users, color: 'text-rose-500', bg: 'bg-rose-50 group-hover:bg-rose-100' },
+        { label: 'Imbalance Alerts', desc: 'Real-time notifications about workload distribution issues.', path: '/admin/workload', icon: Activity, color: 'text-amber-500', bg: 'bg-amber-50 group-hover:bg-amber-100' },
       ]
     },
     {
-      category: 'People & Access',
+      category: 'Global Insights',
       items: [
-        { label: 'User Management', desc: 'Create accounts, assign roles, and manage credentials.', path: '/admin/users', icon: Users, color: 'text-blue-500', bg: 'bg-blue-50 group-hover:bg-blue-100' },
+        { label: 'Global Task Board', desc: 'Full-access view of all organization tasks.', path: '/admin/board', icon: LayoutGrid, color: 'text-blue-500', bg: 'bg-blue-50 group-hover:bg-blue-100' },
+        { label: 'System Analytics', desc: 'High-level performance and predictive metrics.', path: '/admin/analytics', icon: Brain, color: 'text-emerald-500', bg: 'bg-emerald-50 group-hover:bg-emerald-100' },
       ]
     },
     {
-      category: 'Intelligence & Operations',
+      category: 'Access Control',
       items: [
-        { label: 'ML Configuration', desc: 'Tune delay prediction models and SHAP explainer settings.', path: '/admin/ml', icon: Brain, color: 'text-emerald-500', bg: 'bg-emerald-50 group-hover:bg-emerald-100' },
-        { label: 'Global Task Board', desc: 'Full-access view of all organization tasks across all teams.', path: '/admin/board', icon: LayoutGrid, color: 'text-amber-500', bg: 'bg-amber-50 group-hover:bg-amber-100' },
+        { label: 'User Management', desc: 'Manage organization accounts, roles, and security.', path: '/admin/users', icon: UserCog, color: 'text-indigo-500', bg: 'bg-indigo-50 group-hover:bg-indigo-100' },
       ]
     }
   ]
+
+  const isImbalanced = (imbalance?.imbalance_score || 0) > 0.4
 
   return (
     <motion.div initial="hidden" animate="show" transition={{ staggerChildren: 0.08 }}
       className="p-8 max-w-6xl mx-auto space-y-10">
 
       {/* Header */}
-      <motion.div variants={itemVariants} className="flex items-center gap-4">
-        <div className="h-16 w-16 bg-zinc-900 rounded-3xl flex items-center justify-center shadow-lg shadow-zinc-900/20 shrink-0">
-          <ShieldCheck size={32} className="text-white" />
-        </div>
-        <div>
-          <h1 className="text-3xl font-black tracking-tight text-zinc-900">Admin Console</h1>
-          <p className="text-zinc-500 font-medium mt-1">Superuser access to WATOS configurations and security.</p>
-        </div>
-      </motion.div>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <motion.div variants={itemVariants} className="flex items-center gap-4">
+          <div className="h-16 w-16 bg-zinc-900 rounded-3xl flex items-center justify-center shadow-lg shadow-zinc-900/20 shrink-0">
+            <ShieldCheck size={32} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-3xl font-black tracking-tight text-zinc-900">Admin Console</h1>
+            <p className="text-zinc-500 font-medium mt-1">Superuser access to WATOS monitoring and health.</p>
+          </div>
+        </motion.div>
+
+        {/* Imbalance Notification */}
+        <AnimatePresence>
+          {isImbalanced && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.9, x: 20 }}
+              className="flex items-center gap-4 p-4 bg-rose-50 border border-rose-100 rounded-3xl shadow-xl shadow-rose-900/5 max-w-sm"
+            >
+              <div className="h-12 w-12 rounded-2xl bg-rose-500 flex items-center justify-center shrink-0">
+                <AlertTriangle size={20} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-black text-rose-900 uppercase tracking-widest">Workload Imbalance</p>
+                <p className="text-[10px] text-rose-600 font-medium mt-0.5">High variance detected (Score: {imbalance?.imbalance_score.toFixed(2)}). Rebalancing recommended.</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-10">
@@ -111,7 +147,7 @@ const AdminHome = () => {
           <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10">
             <p className="text-[9px] uppercase font-black tracking-widest text-zinc-400 mb-0.5">Access Level</p>
             <p className="text-xs font-bold text-white uppercase flex items-center gap-1">
-              <Key size={10} className="text-emerald-400" /> Unrestricted
+              <Key size={10} className="text-emerald-400" /> Monitor Only
             </p>
           </div>
         </div>

@@ -1,10 +1,13 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useEffect, useRef } from 'react'
 import ErrorBoundary from './components/layout/ErrorBoundary'
 import ProtectedRoute from './components/layout/ProtectedRoute'
 import Sidebar from './components/layout/Sidebar'
 import { Toaster } from './components/ui/toaster'
 import { useWebSockets } from './hooks/useWebSockets'
+import { useAuthStore } from './store/authStore'
+import { getCurrentUser } from './api/auth'
 
 // Public & Auth
 import Login from '@/pages/auth/Login'
@@ -55,6 +58,26 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
 const queryClient = new QueryClient()
 
 function App() {
+  const { token, user, setUser, logout } = useAuthStore()
+  const hasRefreshed = useRef(false)
+
+  useEffect(() => {
+    const refreshUserData = async () => {
+      if (token && user && !hasRefreshed.current) {
+        hasRefreshed.current = true
+        try {
+          const freshUser = await getCurrentUser()
+          setUser(freshUser)
+        } catch (error) {
+          console.error('Failed to refresh user data:', error)
+          // If token is invalid, logout
+          logout()
+        }
+      }
+    }
+    refreshUserData()
+  }, [token, user, setUser, logout])
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
@@ -89,14 +112,14 @@ function App() {
                 <Layout><MemberHome /></Layout>
               </ProtectedRoute>
             } />
-            <Route path="/member/tasks" element={
+            <Route path="/member/board" element={
               <ProtectedRoute roles={['member']}>
-                <Layout><MyTasks /></Layout>
+                <Layout><TaskBoard /></Layout>
               </ProtectedRoute>
             } />
-            <Route path="/member/performance" element={
+            <Route path="/member/analytics" element={
               <ProtectedRoute roles={['member']}>
-                <Layout><MyPerformance /></Layout>
+                <Layout><TeamAnalytics /></Layout>
               </ProtectedRoute>
             } />
 
@@ -111,14 +134,29 @@ function App() {
                 <Layout><TaskBoard /></Layout>
               </ProtectedRoute>
             } />
-            <Route path="/operator/workload" element={
-              <ProtectedRoute roles={['operator']}>
-                <Layout><TeamWorkload /></Layout>
-              </ProtectedRoute>
-            } />
             <Route path="/operator/analytics" element={
               <ProtectedRoute roles={['operator']}>
                 <Layout><TeamAnalytics /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/operator/users" element={
+              <ProtectedRoute roles={['operator']}>
+                <Layout><UserManagement /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/operator/ml" element={
+              <ProtectedRoute roles={['operator']}>
+                <Layout><MLConfig /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/operator/org" element={
+              <ProtectedRoute roles={['operator']}>
+                <Layout><OrgSettings /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/operator/audit" element={
+              <ProtectedRoute roles={['operator']}>
+                <Layout><AuditLog /></Layout>
               </ProtectedRoute>
             } />
             <Route path="/operator/assign" element={
@@ -127,20 +165,20 @@ function App() {
               </ProtectedRoute>
             } />
 
-            {/* ─── Admin (also gets operator-level pages) ─── */}
+            {/* ─── Admin ─── */}
             <Route path="/admin" element={
               <ProtectedRoute roles={['admin']}>
                 <Layout><AdminHome /></Layout>
               </ProtectedRoute>
             } />
-            <Route path="/admin/board" element={
-              <ProtectedRoute roles={['admin']}>
-                <Layout><TaskBoard /></Layout>
-              </ProtectedRoute>
-            } />
             <Route path="/admin/workload" element={
               <ProtectedRoute roles={['admin']}>
                 <Layout><TeamWorkload /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/board" element={
+              <ProtectedRoute roles={['admin']}>
+                <Layout><TaskBoard /></Layout>
               </ProtectedRoute>
             } />
             <Route path="/admin/analytics" element={
@@ -151,21 +189,6 @@ function App() {
             <Route path="/admin/users" element={
               <ProtectedRoute roles={['admin']}>
                 <Layout><UserManagement /></Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/ml" element={
-              <ProtectedRoute roles={['admin']}>
-                <Layout><MLConfig /></Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/org" element={
-              <ProtectedRoute roles={['admin']}>
-                <Layout><OrgSettings /></Layout>
-              </ProtectedRoute>
-            } />
-            <Route path="/admin/audit" element={
-              <ProtectedRoute roles={['admin']}>
-                <Layout><AuditLog /></Layout>
               </ProtectedRoute>
             } />
 

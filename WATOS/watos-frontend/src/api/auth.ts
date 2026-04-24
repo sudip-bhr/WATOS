@@ -19,3 +19,8 @@ export const register = async (email: string, full_name: string, password: strin
   const { data } = await client.post('/auth/register', { email, full_name, password })
   return data
 }
+
+export const getCurrentUser = async (): Promise<User> => {
+  const { data } = await client.get('/users/me')
+  return data
+}

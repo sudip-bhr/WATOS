@@ -116,7 +116,7 @@ const MemberHome = () => {
               Upcoming Deadlines
             </h2>
             <button
-              onClick={() => navigate('/member/tasks')}
+              onClick={() => navigate('/member/board')}
               className="text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors flex items-center gap-1"
             >
               View All <ChevronRight size={12} />
@@ -144,7 +144,7 @@ const MemberHome = () => {
                   <div
                     key={task.id}
                     className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-zinc-100 hover:border-zinc-200 hover:shadow-md transition-all group cursor-pointer"
-                    onClick={() => navigate('/member/tasks')}
+                    onClick={() => navigate('/member/board')}
                   >
                     <div className={cn(
                       'h-10 w-10 rounded-2xl flex items-center justify-center shrink-0',
@@ -188,8 +188,8 @@ const MemberHome = () => {
             <h2 className="text-sm font-black text-zinc-900 uppercase tracking-widest">Quick Actions</h2>
             <div className="space-y-2">
               {[
-                { label: 'My Task Board', desc: 'View & manage your tasks', path: '/member/tasks', icon: ListTodo },
-                { label: 'My Performance', desc: 'Stats & ML insights', path: '/member/performance', icon: TrendingUp },
+                { label: 'Task Board', desc: 'View & manage your tasks', path: '/member/board', icon: ListTodo },
+                { label: 'Analytics', desc: 'Stats & ML insights', path: '/member/analytics', icon: TrendingUp },
                 { label: 'Projects', desc: 'Browse your projects', path: '/projects', icon: Zap },
               ].map(action => (
                 <button

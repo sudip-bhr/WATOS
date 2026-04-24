@@ -10,7 +10,10 @@ import { toast } from '@/hooks/use-toast'
 import type { User as UserType } from '@/types'
 import { cn } from '@/lib/utils'
 
+import { useAuthStore } from '@/store/authStore'
+
 const UserManagement = () => {
+  const { user: currentUser } = useAuthStore()
   const [users, setUsers] = useState<UserType[]>([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -36,10 +39,16 @@ const UserManagement = () => {
     fetchUsers()
   }, [])
 
-  const filteredUsers = users.filter(u => 
-    u.email.toLowerCase().includes(search.toLowerCase()) || 
-    (u.full_name && u.full_name.toLowerCase().includes(search.toLowerCase()))
-  )
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase()) || 
+      (u.full_name && u.full_name.toLowerCase().includes(search.toLowerCase()))
+    
+    if (currentUser?.role === 'operator') {
+      return matchesSearch && u.role === 'member'
+    }
+    
+    return matchesSearch
+  })
 
   const handleRoleChange = async (userId: string, currentRole: string, newRole: string) => {
     if (currentRole === newRole) return
@@ -159,8 +168,12 @@ const UserManagement = () => {
                       )}
                     >
                       <option value="member">Member</option>
-                      <option value="operator">Operator</option>
-                      <option value="admin">Admin</option>
+                      {currentUser?.role === 'admin' && (
+                        <>
+                          <option value="operator">Operator</option>
+                          <option value="admin">Admin</option>
+                        </>
+                      )}
                     </select>
                   </td>
                   <td className="px-6 py-4">
@@ -230,8 +243,12 @@ const UserManagement = () => {
                   onChange={e => setNewUser({...newUser, role: e.target.value})}
                 >
                   <option value="member">Member</option>
-                  <option value="operator">Operator</option>
-                  <option value="admin">Admin</option>
+                  {currentUser?.role === 'admin' && (
+                    <>
+                      <option value="operator">Operator</option>
+                      <option value="admin">Admin</option>
+                    </>
+                  )}
                 </select>
               </div>
               
