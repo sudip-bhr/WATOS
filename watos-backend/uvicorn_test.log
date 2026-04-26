@@ -1,0 +1,159 @@
+/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/pydantic/_internal/_fields.py:160: UserWarning: Field "model_type" has conflict with protected namespace "model_".
+
+You may be able to resolve this warning by setting `model_config['protected_namespaces'] = ()`.
+  warnings.warn(
+INFO:     Started server process [4552]
+INFO:     Waiting for application startup.
+{"timestamp": "2026-04-25T13:24:45.991671+00:00", "level": "INFO", "logger": "watos.pubsub_manager", "message": "Redis Pub/Sub listener started", "module": "pubsub_manager", "function": "start_listener", "line": 97}
+{"timestamp": "2026-04-25T13:24:45.991814+00:00", "level": "INFO", "logger": "watos.main", "message": "Redis Pub/Sub listener started for WebSocket scaling.", "module": "main", "function": "startup_event", "line": 98}
+{"timestamp": "2026-04-25T13:24:45.991979+00:00", "level": "INFO", "logger": "watos.redis", "message": "Redis connection pool initialized", "module": "redis", "function": "get_redis", "line": 24}
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+{"timestamp": "2026-04-25T13:24:45.992890+00:00", "level": "INFO", "logger": "watos.pubsub_manager", "message": "Subscribed to Redis channels", "module": "pubsub_manager", "function": "_listen", "line": 122}
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 514, in _prepare_and_execute
+    prepared_stmt, attributes = await adapt_connection._prepare(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 765, in _prepare
+    prepared_stmt = await self._connection.prepare(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 636, in prepare
+    return await self._prepare(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 654, in _prepare
+    stmt = await self._get_statement(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/asyncpg/connection.py", line 433, in _get_statement
+    statement = await self._protocol.prepare(
+  File "asyncpg/protocol/protocol.pyx", line 166, in prepare
+asyncpg.exceptions.UndefinedColumnError: column users.operator_id does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 572, in execute
+    self._adapt_connection.await_(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 131, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 550, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 501, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 789, in _handle_exception
+    raise translated_error from error
+sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ProgrammingError: <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.operator_id does not exist
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/uvicorn/protocols/http/httptools_impl.py", line 411, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/uvicorn/middleware/proxy_headers.py", line 69, in __call__
+    return await self.app(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/applications.py", line 123, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/base.py", line 193, in __call__
+    response_sent.set()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/contextlib.py", line 135, in __exit__
+    self.gen.throw(type, value, traceback)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/_utils.py", line 93, in collapse_excgroups
+    raise exc
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/base.py", line 191, in __call__
+    response = await self.dispatch_func(request, call_next)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/app/middleware/__init__.py", line 22, in dispatch
+    response = await call_next(request)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/base.py", line 165, in call_next
+    raise app_exc
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/base.py", line 151, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/middleware/exceptions.py", line 65, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 756, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 776, in app
+    await route.handle(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 297, in handle
+    await self.app(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 77, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 64, in wrapped_app
+    raise exc
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    await app(scope, receive, sender)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/starlette/routing.py", line 72, in app
+    response = await func(request)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 278, in app
+    raw_response = await run_endpoint_function(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/fastapi/routing.py", line 191, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/slowapi/extension.py", line 734, in async_wrapper
+    response = await func(*args, **kwargs)  # type: ignore
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/app/api/v1/auth.py", line 98, in login
+    result = await db.execute(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/ext/asyncio/session.py", line 461, in execute
+    result = await greenlet_spawn(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2351, in execute
+    return self._execute_internal(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/session.py", line 2236, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/orm/context.py", line 293, in orm_execute_statement
+    result = conn.execute(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 2353, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/engine/default.py", line 924, in do_execute
+    cursor.execute(statement, parameters)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 572, in execute
+    self._adapt_connection.await_(
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 131, in await_only
+    return current.driver.switch(awaitable)  # type: ignore[no-any-return]
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 550, in _prepare_and_execute
+    self._handle_exception(error)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 501, in _handle_exception
+    self._adapt_connection._handle_exception(error)
+  File "/Users/sudipbohara/WATOS/WATOS/watos-backend/venv/lib/python3.9/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py", line 789, in _handle_exception
+    raise translated_error from error
+sqlalchemy.exc.ProgrammingError: (sqlalchemy.dialects.postgresql.asyncpg.ProgrammingError) <class 'asyncpg.exceptions.UndefinedColumnError'>: column users.operator_id does not exist
+[SQL: SELECT users.id, users.organization_id, users.email, users.full_name, users.hashed_password, users.role, users.capacity_hours, users.skills, users.is_active, users.is_deleted, users.deleted_at, users.created_at, users.operator_id, users.assigned_at 
+FROM users 
+WHERE users.email = $1::VARCHAR AND users.is_deleted = false]
+[parameters: ('test@example.com',)]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+{"timestamp": "2026-04-25T13:24:47.908303+00:00", "level": "INFO", "logger": "watos.pubsub_manager", "message": "Pub/Sub listener cancelled", "module": "pubsub_manager", "function": "_listen", "line": 150}
+{"timestamp": "2026-04-25T13:24:47.908410+00:00", "level": "INFO", "logger": "watos.pubsub_manager", "message": "Redis Pub/Sub listener stopped", "module": "pubsub_manager", "function": "stop_listener", "line": 108}
+{"timestamp": "2026-04-25T13:24:47.908683+00:00", "level": "INFO", "logger": "watos.redis", "message": "Redis connection pool closed", "module": "redis", "function": "close_redis", "line": 34}
+{"timestamp": "2026-04-25T13:24:47.908711+00:00", "level": "INFO", "logger": "watos.main", "message": "WATOS shutdown complete.", "module": "main", "function": "shutdown_event", "line": 116}
+INFO:     Application shutdown complete.
+INFO:     Finished server process [4552]

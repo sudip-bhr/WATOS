@@ -1,0 +1,221 @@
+
+> watos-frontend@0.0.0 lint
+> eslint .
+
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/public/sw.js
+  1:1  warning  Unused eslint-disable directive (no problems were reported from 'no-restricted-globals')
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/api/client.ts
+  32:18  error  'refreshError' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/api/projects.ts
+  12:10  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/analytics/PertChart.tsx
+  80:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  81:58  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskCard.tsx
+  35:51  error  Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskCard.tsx:35:51
+  33 |     const created = new Date(task.created_at)
+  34 |     const slaDeadline = new Date(created.getTime() + task.sla_hours * 3600000)
+> 35 |     const remainingHrs = (slaDeadline.getTime() - Date.now()) / 3600000
+     |                                                   ^^^^^^^^^^ Cannot call impure function
+  36 |     const breached = remainingHrs < 0
+  37 |
+  38 |     if (breached) return { label: `SLA L${task.escalation_level}`, color: 'bg-rose-500 text-white' }  react-hooks/purity
+  52:19  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskDetails.tsx
+   51:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskDetails.tsx:51:5
+  49 |   useEffect(() => {
+  50 |     // Reset review panel state each time a different task is opened
+> 51 |     setIsRejecting(false)
+     |     ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  52 |     setRejectionNote('')
+  53 |     setIsSubmitting(false)
+  54 |  react-hooks/set-state-in-effect
+   65:6   warning  React Hook useEffect has a missing dependency: 'task'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react-hooks/exhaustive-deps
+  157:46  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskDetails.tsx:157:46
+  155 |     const created = new Date(task.created_at)
+  156 |     const deadline = new Date(created.getTime() + task.sla_hours * 3600000)
+> 157 |     const remainingMs = deadline.getTime() - Date.now()
+      |                                              ^^^^^^^^^^ Cannot call impure function
+  158 |     const remainingHrs = remainingMs / 3600000
+  159 |     const breached = remainingHrs < 0
+  160 |     return { deadline, remainingHrs: Math.abs(remainingHrs), breached, level: task.escalation_level }                                                                                                                                                         react-hooks/purity
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/tasks/TaskForm.tsx
+  64:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/ui/badge.tsx
+  37:17  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/ui/button.tsx
+  55:18  error  Fast refresh only works when a file only exports components. Use a new file to share constants or functions between components  react-refresh/only-export-components
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/components/ui/input.tsx
+  4:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/hooks/use-toast.ts
+  20:7  error  'actionTypes' is assigned a value but only used as a type  @typescript-eslint/no-unused-vars
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/MLConfig.tsx
+  40:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  55:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/OrgSettings.tsx
+  50:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  75:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/ReportInbox.tsx
+  11:42  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-explicit-any
+  19:38  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-explicit-any
+  28:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/ReportInbox.tsx:28:5
+  26 |
+  27 |   useEffect(() => {
+> 28 |     fetchReports()
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  29 |   }, [])
+  30 |
+  31 |   const handleMarkReviewed = async (reportId: string) => {  react-hooks/set-state-in-effect
+  36:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        @typescript-eslint/no-unused-vars
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/UserManagement.tsx
+   55:21  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/admin/UserManagement.tsx:55:21
+  53 |   }
+  54 |
+> 55 |   useEffect(() => { fetchUsers() }, [])
+     |                     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  56 |
+  57 |   const filteredUsers = users.filter(u => {
+  58 |     const matchesSearch = u.email.toLowerCase().includes(search.toLowerCase()) ||  react-hooks/set-state-in-effect
+  106:19  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  119:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         @typescript-eslint/no-unused-vars
+  134:41  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+  142:19  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/auth/Login.tsx
+  28:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/auth/Register.tsx
+  44:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/operator/MonthlyReports.tsx
+  13:42  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  16:52  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  28:39  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  45:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/operator/MonthlyReports.tsx:45:5
+  43 |
+  44 |   useEffect(() => {
+> 45 |     fetchReports()
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  46 |   }, [])
+  47 |
+  48 |   const handleStartDraft = async () => {  react-hooks/set-state-in-effect
+  58:19  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  73:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  87:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/operator/TeamAnalytics.tsx
+   12:39  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  161:46  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  162:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  162:66  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/operator/TeamWorkload.tsx
+   45:46  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      @typescript-eslint/no-explicit-any
+   68:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/operator/TeamWorkload.tsx:68:5
+  66 |
+  67 |   useEffect(() => {
+> 68 |     fetchData()
+     |     ^^^^^^^^^ Avoid calling setState() directly within an effect
+  69 |   }, [])
+  70 |
+  71 |   const executeSuggestion = async (sug: RebalancingSuggestion) => {  react-hooks/set-state-in-effect
+   79:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+   96:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  115:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+  133:14  error  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               @typescript-eslint/no-unused-vars
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/public/Landing.tsx
+  307:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/shared/Profile.tsx
+  48:17  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/shared/Projects.tsx
+   87:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/pages/shared/Projects.tsx:87:5
+  85 |
+  86 |   useEffect(() => {
+> 87 |     fetchProjects()
+     |     ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  88 |     // Fetch members for assignment
+  89 |     client.get('/users/').then(r => {
+  90 |       const users: UserType[] = r.data  react-hooks/set-state-in-effect
+  106:73  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  147:17  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+
+/Users/sudipbohara/WATOS/WATOS/watos-frontend/src/store/taskStore.ts
+  24:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 53 problems (51 errors, 2 warnings)
+  0 errors and 1 warning potentially fixable with the `--fix` option.
+
