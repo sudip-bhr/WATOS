@@ -173,7 +173,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                     ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/20'
                     : 'text-zinc-500 hover:bg-zinc-200/50 hover:text-zinc-900'
                 )}
-                title={isCollapsed ? item.label : ""}
+                title={isCollapsed ? item.label : undefined}
               >
                 {Icon && (
                   <Icon
