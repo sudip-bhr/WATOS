@@ -99,6 +99,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                 onClick={() => setNotifOpen(o => !o)}
                 className="relative flex items-center justify-center h-9 w-9 rounded-2xl hover:bg-zinc-200/60 transition-colors"
                 id="notification-bell"
+                aria-label="Notifications"
               >
                 <Bell size={17} className="text-zinc-500" />
                 {unreadCount > 0 && (
@@ -112,9 +113,21 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                 onClick={() => setIsCollapsed(true)}
                 className="hidden lg:flex items-center justify-center h-9 w-9 rounded-2xl hover:bg-zinc-200/60 transition-colors text-zinc-500"
                 title="Collapse Sidebar"
+                aria-label="Collapse Sidebar"
               >
                 <Menu size={18} />
               </button>
+
+              {/* Mobile Close Button */}
+              {onClose && (
+                <button 
+                  onClick={onClose} 
+                  className="lg:hidden p-2 text-zinc-400 hover:text-zinc-900"
+                  aria-label="Close Sidebar"
+                >
+                  <X size={20} />
+                </button>
+              )}
             </div>
           </>
         ) : (
@@ -123,6 +136,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
               onClick={() => setIsCollapsed(false)}
               className="flex items-center justify-center h-12 w-12 rounded-xl bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 hover:scale-110 transition-transform"
               title="Expand Sidebar"
+              aria-label="Expand Sidebar"
             >
               <Brain size={20} />
             </button>
@@ -131,6 +145,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
             <button
               onClick={() => setNotifOpen(o => !o)}
               className="relative flex items-center justify-center h-10 w-10 rounded-2xl bg-zinc-100 hover:bg-zinc-200/60 transition-colors"
+              aria-label="Notifications"
             >
               <Bell size={18} className="text-zinc-500" />
               {unreadCount > 0 && (
@@ -142,12 +157,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
           </>
         )}
         
-        {/* Mobile Close Button */}
-        {onClose && !isCollapsed && (
-          <button onClick={onClose} className="lg:hidden p-2 text-zinc-400 hover:text-zinc-900">
-            <X size={20} />
-          </button>
-        )}
+
       </div>
 
       {/* Nav */}
@@ -173,7 +183,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                     ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/20'
                     : 'text-zinc-500 hover:bg-zinc-200/50 hover:text-zinc-900'
                 )}
-                title={isCollapsed ? item.label : ""}
+                title={isCollapsed ? item.label : undefined}
               >
                 {Icon && (
                   <Icon
@@ -200,7 +210,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
             "flex items-center bg-white/40 rounded-3xl border border-white shadow-sm hover:bg-white/70 transition-all group",
             isCollapsed ? "h-12 w-12 justify-center mx-auto" : "p-4 gap-4"
           )}
-          title={isCollapsed ? user?.full_name : ""}
+          title={isCollapsed ? user?.full_name : undefined}
         >
           <div className="h-10 w-10 rounded-2xl bg-zinc-900 text-white flex items-center justify-center text-sm font-black shadow-lg shadow-zinc-900/10 group-hover:scale-105 transition-transform shrink-0">
             {user?.full_name?.[0]?.toUpperCase() || <User size={16} />}
@@ -222,7 +232,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
             "flex items-center text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all group",
             isCollapsed ? "h-12 w-12 justify-center mx-auto" : "w-full px-5 py-3"
           )}
-          title={isCollapsed ? "Sign Out" : ""}
+          title={isCollapsed ? "Sign Out" : undefined}
         >
           <LogOut className={cn("h-5 w-5 opacity-40 group-hover:opacity-100 transition-opacity", !isCollapsed && "mr-4")} />
           {!isCollapsed && <span>Sign Out</span>}
