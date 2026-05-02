@@ -1,7 +1,7 @@
 import { useAuthStore } from '../../store/authStore'
 import { useNavigate, Link, useLocation } from 'react-router-dom'
 import {
-  Home, CheckSquare, BarChart3, LogOut, LineChart, Brain, Bell, X,
+  Home, CheckSquare, BarChart3, LogOut, LineChart, Brain, Bell, X, Menu,
   FolderKanban, User, CheckCheck, LayoutGrid, Users, UserCog, Cpu,
   Building, ScrollText, UserCheck, FileText, Inbox
 } from 'lucide-react'
@@ -54,6 +54,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   const navigate = useNavigate()
   const location = useLocation()
   const [notifOpen, setNotifOpen] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(false)
 
   const { notifications, unreadCount, markRead, markAllRead } = useNotifications()
 
@@ -74,46 +75,99 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   }
 
   const sidebarContent = (
-    <div className="flex flex-col h-full w-full bg-zinc-50 border-r border-zinc-100/80 z-20 shadow-[10px_0_40px_rgba(0,0,0,0.02)]">
-      {/* Logo + Bell */}
-      <div className="flex items-center justify-between h-20 px-8">
-        <div className="flex items-center gap-3 cursor-pointer group" onClick={() => { navigate(user ? getRoleHome(user.role) : '/'); onClose?.(); }}>
-          <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center shadow-xl shadow-zinc-900/20 group-hover:scale-110 transition-transform">
-            <Brain size={18} className="text-white" />
-          </div>
-          <span className="text-2xl font-black tracking-tighter uppercase italic">WATOS</span>
-        </div>
+    <div className="flex flex-col h-full w-full bg-zinc-50 border-r border-zinc-100/80 z-20 shadow-[10px_0_40px_rgba(0,0,0,0.02)] overflow-hidden">
+      {/* Header: Logo, Notifications & Toggle */}
+      <div className={cn(
+        "flex transition-all duration-300",
+        isCollapsed ? "flex-col items-center py-6 gap-4" : "flex-row items-center justify-between h-20 px-6"
+      )}>
+        {!isCollapsed ? (
+          <>
+            <div 
+              className="flex items-center gap-3 cursor-pointer group" 
+              onClick={() => { navigate(user ? getRoleHome(user.role) : '/'); onClose?.(); }}
+            >
+              <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center shadow-xl shadow-zinc-900/20 group-hover:scale-110 transition-transform shrink-0">
+                <Brain size={18} className="text-white" />
+              </div>
+              <span className="text-2xl font-black tracking-tighter uppercase italic whitespace-nowrap">WATOS</span>
+            </div>
+            
+            <div className="flex items-center gap-1">
+              {/* Notification Bell */}
+              <button
+                onClick={() => setNotifOpen(o => !o)}
+                className="relative flex items-center justify-center h-9 w-9 rounded-2xl hover:bg-zinc-200/60 transition-colors"
+                id="notification-bell"
+                aria-label="Notifications"
+              >
+                <Bell size={17} className="text-zinc-500" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 rounded-full bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center px-1 shadow-md">
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </span>
+                )}
+              </button>
 
-        <div className="flex items-center gap-2">
-          {/* Notification Bell */}
-          <button
-            onClick={() => setNotifOpen(o => !o)}
-            className="relative flex items-center justify-center h-9 w-9 rounded-2xl hover:bg-zinc-200/60 transition-colors"
-            id="notification-bell"
-          >
-            <Bell size={17} className="text-zinc-500" />
-            {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 min-w-4.5 h-4.5 rounded-full bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center px-1 shadow-md">
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            )}
-          </button>
-          
-          {/* Mobile Close Button */}
-          {onClose && (
-            <button onClick={onClose} className="lg:hidden p-2 text-zinc-400 hover:text-zinc-900">
-              <X size={20} />
+              <button
+                onClick={() => setIsCollapsed(true)}
+                className="hidden lg:flex items-center justify-center h-9 w-9 rounded-2xl hover:bg-zinc-200/60 transition-colors text-zinc-500"
+                title="Collapse Sidebar"
+                aria-label="Collapse Sidebar"
+              >
+                <Menu size={18} />
+              </button>
+
+              {/* Mobile Close Button */}
+              {onClose && (
+                <button 
+                  onClick={onClose} 
+                  className="lg:hidden p-2 text-zinc-400 hover:text-zinc-900"
+                  aria-label="Close Sidebar"
+                >
+                  <X size={20} />
+                </button>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <button
+              onClick={() => setIsCollapsed(false)}
+              className="flex items-center justify-center h-12 w-12 rounded-xl bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 hover:scale-110 transition-transform"
+              title="Expand Sidebar"
+              aria-label="Expand Sidebar"
+            >
+              <Brain size={20} />
             </button>
-          )}
-        </div>
+
+            {/* Notification Bell (Collapsed) */}
+            <button
+              onClick={() => setNotifOpen(o => !o)}
+              className="relative flex items-center justify-center h-10 w-10 rounded-2xl bg-zinc-100 hover:bg-zinc-200/60 transition-colors"
+              aria-label="Notifications"
+            >
+              <Bell size={18} className="text-zinc-500" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-5 h-5 rounded-full bg-zinc-900 text-white text-[10px] font-black flex items-center justify-center px-1 border-2 border-zinc-50 shadow-sm">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+          </>
+        )}
+        
+
       </div>
 
       {/* Nav */}
-      <div className="flex-1 overflow-y-auto py-8 px-6">
-        <div className="mb-6 px-2">
-          <h5 className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-300">{sectionLabel}</h5>
-        </div>
-        <nav className="space-y-1.5">
+      <div className={cn("flex-1 overflow-y-auto py-8 transition-all duration-300", isCollapsed ? "px-3" : "px-6")}>
+        {!isCollapsed && (
+          <div className="mb-6 px-2">
+            <h5 className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-300">{sectionLabel}</h5>
+          </div>
+        )}
+        <nav className="space-y-2">
           {navItems.map((item) => {
             const Icon = IconMap[item.icon]
             const active = isActive(item.path)
@@ -123,21 +177,24 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
                 to={item.path}
                 onClick={onClose}
                 className={cn(
-                  'flex items-center px-4 py-3.5 text-xs font-black uppercase tracking-widest rounded-2xl transition-all duration-300 group',
+                  'flex items-center rounded-2xl transition-all duration-300 group',
+                  isCollapsed ? 'justify-center h-12 w-12 mx-auto' : 'px-4 py-3.5',
                   active
-                    ? 'bg-zinc-900 text-white shadow-2xl shadow-zinc-900/20'
+                    ? 'bg-zinc-900 text-white shadow-lg shadow-zinc-900/20'
                     : 'text-zinc-500 hover:bg-zinc-200/50 hover:text-zinc-900'
                 )}
+                title={isCollapsed ? item.label : undefined}
               >
                 {Icon && (
                   <Icon
                     className={cn(
-                      'mr-4 h-4 w-4 transition-transform duration-500',
-                      active ? 'scale-110 rotate-3' : 'opacity-40 group-hover:opacity-100 group-hover:rotate-12'
+                      'h-5 w-5 shrink-0 transition-transform duration-500',
+                      !isCollapsed && 'mr-4',
+                      active ? 'scale-110 rotate-3' : 'opacity-60 group-hover:opacity-100 group-hover:rotate-12'
                     )}
                   />
                 )}
-                {item.label}
+                {!isCollapsed && <span className="text-xs font-black uppercase tracking-widest truncate">{item.label}</span>}
               </Link>
             )
           })}
@@ -145,30 +202,40 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
       </div>
 
       {/* User Footer */}
-      <div className="p-6 border-t border-zinc-100 space-y-6">
+      <div className={cn("border-t border-zinc-100 transition-all duration-300", isCollapsed ? "p-3 space-y-4" : "p-6 space-y-6")}>
         <Link
           to="/profile"
           onClick={onClose}
-          className="flex items-center gap-4 bg-white/40 p-4 rounded-3xl border border-white shadow-sm hover:bg-white/70 transition-colors group"
+          className={cn(
+            "flex items-center bg-white/40 rounded-3xl border border-white shadow-sm hover:bg-white/70 transition-all group",
+            isCollapsed ? "h-12 w-12 justify-center mx-auto" : "p-4 gap-4"
+          )}
+          title={isCollapsed ? user?.full_name : undefined}
         >
-          <div className="h-12 w-12 rounded-2xl bg-zinc-900 text-white flex items-center justify-center text-sm font-black shadow-lg shadow-zinc-900/10 group-hover:scale-105 transition-transform">
+          <div className="h-10 w-10 rounded-2xl bg-zinc-900 text-white flex items-center justify-center text-sm font-black shadow-lg shadow-zinc-900/10 group-hover:scale-105 transition-transform shrink-0">
             {user?.full_name?.[0]?.toUpperCase() || <User size={16} />}
           </div>
-          <div className="overflow-hidden">
-            <p className="text-sm font-black text-zinc-900 truncate tracking-tight">{user?.full_name}</p>
-            <div className="flex items-center gap-2 mt-0.5">
-              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-              <p className="text-[9px] uppercase font-black tracking-[0.2em] text-zinc-400">{user?.role}</p>
+          {!isCollapsed && (
+            <div className="overflow-hidden">
+              <p className="text-sm font-black text-zinc-900 truncate tracking-tight">{user?.full_name}</p>
+              <div className="flex items-center gap-2 mt-0.5">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                <p className="text-[9px] uppercase font-black tracking-[0.2em] text-zinc-400">{user?.role}</p>
+              </div>
             </div>
-          </div>
+          )}
         </Link>
 
         <button
           onClick={handleLogout}
-          className="flex items-center w-full px-5 py-3 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all group"
+          className={cn(
+            "flex items-center text-[10px] font-black uppercase tracking-[0.3em] text-zinc-400 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all group",
+            isCollapsed ? "h-12 w-12 justify-center mx-auto" : "w-full px-5 py-3"
+          )}
+          title={isCollapsed ? "Sign Out" : undefined}
         >
-          <LogOut className="mr-4 h-4 w-4 opacity-30 group-hover:opacity-100 transition-opacity" />
-          Sign Out
+          <LogOut className={cn("h-5 w-5 opacity-40 group-hover:opacity-100 transition-opacity", !isCollapsed && "mr-4")} />
+          {!isCollapsed && <span>Sign Out</span>}
         </button>
       </div>
     </div>
@@ -177,7 +244,10 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <div className="hidden lg:flex flex-col h-screen w-72 shrink-0">
+      <div className={cn(
+        "hidden lg:flex flex-col h-screen transition-all duration-300 ease-in-out shrink-0",
+        isCollapsed ? "w-20" : "w-72"
+      )}>
         {sidebarContent}
       </div>
 
