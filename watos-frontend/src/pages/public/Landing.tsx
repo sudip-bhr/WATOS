@@ -257,7 +257,7 @@ const Landing = () => {
 
         <div className="max-w-7xl mx-auto mb-20 text-center space-y-4">
           <div className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400">Interface</div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gradient">The Workspace Experience</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-linear-to-r from-indigo-600 via-violet-600 to-sky-500 bg-clip-text text-transparent">The Workspace Experience</h2>
         </div>
 
         <div className="max-w-6xl mx-auto">
