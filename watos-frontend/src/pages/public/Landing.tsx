@@ -277,7 +277,7 @@ const Landing = () => {
             }}
             autoplay={{ delay: 5000 }}
             pagination={{ clickable: true }}
-            className="pb-24 overflow-visible!"
+            className="pb-24 !overflow-visible"
           >
             {[
               { title: "Task Board", img: "/screenshots/task-board.png", caption: "AI-assisted task management and rebalancing." },
