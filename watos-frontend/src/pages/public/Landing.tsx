@@ -109,7 +109,13 @@ const Landing = () => {
                   <Button size="lg" className="h-12 px-8 text-sm font-semibold rounded-full shadow-lg shadow-zinc-900/10 transition-transform hover:scale-105" asChild>
                     <Link to="/register">Get Started Free <ArrowRight size={16} className="ml-2" /></Link>
                   </Button>
-                  <Button size="lg" variant="outline" className="h-12 px-8 text-sm font-semibold rounded-full border-zinc-200 transition-all hover:bg-zinc-50">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="h-12 px-8 text-sm font-semibold rounded-full border-zinc-200 transition-all hover:bg-zinc-50"
+                    disabled
+                    title="Demo coming soon"
+                  >
                     View Demo <Play size={14} className="ml-2 fill-current" />
                   </Button>
                 </>
