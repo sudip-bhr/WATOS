@@ -183,8 +183,8 @@ const TeamWorkload = () => {
 
       {loading ? (
         <div className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[1, 2, 3].map(i => <Skeleton key={i} className="h-32 rounded-3xl" />)}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[1, 2, 3].map(i => <Skeleton key={i} className="h-40 rounded-[2rem]" />)}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Skeleton className="h-96 rounded-3xl" />
@@ -193,45 +193,70 @@ const TeamWorkload = () => {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-none bg-zinc-950 text-white rounded-4xl p-8 shadow-2xl shadow-zinc-900/30 h-fit">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-bold uppercase tracking-widest opacity-70">Avg Utilization</CardTitle>
-                <TrendingUp className="h-4 w-4" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold">{avgUtil}%</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {/* Avg Utilization */}
+            <Card className="border-none bg-zinc-950 text-white rounded-[2rem] shadow-xl shadow-zinc-900/20 overflow-hidden group h-full">
+              <CardContent className="p-6 flex flex-col justify-between h-full">
+                <div className="flex justify-between items-start">
+                  <div className="h-10 w-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/10">
+                    <TrendingUp className="h-5 w-5 text-zinc-400" />
+                  </div>
+                  <Badge variant="outline" className="text-[9px] border-white/20 text-zinc-400 font-black uppercase tracking-widest px-2">Live Load</Badge>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-1">Avg Utilization</p>
+                  <div className="text-3xl font-black tracking-tight">{avgUtil}%</div>
+                </div>
               </CardContent>
             </Card>
             
+            {/* Overloaded Members */}
             <Card className={cn(
-              "border-none shadow-xl rounded-4xl p-8",
-              overloadedCount > 0 ? "bg-amber-50" : "bg-white border-zinc-200"
+              "border-none rounded-[2rem] shadow-sm overflow-hidden transition-all duration-300 group h-full",
+              overloadedCount > 0 ? "bg-amber-50 shadow-amber-900/5" : "bg-white/80 backdrop-blur-md border border-zinc-200/50"
             )}>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className={cn(
-                  "text-xs font-bold uppercase tracking-widest",
-                  overloadedCount > 0 ? "text-amber-600" : "text-zinc-500"
-                )}>Overloaded Members</CardTitle>
-                <Users className={cn("h-4 w-4", overloadedCount > 0 ? "text-amber-600" : "text-zinc-400")} />
-              </CardHeader>
-              <CardContent>
-                <div className={cn(
-                  "text-3xl font-bold",
-                  overloadedCount > 0 ? "text-amber-900" : "text-zinc-900"
-                )}>
-                  {overloadedCount}
+              <CardContent className="p-6 flex flex-col justify-between h-full">
+                <div className="flex justify-between items-start">
+                  <div className={cn(
+                    "h-10 w-10 rounded-xl flex items-center justify-center border",
+                    overloadedCount > 0 ? "bg-amber-100 border-amber-200" : "bg-zinc-100 border-zinc-200"
+                  )}>
+                    <Users className={cn("h-5 w-5", overloadedCount > 0 ? "text-amber-600" : "text-zinc-500")} />
+                  </div>
+                  {overloadedCount > 0 && (
+                    <Badge variant="destructive" className="text-[9px] font-black uppercase tracking-widest px-2 bg-amber-500 text-white border-none">
+                      Action Needed
+                    </Badge>
+                  )}
+                </div>
+                <div className="mt-6">
+                  <p className={cn(
+                    "text-[10px] font-black uppercase tracking-[0.2em] mb-1",
+                    overloadedCount > 0 ? "text-amber-600/70" : "text-zinc-400"
+                  )}>Overloaded Members</p>
+                  <div className={cn(
+                    "text-3xl font-black tracking-tight",
+                    overloadedCount > 0 ? "text-amber-900" : "text-zinc-900"
+                  )}>
+                    {overloadedCount}
+                  </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border border-zinc-200 rounded-4xl p-8 shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-xs font-bold uppercase tracking-widest text-zinc-500">ML Suggestions</CardTitle>
-                <Brain className="h-4 w-4 text-zinc-400" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-zinc-900">{suggestions.length}</div>
+            {/* ML Suggestions */}
+            <Card className="border border-zinc-200/50 bg-white/80 backdrop-blur-md rounded-[2rem] shadow-sm overflow-hidden group h-full">
+              <CardContent className="p-6 flex flex-col justify-between h-full">
+                <div className="flex justify-between items-start">
+                  <div className="h-10 w-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center">
+                    <Brain className="h-5 w-5 text-indigo-500" />
+                  </div>
+                  <Badge variant="secondary" className="text-[9px] bg-indigo-100 text-indigo-700 border-none font-black uppercase tracking-widest px-2">AI Assisted</Badge>
+                </div>
+                <div className="mt-6">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-1">ML Suggestions</p>
+                  <div className="text-3xl font-black tracking-tight text-zinc-900">{suggestions.length}</div>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -440,7 +465,7 @@ const TeamWorkload = () => {
                     <SelectTrigger className="h-12 rounded-2xl border-zinc-100 bg-zinc-50 font-bold text-zinc-900">
                       <SelectValue placeholder="Choose recipient..." />
                     </SelectTrigger>
-                    <SelectContent className="rounded-2xl border-zinc-100 shadow-xl">
+                    <SelectContent className="rounded-2xl border-zinc-100 shadow-2xl bg-white">
                       {workloads.filter(w => w.user_id !== selectedUser?.user_id).map(w => (
                         <SelectItem key={w.user_id} value={w.user_id} className="rounded-xl font-medium focus:bg-zinc-50">
                           <div className="flex items-center justify-between w-full gap-4">

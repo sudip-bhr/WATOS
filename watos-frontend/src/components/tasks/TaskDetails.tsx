@@ -188,7 +188,7 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
-      <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0">
+      <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 bg-white border-l border-zinc-200 shadow-2xl sm:rounded-l-[2.5rem]">
         <div className="flex flex-col h-full">
           <SheetHeader className="p-5 md:p-8 border-b border-zinc-100 shrink-0">
             <div className="flex flex-wrap items-center gap-2 mb-3">
@@ -607,7 +607,7 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
               </div>
 
               {/* Comment Input */}
-              <div className="flex gap-4 pt-4 sticky bottom-0 bg-white/80 backdrop-blur-sm -mx-2 px-2 py-4">
+              <div className="flex gap-4 pt-4 sticky bottom-0 bg-white -mx-2 px-2 py-4 border-t border-zinc-100">
                 <div className="h-10 w-10 shrink-0 rounded-2xl bg-zinc-900 flex items-center justify-center text-xs font-black text-white shadow-lg">
                   {user?.full_name ? user.full_name[0].toUpperCase() : user?.email[0].toUpperCase()}
                 </div>

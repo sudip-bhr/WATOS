@@ -25,52 +25,52 @@ const Landing = () => {
       title: "Interactive Project Board",
       description: "Real-time task synchronization with ML-driven workload rebalancing suggestions.",
       icon: <Layers size={24} />,
-      features: ["Drag & Drop", "Live Re-balancing", "Burnout Alerts"]
+      features: ["Drag & Drop", "Live Re-balancing", "Overload Alerts"]
     },
     {
       title: "Complexity Analytics",
       description: "Neural analysis of project density, skill requirements, and delivery probability.",
-      icon: <BarChart3 className="text-zinc-900" size={24} />,
-      features: ["Skill Radar", "Uplift Forecast", "Risk Heatmaps"]
+      icon: <Layers size={24} />,
+      features: ["Skill Radar", "Risk Heatmaps"]
     },
     {
       title: "PERT Critical Path",
       description: "Fully automated dependency tracking with real-time bottleneck identification.",
-      icon: <Activity className="text-zinc-900" size={24} />,
-      features: ["Path Density", "Float Tracking", "Auto-Scheduling"]
+      icon: <Layers size={24} />,
+      features: ["Path Density", "Float Tracking"]
     }
   ]
 
   return (
-    <div className="min-h-screen bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white font-sans tracking-tight">
+    <div className="min-h-screen bg-white text-zinc-900 selection:bg-zinc-900 selection:text-white">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 border-b border-zinc-100 bg-white/70 backdrop-blur-xl">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-zinc-900 flex items-center justify-center">
-              <Brain size={18} className="text-white" />
+      <nav className="fixed top-0 w-full z-50 border-b border-zinc-100/50 bg-white/60 backdrop-blur-2xl">
+        <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center transition-transform group-hover:rotate-12">
+              <Brain size={20} className="text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tighter">WATOS</span>
+            <span className="font-bold text-2xl tracking-tighter">WATOS</span>
           </div>
 
-          <div className="flex items-center gap-8">
-            <div className="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-widest text-zinc-400">
+          <div className="flex items-center gap-10">
+            <div className="hidden md:flex items-center gap-10 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400">
               <a href="#features" className="hover:text-zinc-900 transition-colors">Features</a>
               <a href="#how-it-works" className="hover:text-zinc-900 transition-colors">Process</a>
               <a href="#preview" className="hover:text-zinc-900 transition-colors">Interface</a>
             </div>
-            <div className="h-4 w-px bg-zinc-200 hidden md:block" />
-            <div className="flex items-center gap-3">
+            <div className="h-5 w-px bg-zinc-100 hidden md:block" />
+            <div className="flex items-center gap-4">
               {isAuthenticated ? (
-                <Button onClick={() => navigate('/tasks')} variant="default" className="rounded-full font-semibold gap-2 px-6 h-9 text-sm transition-transform hover:scale-105 active:scale-95">
-                  Workspace <ArrowRight size={14} />
+                <Button onClick={() => navigate('/tasks')} className="btn-premium rounded-full font-bold gap-2 px-8 h-11 text-sm">
+                  Workspace <ArrowRight size={16} />
                 </Button>
               ) : (
                 <>
-                  <Button variant="ghost" className="font-semibold text-xs tracking-wide h-9 hover:bg-zinc-50" asChild>
+                  <Button variant="ghost" className="font-bold text-xs tracking-wider h-11 hover:bg-zinc-100/50 hover:text-zinc-900 px-6 rounded-full transition-all duration-300" asChild>
                     <Link to="/login">Sign In</Link>
                   </Button>
-                  <Button variant="default" className="rounded-full font-semibold px-6 h-9 text-sm shadow-sm transition-transform hover:scale-105 active:scale-95" asChild>
+                  <Button className="btn-premium rounded-full font-bold px-8 h-11 text-sm" asChild>
                     <Link to="/register">Join Now</Link>
                   </Button>
                 </>
@@ -81,125 +81,61 @@ const Landing = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative pt-40 pb-32 overflow-hidden">
-        {/* Subtle Background Glows */}
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[600px] h-[600px] bg-indigo-50/50 rounded-full blur-[120px] -z-10" />
-        <div className="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/4 w-[500px] h-[500px] bg-zinc-50 rounded-full blur-[100px] -z-10" />
+      <section className="relative pt-52 pb-40 overflow-hidden flex flex-col items-center">
+        {/* Organic Background Elements */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-linear-to-b from-zinc-50 to-white -z-10" />
+        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[140px] -z-10 animate-float" />
+        <div className="absolute top-40 right-1/4 w-[400px] h-[400px] bg-slate-100/40 rounded-full blur-[120px] -z-10 animate-float-delayed" />
 
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-500">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
-              Intelligence Engine v2.0
-            </div>
-            <h1 className="text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight">
-              Predict. Optimize. <br />
-              <span className="text-zinc-400">Deliver.</span>
-            </h1>
-            <p className="text-lg text-zinc-500 max-w-lg leading-relaxed font-medium">
-              A high-precision workload analysis and task optimization system. We turn complex project telemetry into actionable insights, helping teams deliver faster with less burnout.
-            </p>
-            <div className="flex flex-wrap gap-4 pt-4">
-              {isAuthenticated ? (
-                <Button size="lg" className="h-12 px-8 text-sm font-semibold rounded-full shadow-lg shadow-zinc-900/10 transition-transform hover:scale-105" asChild>
-                  <Link to="/tasks">Go to Workspace <ArrowRight size={16} className="ml-2" /></Link>
-                </Button>
-              ) : (
-                <>
-                  <Button size="lg" className="h-12 px-8 text-sm font-semibold rounded-full shadow-lg shadow-zinc-900/10 transition-transform hover:scale-105" asChild>
-                    <Link to="/register">Get Started Free <ArrowRight size={16} className="ml-2" /></Link>
-                  </Button>
-                  <Button size="lg" variant="outline" className="h-12 px-8 text-sm font-semibold rounded-full border-zinc-200 transition-all hover:bg-zinc-50">
-                    View Demo <Play size={14} className="ml-2 fill-current" />
-                  </Button>
-                </>
-              )}
-            </div>
-          </div>
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-10">
 
-          <div className="relative">
-            {/* Mock UI Card / Layered Visual */}
-            <div className="relative aspect-[4/3] rounded-[2.5rem] bg-white border border-zinc-100 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] p-8 overflow-hidden group">
-              <div className="absolute inset-0 bg-linear-to-br from-indigo-50/20 to-transparent pointer-events-none" />
-
-              {/* Header UI */}
-              <div className="flex items-center justify-between mb-8">
-                <div className="flex gap-1.5">
-                  <div className="h-2 w-2 rounded-full bg-zinc-100" />
-                  <div className="h-2 w-2 rounded-full bg-zinc-100" />
-                  <div className="h-2 w-2 rounded-full bg-zinc-100" />
-                </div>
-                <div className="h-6 w-32 rounded-full bg-zinc-50 border border-zinc-100" />
-              </div>
-
-              {/* Main Content Mock */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div className="h-32 rounded-2xl bg-zinc-50 border border-zinc-100 p-4 space-y-3">
-                    <div className="h-2 w-2/3 bg-zinc-200 rounded-full" />
-                    <div className="h-2 w-1/2 bg-zinc-100 rounded-full" />
-                    <div className="flex gap-2 pt-4">
-                      <div className="h-6 w-6 rounded-full bg-indigo-100" />
-                      <div className="h-6 w-6 rounded-full bg-zinc-100" />
-                    </div>
-                  </div>
-                  <div className="h-24 rounded-2xl bg-zinc-50 border border-zinc-100 p-4">
-                    <Activity size={32} className="text-zinc-200" />
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="h-24 rounded-2xl bg-zinc-900 p-4 flex flex-col justify-between">
-                    <div className="h-1.5 w-1/3 bg-white/20 rounded-full" />
-                    <div className="text-white font-bold text-lg">94%</div>
-                  </div>
-                  <div className="h-32 rounded-2xl bg-zinc-50 border border-zinc-100 p-4 space-y-3">
-                    <div className="h-2 w-1/2 bg-zinc-200 rounded-full" />
-                    <div className="h-10 w-full rounded-lg border border-dashed border-zinc-200" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Elevated Glass Elements */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 bg-white/40 backdrop-blur-xl border border-white/40 rounded-3xl shadow-2xl transition-transform duration-700 group-hover:-translate-y-2/3 flex items-center justify-center">
-                <Cpu size={48} className="text-zinc-900 opacity-20" />
-              </div>
-            </div>
+          <h1 className="text-6xl md:text-8xl font-bold leading-[1.05] tracking-tighter text-gradient-subtle">
+            Predict. Optimize. <br />
+            Deliver.
+          </h1>
+          <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-medium">
+            The high-precision workload analysis system that turns complex project telemetry into actionable intelligence. Built for teams that value clarity and performance.
+          </p>
+          <div className="flex flex-wrap justify-center gap-5 pt-6">
+            {isAuthenticated ? (
+              <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
+                <Link to="/tasks">Go to Workspace <ArrowRight size={20} className="ml-2" /></Link>
+              </Button>
+            ) : (
+              <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
+                <Link to="/register">Get Started <ArrowRight size={20} className="ml-2" /></Link>
+              </Button>
+            )}
           </div>
         </div>
+
       </section>
 
-      {/* Trust Strip */}
-      <section className="border-y border-zinc-100 py-6">
-        <div className="max-w-7xl mx-auto px-6 flex justify-center items-center gap-12 text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-400 opacity-60">
-          <span>AI-assisted planning</span>
-          <span className="h-1 w-1 rounded-full bg-zinc-300" />
-          <span>Real-time sync</span>
-          <span className="h-1 w-1 rounded-full bg-zinc-300" />
-          <span>Explainable insights</span>
-        </div>
-      </section>
 
       {/* Features Grid */}
-      <section id="features" className="py-32 px-6">
+      <section id="features" className="py-48 px-6 relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
+
         <div className="max-w-7xl mx-auto">
-          <div className="max-w-2xl mb-20 space-y-4">
-            <div className="text-[11px] font-bold uppercase tracking-[0.3em] text-indigo-500">The Neural Stack</div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight">Built for high-precision operations.</h2>
+          <div className="max-w-2xl mb-24 space-y-6">
+            <h2 className="text-5xl md:text-6xl font-bold tracking-tighter leading-tight text-gradient-subtle">
+              Built for high-precision <br /> operations.
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             {modules.map((mod, idx) => (
-              <div key={idx} className="group p-8 rounded-[2rem] border border-zinc-100 hover:border-zinc-200 hover:shadow-[0_20px_40px_-12px_rgba(0,0,0,0.05)] transition-all duration-500 hover:-translate-y-2 bg-white">
-                <div className="h-12 w-12 rounded-xl bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-8 text-zinc-700 group-hover:bg-zinc-900 group-hover:text-white transition-colors duration-500">
+              <div key={idx} className="group p-10 rounded-[2.5rem] glass-panel border-zinc-100/50 transition-all duration-700 hover:-translate-y-4">
+                <div className="h-14 w-14 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-10 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500 shadow-sm">
                   {mod.icon}
                 </div>
-                <h3 className="text-xl font-bold mb-4">{mod.title}</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed mb-8">
+                <h3 className="text-2xl font-bold mb-5 tracking-tight">{mod.title}</h3>
+                <p className="text-zinc-500 text-base leading-relaxed mb-10 font-medium">
                   {mod.description}
                 </p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2.5">
                   {mod.features.map(f => (
-                    <span key={f} className="text-[9px] font-bold uppercase tracking-widest text-zinc-400 px-3 py-1 bg-zinc-50 rounded-md">
+                    <span key={f} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-4 py-1.5 bg-white/50 rounded-full border border-zinc-100">
                       {f}
                     </span>
                   ))}
@@ -211,32 +147,33 @@ const Landing = () => {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="py-32 px-6 bg-zinc-50/50 border-y border-zinc-100">
+      <section id="how-it-works" className="py-48 px-6 bg-zinc-50/30 border-y border-zinc-100/50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10" />
+
         <div className="max-w-7xl mx-auto text-center">
-          <div className="max-w-2xl mx-auto mb-20 space-y-4">
-            <div className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400">The Workflow</div>
-            <h2 className="text-4xl font-bold tracking-tight">From data to optimization.</h2>
+          <div className="max-w-2xl mx-auto mb-32 space-y-6">
+            <h2 className="text-5xl font-bold tracking-tighter text-gradient-subtle">From data to optimization.</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-20 items-start relative">
             {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-12 left-[15%] right-[15%] h-px bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
+            <div className="hidden md:block absolute top-16 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
 
             {[
-              { step: "01", title: "Ingest Tasks", desc: "Input your team's workload or connect existing project boards.", icon: <Globe size={24} /> },
-              { step: "02", title: "Neural Analysis", desc: "Our engine analyzes skill gaps, complexity, and dependencies.", icon: <Brain size={24} /> },
-              { step: "03", title: "Optimal Output", desc: "Receive real-time rebalancing suggestions and risk alerts.", icon: <Check size={24} /> }
+              { step: "01", title: "Ingest Tasks", desc: "Input your team's workload or connect existing project boards.", icon: <Globe size={28} /> },
+              { step: "02", title: "Neural Analysis", desc: "Our engine analyzes skill gaps, complexity, and dependencies.", icon: <Brain size={28} /> },
+              { step: "03", title: "Optimal Output", desc: "Receive real-time rebalancing suggestions and risk alerts.", icon: <Check size={28} /> }
             ].map((step, idx) => (
-              <div key={idx} className="space-y-6">
-                <div className="h-24 w-24 rounded-full bg-white border border-zinc-200 shadow-sm flex items-center justify-center mx-auto relative">
+              <div key={idx} className="group space-y-8 relative">
+                <div className="h-32 w-32 rounded-[2.5rem] bg-white border border-zinc-100 shadow-xl shadow-zinc-200/20 flex items-center justify-center mx-auto relative transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-6">
                   <div className="text-zinc-900">{step.icon}</div>
-                  <div className="absolute -top-2 -right-2 h-8 w-8 rounded-full bg-zinc-900 text-white text-[10px] font-bold flex items-center justify-center">
+                  <div className="absolute -top-3 -right-3 h-10 w-10 rounded-2xl bg-zinc-900 text-white text-[11px] font-bold flex items-center justify-center shadow-lg">
                     {step.step}
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <h4 className="text-lg font-bold">{step.title}</h4>
-                  <p className="text-zinc-500 text-sm max-w-[240px] mx-auto leading-relaxed">{step.desc}</p>
+                <div className="space-y-4">
+                  <h4 className="text-2xl font-bold tracking-tight">{step.title}</h4>
+                  <p className="text-zinc-500 text-base max-w-[280px] mx-auto leading-relaxed font-medium">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -245,16 +182,16 @@ const Landing = () => {
       </section>
 
       {/* Product Preview Slider */}
-      <section id="preview" className="py-32 px-6 overflow-hidden relative">
+      <section id="preview" className="py-48 px-6 overflow-hidden relative">
         {/* Glow Effects */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl max-h-4xl bg-indigo-50/30 rounded-full blur-[160px] -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl max-h-5xl bg-indigo-50/20 rounded-full blur-[180px] -z-10" />
 
-        <div className="max-w-7xl mx-auto mb-20 text-center space-y-4">
-          <div className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400">Interface</div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-gradient">The Workspace Experience</h2>
+        <div className="max-w-7xl mx-auto mb-24 text-center space-y-6">
+
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
         </div>
 
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <Swiper
             modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
             effect="coverflow"
@@ -271,29 +208,29 @@ const Landing = () => {
             }}
             autoplay={{ delay: 5000 }}
             pagination={{ clickable: true }}
-            className="pb-24 overflow-visible!"
+            className="pb-32 overflow-visible!"
           >
             {[
-              { title: "Task Board", img: "/screenshots/task-board.png", caption: "AI-assisted task management and rebalancing." },
-              { title: "Analytics", img: "/screenshots/analytics.png", caption: "Deep neural analysis of project telemetry." },
-              { title: "PERT View", img: "/screenshots/pert-view.png", caption: "Automated critical path and dependency tracking." }
+              { title: "Task Board", img: "", caption: "AI-assisted task management and rebalancing." },
+              { title: "Analytics", img: "", caption: "Deep neural analysis of project telemetry." },
+              { title: "PERT View", img: "", caption: "Automated critical path and dependency tracking." }
             ].map((slide, idx) => (
-              <SwiperSlide key={idx} className="w-[85%] md:w-[70%] lg:w-[60%]">
-                <div className="group relative rounded-[2.5rem] lg:rounded-[3rem] overflow-hidden border border-white/50 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] transition-all duration-700 bg-white">
+              <SwiperSlide key={idx} className="w-[90%] md:w-[75%] lg:w-[65%]">
+                <div className="group relative rounded-[3rem] overflow-hidden border border-white/50 shadow-[0_48px_96px_-24px_rgba(0,0,0,0.12)] transition-all duration-1000 bg-white">
                   <img
                     src={slide.img}
                     alt={slide.title}
-                    className="w-full aspect-[16/10] object-cover grayscale-[40%] group-hover:grayscale-0 transition-all duration-1000 scale-[1.01] group-hover:scale-100"
+                    className="w-full aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 scale-[1.02] group-hover:scale-100"
                   />
                   {/* Glassy Overlay Label */}
-                  <div className="absolute top-8 left-8">
-                    <div className="px-5 py-2.5 rounded-2xl bg-white/60 backdrop-blur-2xl border border-white/40 shadow-xl">
-                      <span className="text-[11px] font-bold uppercase tracking-widest text-zinc-900">{slide.title}</span>
+                  <div className="absolute top-10 left-10">
+                    <div className="px-6 py-3 rounded-2xl bg-white/40 backdrop-blur-3xl border border-white/40 shadow-2xl">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">{slide.title}</span>
                     </div>
                   </div>
                   {/* Bottom Caption Overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-10 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-                    <p className="text-white text-sm font-medium tracking-wide leading-relaxed">{slide.caption}</p>
+                  <div className="absolute inset-x-0 bottom-0 p-12 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-8 group-hover:translate-y-0">
+                    <p className="text-white text-base font-medium tracking-wide leading-relaxed max-w-md">{slide.caption}</p>
                   </div>
                 </div>
               </SwiperSlide>
@@ -303,29 +240,30 @@ const Landing = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-40 px-6 border-t border-zinc-100">
-        <div className="max-w-4xl mx-auto text-center space-y-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-100 font-bold text-[10px] uppercase tracking-[0.2em] text-zinc-400">
-            <Zap className="fill-current text-indigo-500" size={12} /> Instant Activation
-          </div>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
-            Ready to optimize your <br />
-            <span className="text-zinc-200">workflow?</span>
+      <section className="py-52 px-6 relative overflow-hidden">
+        {/* Organic Background Blowouts */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[160px] -z-10 animate-pulse" />
+
+        <div className="max-w-5xl mx-auto text-center space-y-14 relative">
+
+          <h2 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[1] text-gradient-subtle">
+            Ready to optimize <br />
+            your workflow?
           </h2>
-          <p className="text-xl text-zinc-500 font-medium max-w-lg mx-auto leading-relaxed">
-            Join the next generation of project intelligence. Start your free instance today.
+          <p className="text-2xl text-zinc-500 font-medium max-w-xl mx-auto leading-relaxed">
+            Start your free instance today.
           </p>
-          <div className="flex flex-col items-center gap-8 pt-6">
-            <Button size="lg" className="h-14 px-12 rounded-full font-bold text-base shadow-2xl shadow-zinc-900/10 transition-all hover:scale-105 active:scale-95" asChild>
-              <Link to="/register">Create Your Instance <ChevronRight size={20} className="ml-1" /></Link>
+          <div className="flex flex-col items-center gap-12 pt-10">
+            <Button size="lg" className="btn-premium h-18 px-20 rounded-full font-bold text-xl" asChild>
+              <Link to="/register">Create Your Instance <ChevronRight size={24} className="ml-1" /></Link>
             </Button>
-            <div className="flex items-center gap-4 opacity-40 grayscale">
-              <div className="flex -space-x-3">
-                {[1, 2, 3, 4].map(i => (
-                  <div key={i} className="h-8 w-8 rounded-full border-2 border-white bg-zinc-100" />
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex -space-x-4">
+                {[1, 2, 3, 4, 5].map(i => (
+                  <div key={i} className="h-10 w-10 rounded-full border-4 border-white bg-zinc-100 shadow-sm" />
                 ))}
               </div>
-              <div className="text-[10px] font-bold tracking-widest uppercase">
+              <div className="text-[11px] font-bold tracking-[0.4em] uppercase text-zinc-400">
                 Trusted by high-performance teams
               </div>
             </div>
@@ -334,31 +272,33 @@ const Landing = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-24 px-6 border-t border-zinc-100 bg-white">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-20">
-          <div className="md:col-span-2 space-y-8">
+      <footer className="py-32 px-6 border-t border-zinc-100/50 bg-white relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
+          <div className="md:col-span-2 space-y-10">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-zinc-900 flex items-center justify-center">
-                <Brain size={18} className="text-white" />
+              <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center">
+                <Brain size={20} className="text-white" />
               </div>
-              <span className="font-bold text-xl tracking-tighter">WATOS</span>
+              <span className="font-bold text-2xl tracking-tighter">WATOS</span>
             </div>
-            <p className="text-zinc-400 max-w-xs font-medium text-xs leading-relaxed">
-              Advancing project intelligence through explainable AI and neural optimization. Built for the modern engineering stack.
+            <p className="text-zinc-400 max-w-sm font-medium text-sm leading-relaxed">
+              System for Task Optimization and Workload Balancing.
             </p>
           </div>
-          <div className="grid grid-cols-2 md:col-span-2 gap-10">
-            <div className="space-y-6">
-              <h5 className="font-bold text-[10px] uppercase tracking-[0.4em] text-zinc-400">Resources</h5>
-              <div className="flex flex-col gap-4 text-xs font-semibold text-zinc-500">
+          <div className="grid grid-cols-2 md:col-span-2 gap-12">
+            <div className="space-y-8">
+              <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Resources</h5>
+              <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
                 <a href="#" className="hover:text-zinc-900 transition-colors">Documentation</a>
                 <a href="#" className="hover:text-zinc-900 transition-colors">API Reference</a>
                 <a href="#" className="hover:text-zinc-900 transition-colors">System Status</a>
               </div>
             </div>
-            <div className="space-y-6">
-              <h5 className="font-bold text-[10px] uppercase tracking-[0.4em] text-zinc-400">Company</h5>
-              <div className="flex flex-col gap-4 text-xs font-semibold text-zinc-500">
+            <div className="space-y-8">
+              <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Company</h5>
+              <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
                 <a href="#" className="hover:text-zinc-900 transition-colors">Privacy Policy</a>
                 <a href="#" className="hover:text-zinc-900 transition-colors">Terms of Service</a>
                 <a href="#" className="hover:text-zinc-900 transition-colors">Security</a>
@@ -366,9 +306,9 @@ const Landing = () => {
             </div>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto pt-20 mt-20 border-t border-zinc-50 flex flex-col md:flex-row justify-between items-center gap-4 text-[9px] font-bold uppercase tracking-[0.5em] text-zinc-300">
+        <div className="max-w-7xl mx-auto pt-24 mt-24 border-t border-zinc-50 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-300">
           <span>Core Operation Engine v2.0.4</span>
-          <span>&copy; 2026 WATOS Intelligence. All rights reserved.</span>
+          <span>&copy; 2026 WATOSSystem. All rights reserved.</span>
         </div>
       </footer>
     </div>
