@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, memo } from 'react'
 import { AxiosError } from 'axios'
 import { Draggable } from '@hello-pangea/dnd'
 import type { Task } from '@/types'
@@ -15,7 +15,7 @@ interface TaskCardProps {
   index: number
 }
 
-const TaskCard = ({ task, index }: TaskCardProps) => {
+const TaskCard = memo(({ task, index }: TaskCardProps) => {
   const { user } = useAuthStore()
   const [submitting, setSubmitting] = useState(false)
   const isMember = user?.role === 'member'
@@ -170,6 +170,6 @@ const TaskCard = ({ task, index }: TaskCardProps) => {
       )}
     </Draggable>
   )
-}
+})
 
 export default TaskCard

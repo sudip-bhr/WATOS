@@ -35,30 +35,36 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-zinc-50 p-4">
-      <div className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-        <div className="h-8 w-8 rounded-lg bg-zinc-900 flex items-center justify-center">
-          <Brain size={18} className="text-white" />
+    <div className="min-h-screen flex items-center justify-center board-bg p-4 relative overflow-hidden">
+      <div className="noise-texture" />
+      
+      {/* Background organic glow */}
+      <div className="absolute top-1/4 -left-1/4 w-[500px] h-[500px] bg-indigo-50/30 rounded-full blur-[120px] -z-10 animate-float" />
+      <div className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-zinc-100/50 rounded-full blur-[120px] -z-10 animate-float-delayed" />
+
+      <div className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" onClick={() => navigate('/')}>
+        <div className="h-9 w-9 rounded-xl bg-zinc-900 flex items-center justify-center shadow-lg shadow-zinc-900/10">
+          <Brain size={20} className="text-white" />
         </div>
-        <span className="font-bold text-xl tracking-tight">WATOS</span>
+        <span className="font-bold text-2xl tracking-tighter text-zinc-900">WATOS</span>
       </div>
 
-      <Card className="w-full max-w-md border-none shadow-2xl bg-white">
-        <CardHeader className="space-y-1 text-center pt-8">
-          <CardTitle className="text-2xl font-bold tracking-tight">Welcome back</CardTitle>
-          <CardDescription>
+      <Card className="w-full max-w-md border border-white/50 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.1)] bg-white/70 backdrop-blur-xl relative z-10">
+        <CardHeader className="space-y-2 text-center pt-10 pb-8">
+          <CardTitle className="text-3xl font-bold tracking-tight text-gradient-subtle">Welcome back</CardTitle>
+          <CardDescription className="text-zinc-500 font-medium">
             Access your intelligent performance dashboard.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 pb-8">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="space-y-6 pb-10">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <div className="p-3 text-xs font-medium text-rose-500 bg-rose-500/10 rounded-lg border border-rose-500/20 text-center">
+              <div className="p-4 text-xs font-bold text-rose-500 bg-rose-500/5 rounded-xl border border-rose-500/10 text-center animate-in fade-in zoom-in duration-300">
                 {error}
               </div>
             )}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email address</Label>
+            <div className="space-y-2.5">
+              <Label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-zinc-400 ml-1">Email address</Label>
               <Input 
                 id="email" 
                 type="email" 
@@ -66,11 +72,14 @@ const Login = () => {
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="bg-zinc-50/50"
+                className="h-11 bg-white/50 border-zinc-200/50 focus:border-zinc-900 focus:ring-0 transition-all rounded-xl px-4"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between ml-1">
+                <Label htmlFor="password" className="text-xs font-bold uppercase tracking-widest text-zinc-400">Password</Label>
+                <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 transition-colors">Forgot?</a>
+              </div>
               <Input 
                 id="password" 
                 type="password" 
@@ -78,28 +87,31 @@ const Login = () => {
                 required 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-zinc-50/50"
+                className="h-11 bg-white/50 border-zinc-200/50 focus:border-zinc-900 focus:ring-0 transition-all rounded-xl px-4"
               />
             </div>
-            <Button type="submit" className="w-full gap-2 h-11" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign In'}
-              <ArrowRight size={16} />
-            </Button>
+            <div className="flex justify-center pt-2">
+              <Button type="submit" className="btn-premium h-11 px-12 rounded-2xl font-bold text-sm shadow-xl" disabled={loading}>
+                {loading ? 'Signing in...' : 'Sign In'}
+                <ArrowRight size={18} className="ml-1" />
+              </Button>
+            </div>
           </form>
           
-          <div className="text-center text-sm text-zinc-500">
+          <div className="text-center text-sm text-zinc-400 font-medium pt-2">
             Don't have an account?{' '}
-            <Link to="/register" className="font-medium text-zinc-900 hover:underline">
+            <Link to="/register" className="font-bold text-zinc-900 hover:underline decoration-zinc-200 underline-offset-4 transition-all">
               Create one
             </Link>
           </div>
         </CardContent>
       </Card>
       
-      <div className="fixed bottom-8 text-zinc-400 text-xs uppercase tracking-widest font-medium">
+      <div className="fixed bottom-8 text-zinc-300 text-[10px] uppercase tracking-[0.4em] font-bold">
         Intelligence & Governance Platform
       </div>
     </div>
+
   )
 }
 

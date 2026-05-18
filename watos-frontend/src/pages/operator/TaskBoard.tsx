@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useTaskStore } from '@/store/taskStore'
-import { DragDropContext, Droppable, type DropResult } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, type DropResult, type DragStart, type DragUpdate } from '@hello-pangea/dnd'
 import TaskCard from '@/components/tasks/TaskCard'
 import TaskDetails from '@/components/tasks/TaskDetails'
 import TaskForm from '@/components/tasks/TaskForm'
@@ -56,7 +56,83 @@ const TaskBoard = () => {
 
   const forCol = (s: Task['status']) => filtered.filter(t => t.status === s)
 
-  const onDragEnd = async (result: DropResult) => {
+  // --- Auto-scroll Logic ---
+  const boardRef = useRef<HTMLDivElement>(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const mousePosRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const animationFrameRef = useRef<number | null>(null)
+  const [dragOverColumnId, setDragOverColumnId] = useState<string | null>(null)
+
+  const handleAutoScroll = () => {
+    if (!isDragging || !boardRef.current) return
+
+    const { x } = mousePosRef.current
+    const container = boardRef.current
+    const rect = container.getBoundingClientRect()
+    
+    const edgeSize = 150 // Area near edges that triggers scroll
+    const maxSpeed = 15 // Max scroll speed
+    
+    let speed = 0
+    
+    if (x > rect.right - edgeSize) {
+      // Scroll right
+      speed = Math.min(maxSpeed, (x - (rect.right - edgeSize)) / 5)
+    } else if (x < rect.left + edgeSize) {
+      // Scroll left
+      speed = -Math.min(maxSpeed, ((rect.left + edgeSize) - x) / 5)
+    }
+    
+    if (speed !== 0) {
+      container.scrollLeft += speed
+    }
+
+    // --- Manual Column Detection for precise highlighting ---
+    const columns = container.querySelectorAll('.group\\/column')
+    let foundId: string | null = null
+    columns.forEach(colEl => {
+      const rect = colEl.getBoundingClientRect()
+      if (x >= rect.left && x <= rect.right) {
+        foundId = colEl.getAttribute('data-col-id')
+      }
+    })
+    setDragOverColumnId(foundId)
+    
+    animationFrameRef.current = requestAnimationFrame(handleAutoScroll)
+  }
+
+  useEffect(() => {
+    if (isDragging) {
+      animationFrameRef.current = requestAnimationFrame(handleAutoScroll)
+    } else {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
+    }
+    return () => {
+      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current)
+    }
+  }, [isDragging])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePosRef.current = { x: e.clientX, y: e.clientY }
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  const onDragStart = useCallback(() => {
+    setIsDragging(true)
+  }, [])
+
+  const onDragUpdate = useCallback((update: DragUpdate) => {
+    if (update.client?.selection) {
+      mousePosRef.current = { x: update.client.selection.x, y: update.client.selection.y }
+    }
+  }, [])
+
+  const onDragEnd = useCallback(async (result: DropResult) => {
+    setIsDragging(false)
+    setDragOverColumnId(null)
     const { destination, draggableId } = result
     if (!destination) return
     const newStatus = destination.droppableId as Task['status']
@@ -75,7 +151,7 @@ const TaskBoard = () => {
     } catch (e) {
       console.error(e)
     }
-  }
+  }, [tasks, isMember, updateTaskStatus])
 
   return (
     <div className="h-screen flex flex-col">
@@ -140,25 +216,28 @@ const TaskBoard = () => {
       </div>
 
       {/* Board Background & Texture */}
-      <div className="flex-1 overflow-x-auto overflow-y-hidden px-4 md:px-8 py-6 custom-scrollbar board-bg">
-        <div className="noise-texture" />
-        
-        {loading ? (
-          <div className="flex gap-6 md:gap-8 relative z-10">
-            {displayColumns.map(c => (
-              <div key={c.id} className="w-[300px] md:w-80 shrink-0 space-y-4">
-                <div className="px-2">
-                  <Skeleton className="h-6 w-32 rounded-lg opacity-40" />
+      <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
+        <div 
+          ref={boardRef}
+          className="flex-1 overflow-x-auto overflow-y-hidden custom-scrollbar board-bg"
+        >
+          <div className="noise-texture" />
+          
+          {loading ? (
+            <div className="flex gap-6 md:gap-8 relative z-10 px-4 md:px-8 py-6">
+              {displayColumns.map(c => (
+                <div key={c.id} className="w-[300px] md:w-80 shrink-0 space-y-4">
+                  <div className="px-2">
+                    <Skeleton className="h-6 w-32 rounded-lg opacity-40" />
+                  </div>
+                  <Skeleton className="h-[calc(100vh-280px)] rounded-[2.5rem] opacity-20" />
                 </div>
-                <Skeleton className="h-[calc(100vh-280px)] rounded-[2.5rem] opacity-20" />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <DragDropContext onDragEnd={onDragEnd}>
-            <div className="flex gap-6 md:gap-8 h-full relative z-10">
+              ))}
+            </div>
+          ) : (
+            <div className="flex gap-6 md:gap-8 h-full relative z-10 px-4 md:px-8 py-6">
               {displayColumns.map(col => (
-                <div key={col.id} className="w-[300px] md:w-80 shrink-0 flex flex-col group/column">
+                <div key={col.id} data-col-id={col.id} className="w-[300px] md:w-80 shrink-0 flex flex-col group/column">
                   {/* Column Header */}
                   <div className="flex items-center justify-between mb-4 px-3">
                     <div className="flex items-center gap-2.5">
@@ -171,7 +250,10 @@ const TaskBoard = () => {
                         col.id === 'approved' ? 'bg-violet-400' :
                         col.id === 'done' ? 'bg-emerald-400' : 'bg-zinc-400'
                       )} />
-                      <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 group-hover/column:text-zinc-600 transition-colors duration-300">
+                      <h3 className={cn(
+                        "text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300",
+                        dragOverColumnId === col.id ? "text-zinc-900 scale-110 origin-left translate-x-1" : "text-zinc-400 group-hover/column:text-zinc-600"
+                      )}>
                         {col.label}
                       </h3>
                     </div>
@@ -189,9 +271,9 @@ const TaskBoard = () => {
                         ref={provided.innerRef}
                         {...provided.droppableProps}
                         className={cn(
-                          'flex-1 glass-panel rounded-[2.5rem] p-3 overflow-y-auto custom-scrollbar transition-all duration-500',
-                          snapshot.isDraggingOver 
-                            ? 'bg-white/60 ring-1 ring-zinc-200/50 shadow-2xl scale-[1.02]' 
+                          'flex-1 glass-panel rounded-[2.5rem] p-3 overflow-y-auto custom-scrollbar transition-all duration-500 border border-transparent',
+                          dragOverColumnId === col.id 
+                            ? 'bg-white ring-4 ring-zinc-900/5 shadow-[0_40px_80px_-15px_rgba(0,0,0,0.15)] scale-[1.01] border-zinc-200/50' 
                             : 'hover:bg-white/45'
                         )}
                       >
@@ -220,9 +302,9 @@ const TaskBoard = () => {
                 </div>
               ))}
             </div>
-          </DragDropContext>
-        )}
-      </div>
+          )}
+        </div>
+      </DragDropContext>
 
       {/* Live task lookup ensures operator review panel sees fresh status */}
       <TaskDetails task={selectedTask} isOpen={!!selectedTask} onClose={() => setSelectedTaskId(null)} />
