@@ -87,280 +87,231 @@ const Landing = () => {
         <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[140px] -z-10 animate-float" />
         <div className="absolute top-40 right-1/4 w-[400px] h-[400px] bg-slate-100/40 rounded-full blur-[120px] -z-10 animate-float-delayed" />
 
-<<<<<<< HEAD
-  <div className="max-w-4xl mx-auto px-6 text-center space-y-10">
-=======
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-      <div className="space-y-8">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-500">
-          <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-pulse" />
-          Intelligence Engine v2.0
-        </div>
-        <h1 className="text-6xl md:text-7xl font-bold leading-[1.1] tracking-tight">
-          Predict. Optimize. <br />
-          <span className="text-zinc-400">Deliver.</span>
-        </h1>
-        <p className="text-lg text-zinc-500 max-w-lg leading-relaxed font-medium">
-          A high-precision workload analysis and task optimization system. We turn complex project telemetry into actionable insights, helping teams deliver faster with less burnout.
-        </p>
-        <div className="flex flex-wrap gap-4 pt-4">
-          {isAuthenticated ? (
-            <Button size="lg" className="h-12 px-8 text-sm font-semibold rounded-full shadow-lg shadow-zinc-900/10 transition-transform hover:scale-105" asChild>
-              <Link to="/tasks">Go to Workspace <ArrowRight size={16} className="ml-2" /></Link>
-            </Button>
-          ) : (
-            <>
-              <Button size="lg" className="h-12 px-8 text-sm font-semibold rounded-full shadow-lg shadow-zinc-900/10 transition-transform hover:scale-105" asChild>
-                <Link to="/register">Get Started Free <ArrowRight size={16} className="ml-2" /></Link>
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-10">
+
+          <h1 className="text-6xl md:text-8xl font-bold leading-[1.05] tracking-tighter text-gradient-subtle">
+            Predict. Optimize. <br />
+            Deliver.
+          </h1>
+          <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-medium">
+            The high-precision workload analysis system that turns complex project telemetry into actionable intelligence. Built for teams that value clarity and performance.
+          </p>
+          <div className="flex flex-wrap justify-center gap-5 pt-6">
+            {isAuthenticated ? (
+              <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
+                <Link to="/tasks">Go to Workspace <ArrowRight size={20} className="ml-2" /></Link>
               </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="h-12 px-8 text-sm font-semibold rounded-full border-zinc-200 transition-all hover:bg-zinc-50"
-                disabled
-                title="Demo coming soon"
-              >
-                View Demo <Play size={14} className="ml-2 fill-current" />
+            ) : (
+              <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
+                <Link to="/register">Get Started <ArrowRight size={20} className="ml-2" /></Link>
               </Button>
-            </>
-          )}
+            )}
+          </div>
         </div>
-      </div>
->>>>>>> fb9f7f63d8ebd89433929756b6e3acbca01bc928
 
-      <h1 className="text-6xl md:text-8xl font-bold leading-[1.05] tracking-tighter text-gradient-subtle">
-        Predict. Optimize. <br />
-        Deliver.
-      </h1>
-      <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-medium">
-        The high-precision workload analysis system that turns complex project telemetry into actionable intelligence. Built for teams that value clarity and performance.
-      </p>
-      <div className="flex flex-wrap justify-center gap-5 pt-6">
-        {isAuthenticated ? (
-          <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
-            <Link to="/tasks">Go to Workspace <ArrowRight size={20} className="ml-2" /></Link>
-          </Button>
-        ) : (
-          <Button size="lg" className="btn-premium h-16 px-12 text-lg font-bold rounded-full" asChild>
-            <Link to="/register">Get Started <ArrowRight size={20} className="ml-2" /></Link>
-          </Button>
-        )}
-      </div>
-    </div>
-
-  </section>
+      </section>
 
 
-  {/* Features Grid */ }
-  <section id="features" className="py-48 px-6 relative overflow-hidden">
-    <div className="absolute top-1/2 left-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
+      {/* Features Grid */}
+      <section id="features" className="py-48 px-6 relative overflow-hidden">
+        <div className="absolute top-1/2 left-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
 
-    <div className="max-w-7xl mx-auto">
-      <div className="max-w-2xl mb-24 space-y-6">
-        <h2 className="text-5xl md:text-6xl font-bold tracking-tighter leading-tight text-gradient-subtle">
-          Built for high-precision <br /> operations.
-        </h2>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-        {modules.map((mod, idx) => (
-          <div key={idx} className="group p-10 rounded-[2.5rem] glass-panel border-zinc-100/50 transition-all duration-700 hover:-translate-y-4">
-            <div className="h-14 w-14 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-10 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500 shadow-sm">
-              {mod.icon}
-            </div>
-            <h3 className="text-2xl font-bold mb-5 tracking-tight">{mod.title}</h3>
-            <p className="text-zinc-500 text-base leading-relaxed mb-10 font-medium">
-              {mod.description}
-            </p>
-            <div className="flex flex-wrap gap-2.5">
-              {mod.features.map(f => (
-                <span key={f} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-4 py-1.5 bg-white/50 rounded-full border border-zinc-100">
-                  {f}
-                </span>
-              ))}
-            </div>
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl mb-24 space-y-6">
+            <h2 className="text-5xl md:text-6xl font-bold tracking-tighter leading-tight text-gradient-subtle">
+              Built for high-precision <br /> operations.
+            </h2>
           </div>
-        ))}
-      </div>
-    </div>
-  </section>
 
-  {/* How It Works */ }
-  <section id="how-it-works" className="py-48 px-6 bg-zinc-50/30 border-y border-zinc-100/50 relative overflow-hidden">
-    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10" />
-
-    <div className="max-w-7xl mx-auto text-center">
-      <div className="max-w-2xl mx-auto mb-32 space-y-6">
-        <h2 className="text-5xl font-bold tracking-tighter text-gradient-subtle">From data to optimization.</h2>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-20 items-start relative">
-        {/* Connecting Line (Desktop) */}
-        <div className="hidden md:block absolute top-16 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
-
-        {[
-          { step: "01", title: "Ingest Tasks", desc: "Input your team's workload or connect existing project boards.", icon: <Globe size={28} /> },
-          { step: "02", title: "Neural Analysis", desc: "Our engine analyzes skill gaps, complexity, and dependencies.", icon: <Brain size={28} /> },
-          { step: "03", title: "Optimal Output", desc: "Receive real-time rebalancing suggestions and risk alerts.", icon: <Check size={28} /> }
-        ].map((step, idx) => (
-          <div key={idx} className="group space-y-8 relative">
-            <div className="h-32 w-32 rounded-[2.5rem] bg-white border border-zinc-100 shadow-xl shadow-zinc-200/20 flex items-center justify-center mx-auto relative transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-6">
-              <div className="text-zinc-900">{step.icon}</div>
-              <div className="absolute -top-3 -right-3 h-10 w-10 rounded-2xl bg-zinc-900 text-white text-[11px] font-bold flex items-center justify-center shadow-lg">
-                {step.step}
-              </div>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-2xl font-bold tracking-tight">{step.title}</h4>
-              <p className="text-zinc-500 text-base max-w-[280px] mx-auto leading-relaxed font-medium">{step.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  {/* Product Preview Slider */ }
-  <section id="preview" className="py-48 px-6 overflow-hidden relative">
-    {/* Glow Effects */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl max-h-5xl bg-indigo-50/20 rounded-full blur-[180px] -z-10" />
-
-<<<<<<< HEAD
-  <div className="max-w-7xl mx-auto mb-24 text-center space-y-6">
-
-    <h2 className="text-5xl md:text-6xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
-=======
-        <div className="max-w-7xl mx-auto mb-20 text-center space-y-4">
-      <div className="text-[11px] font-bold uppercase tracking-[0.3em] text-zinc-400">Interface</div>
-      <h2 className="text-4xl md:text-5xl font-bold tracking-tight bg-linear-to-r from-indigo-600 via-violet-600 to-sky-500 bg-clip-text text-transparent">The Workspace Experience</h2>
->>>>>>> fb9f7f63d8ebd89433929756b6e3acbca01bc928
-    </div>
-
-    <div className="max-w-7xl mx-auto">
-      <Swiper
-        modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
-        effect="coverflow"
-        grabCursor={true}
-        centeredSlides={true}
-        slidesPerView={'auto'}
-        loop={true}
-        coverflowEffect={{
-          rotate: 0,
-          stretch: 0,
-          depth: 100,
-          modifier: 2.5,
-          slideShadows: false,
-        }}
-        autoplay={{ delay: 5000 }}
-        pagination={{ clickable: true }}
-
-        className="pb-32 overflow-visible!"
-
-        className="pb-24 !overflow-visible"
-
-      >
-        {[
-          { title: "Task Board", img: "", caption: "AI-assisted task management and rebalancing." },
-          { title: "Analytics", img: "", caption: "Deep neural analysis of project telemetry." },
-          { title: "PERT View", img: "", caption: "Automated critical path and dependency tracking." }
-        ].map((slide, idx) => (
-          <SwiperSlide key={idx} className="w-[90%] md:w-[75%] lg:w-[65%]">
-            <div className="group relative rounded-[3rem] overflow-hidden border border-white/50 shadow-[0_48px_96px_-24px_rgba(0,0,0,0.12)] transition-all duration-1000 bg-white">
-              <img
-                src={slide.img}
-                alt={slide.title}
-                className="w-full aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 scale-[1.02] group-hover:scale-100"
-              />
-              {/* Glassy Overlay Label */}
-              <div className="absolute top-10 left-10">
-                <div className="px-6 py-3 rounded-2xl bg-white/40 backdrop-blur-3xl border border-white/40 shadow-2xl">
-                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">{slide.title}</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+            {modules.map((mod, idx) => (
+              <div key={idx} className="group p-10 rounded-[2.5rem] glass-panel border-zinc-100/50 transition-all duration-700 hover:-translate-y-4">
+                <div className="h-14 w-14 rounded-2xl bg-zinc-50 border border-zinc-100 flex items-center justify-center mb-10 text-zinc-900 group-hover:bg-zinc-900 group-hover:text-white transition-all duration-500 shadow-sm">
+                  {mod.icon}
+                </div>
+                <h3 className="text-2xl font-bold mb-5 tracking-tight">{mod.title}</h3>
+                <p className="text-zinc-500 text-base leading-relaxed mb-10 font-medium">
+                  {mod.description}
+                </p>
+                <div className="flex flex-wrap gap-2.5">
+                  {mod.features.map(f => (
+                    <span key={f} className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 px-4 py-1.5 bg-white/50 rounded-full border border-zinc-100">
+                      {f}
+                    </span>
+                  ))}
                 </div>
               </div>
-              {/* Bottom Caption Overlay */}
-              <div className="absolute inset-x-0 bottom-0 p-12 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-8 group-hover:translate-y-0">
-                <p className="text-white text-base font-medium tracking-wide leading-relaxed max-w-md">{slide.caption}</p>
-              </div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </div>
-  </section>
-
-  {/* CTA Section */ }
-  <section className="py-52 px-6 relative overflow-hidden">
-    {/* Organic Background Blowouts */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[160px] -z-10 animate-pulse" />
-
-    <div className="max-w-5xl mx-auto text-center space-y-14 relative">
-
-      <h2 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[1] text-gradient-subtle">
-        Ready to optimize <br />
-        your workflow?
-      </h2>
-      <p className="text-2xl text-zinc-500 font-medium max-w-xl mx-auto leading-relaxed">
-        Start your free instance today.
-      </p>
-      <div className="flex flex-col items-center gap-12 pt-10">
-        <Button size="lg" className="btn-premium h-18 px-20 rounded-full font-bold text-xl" asChild>
-          <Link to="/register">Create Your Instance <ChevronRight size={24} className="ml-1" /></Link>
-        </Button>
-        <div className="flex flex-col items-center gap-6">
-          <div className="flex -space-x-4">
-            {[1, 2, 3, 4, 5].map(i => (
-              <div key={i} className="h-10 w-10 rounded-full border-4 border-white bg-zinc-100 shadow-sm" />
             ))}
           </div>
-          <div className="text-[11px] font-bold tracking-[0.4em] uppercase text-zinc-400">
-            Trusted by high-performance teams
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+      </section>
 
-  {/* Footer */ }
-  <footer className="py-32 px-6 border-t border-zinc-100/50 bg-white relative overflow-hidden">
-    <div className="absolute bottom-0 right-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
+      {/* How It Works */}
+      <section id="how-it-works" className="py-48 px-6 bg-zinc-50/30 border-y border-zinc-100/50 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10" />
 
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
-      <div className="md:col-span-2 space-y-10">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center">
-            <Brain size={20} className="text-white" />
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="max-w-2xl mx-auto mb-32 space-y-6">
+            <h2 className="text-5xl font-bold tracking-tighter text-gradient-subtle">From data to optimization.</h2>
           </div>
-          <span className="font-bold text-2xl tracking-tighter">WATOS</span>
-        </div>
-        <p className="text-zinc-400 max-w-sm font-medium text-sm leading-relaxed">
-          System for Task Optimization and Workload Balancing.
-        </p>
-      </div>
-      <div className="grid grid-cols-2 md:col-span-2 gap-12">
-        <div className="space-y-8">
-          <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Resources</h5>
-          <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
-            <a href="#" className="hover:text-zinc-900 transition-colors">Documentation</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">API Reference</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">System Status</a>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-20 items-start relative">
+            {/* Connecting Line (Desktop) */}
+            <div className="hidden md:block absolute top-16 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
+
+            {[
+              { step: "01", title: "Ingest Tasks", desc: "Input your team's workload or connect existing project boards.", icon: <Globe size={28} /> },
+              { step: "02", title: "Neural Analysis", desc: "Our engine analyzes skill gaps, complexity, and dependencies.", icon: <Brain size={28} /> },
+              { step: "03", title: "Optimal Output", desc: "Receive real-time rebalancing suggestions and risk alerts.", icon: <Check size={28} /> }
+            ].map((step, idx) => (
+              <div key={idx} className="group space-y-8 relative">
+                <div className="h-32 w-32 rounded-[2.5rem] bg-white border border-zinc-100 shadow-xl shadow-zinc-200/20 flex items-center justify-center mx-auto relative transition-all duration-500 group-hover:-translate-y-2 group-hover:rotate-6">
+                  <div className="text-zinc-900">{step.icon}</div>
+                  <div className="absolute -top-3 -right-3 h-10 w-10 rounded-2xl bg-zinc-900 text-white text-[11px] font-bold flex items-center justify-center shadow-lg">
+                    {step.step}
+                  </div>
+                </div>
+                <div className="space-y-4">
+                  <h4 className="text-2xl font-bold tracking-tight">{step.title}</h4>
+                  <p className="text-zinc-500 text-base max-w-[280px] mx-auto leading-relaxed font-medium">{step.desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="space-y-8">
-          <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Company</h5>
-          <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
-            <a href="#" className="hover:text-zinc-900 transition-colors">Privacy Policy</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Terms of Service</a>
-            <a href="#" className="hover:text-zinc-900 transition-colors">Security</a>
+      </section>
+
+      {/* Product Preview Slider */}
+      <section id="preview" className="py-48 px-6 overflow-hidden relative">
+        {/* Glow Effects */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl max-h-5xl bg-indigo-50/20 rounded-full blur-[180px] -z-10" />
+
+        <div className="max-w-7xl mx-auto mb-24 text-center space-y-6">
+
+          <h2 className="text-5xl md:text-6xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
+        </div>
+
+        <div className="max-w-7xl mx-auto">
+          <Swiper
+            modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={'auto'}
+            loop={true}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+              slideShadows: false,
+            }}
+            autoplay={{ delay: 5000 }}
+            pagination={{ clickable: true }}
+            className="pb-32 overflow-visible!"
+          >
+            {[
+              { title: "Task Board", img: "", caption: "AI-assisted task management and rebalancing." },
+              { title: "Analytics", img: "", caption: "Deep neural analysis of project telemetry." },
+              { title: "PERT View", img: "", caption: "Automated critical path and dependency tracking." }
+            ].map((slide, idx) => (
+              <SwiperSlide key={idx} className="w-[90%] md:w-[75%] lg:w-[65%]">
+                <div className="group relative rounded-[3rem] overflow-hidden border border-white/50 shadow-[0_48px_96px_-24px_rgba(0,0,0,0.12)] transition-all duration-1000 bg-white">
+                  <img
+                    src={slide.img}
+                    alt={slide.title}
+                    className="w-full aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 scale-[1.02] group-hover:scale-100"
+                  />
+                  {/* Glassy Overlay Label */}
+                  <div className="absolute top-10 left-10">
+                    <div className="px-6 py-3 rounded-2xl bg-white/40 backdrop-blur-3xl border border-white/40 shadow-2xl">
+                      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">{slide.title}</span>
+                    </div>
+                  </div>
+                  {/* Bottom Caption Overlay */}
+                  <div className="absolute inset-x-0 bottom-0 p-12 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-8 group-hover:translate-y-0">
+                    <p className="text-white text-base font-medium tracking-wide leading-relaxed max-w-md">{slide.caption}</p>
+                  </div>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-52 px-6 relative overflow-hidden">
+        {/* Organic Background Blowouts */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[160px] -z-10 animate-pulse" />
+
+        <div className="max-w-5xl mx-auto text-center space-y-14 relative">
+
+          <h2 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[1] text-gradient-subtle">
+            Ready to optimize <br />
+            your workflow?
+          </h2>
+          <p className="text-2xl text-zinc-500 font-medium max-w-xl mx-auto leading-relaxed">
+            Start your free instance today.
+          </p>
+          <div className="flex flex-col items-center gap-12 pt-10">
+            <Button size="lg" className="btn-premium h-18 px-20 rounded-full font-bold text-xl" asChild>
+              <Link to="/register">Create Your Instance <ChevronRight size={24} className="ml-1" /></Link>
+            </Button>
+            <div className="flex flex-col items-center gap-6">
+              <div className="flex -space-x-4">
+                {[1, 2, 3, 4, 5].map(i => (
+                  <div key={i} className="h-10 w-10 rounded-full border-4 border-white bg-zinc-100 shadow-sm" />
+                ))}
+              </div>
+              <div className="text-[11px] font-bold tracking-[0.4em] uppercase text-zinc-400">
+                Trusted by high-performance teams
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-32 px-6 border-t border-zinc-100/50 bg-white relative overflow-hidden">
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-zinc-50 rounded-full blur-[100px] -z-10" />
+
+        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
+          <div className="md:col-span-2 space-y-10">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center">
+                <Brain size={20} className="text-white" />
+              </div>
+              <span className="font-bold text-2xl tracking-tighter">WATOS</span>
+            </div>
+            <p className="text-zinc-400 max-w-sm font-medium text-sm leading-relaxed">
+              System for Task Optimization and Workload Balancing.
+            </p>
+          </div>
+          <div className="grid grid-cols-2 md:col-span-2 gap-12">
+            <div className="space-y-8">
+              <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Resources</h5>
+              <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
+                <a href="#" className="hover:text-zinc-900 transition-colors">Documentation</a>
+                <a href="#" className="hover:text-zinc-900 transition-colors">API Reference</a>
+                <a href="#" className="hover:text-zinc-900 transition-colors">System Status</a>
+              </div>
+            </div>
+            <div className="space-y-8">
+              <h5 className="font-bold text-[11px] uppercase tracking-[0.4em] text-zinc-900">Company</h5>
+              <div className="flex flex-col gap-5 text-sm font-bold text-zinc-400">
+                <a href="#" className="hover:text-zinc-900 transition-colors">Privacy Policy</a>
+                <a href="#" className="hover:text-zinc-900 transition-colors">Terms of Service</a>
+                <a href="#" className="hover:text-zinc-900 transition-colors">Security</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto pt-24 mt-24 border-t border-zinc-50 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-300">
+          <span>Core Operation Engine v2.0.4</span>
+          <span>&copy; 2026 WATOSSystem. All rights reserved.</span>
+        </div>
+      </footer>
     </div>
-    <div className="max-w-7xl mx-auto pt-24 mt-24 border-t border-zinc-50 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] font-bold uppercase tracking-[0.5em] text-zinc-300">
-      <span>Core Operation Engine v2.0.4</span>
-      <span>&copy; 2026 WATOSSystem. All rights reserved.</span>
-    </div>
-  </footer>
-    </div >
   )
 }
 
