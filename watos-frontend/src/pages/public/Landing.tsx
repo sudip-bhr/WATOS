@@ -227,6 +227,7 @@ const Landing = () => {
 
                   <img
                     src={slide.img}
+                    alt={slide.title}
                     className="w-full aspect-[16/9] object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
                   />
 
