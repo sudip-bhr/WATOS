@@ -15,7 +15,7 @@ router = APIRouter()
 @router.get("/settings")
 async def get_settings(
     db: AsyncSession = Depends(get_db),
-    current_user=Depends(require_role("admin", "operator"))
+    current_user=Depends(require_role("admin"))
 ):
     stmt = select(Organization).limit(1)
     if current_user.organization_id:

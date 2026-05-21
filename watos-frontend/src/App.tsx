@@ -1,11 +1,13 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useRef } from 'react'
-import { Brain, Menu } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Menu } from 'lucide-react'
 import ErrorBoundary from './components/layout/ErrorBoundary'
 import ProtectedRoute from './components/layout/ProtectedRoute'
 import Sidebar from './components/layout/Sidebar'
 import { Toaster } from './components/ui/toaster'
+import { ConfirmProvider } from './hooks/useConfirm'
 import { useWebSockets } from './hooks/useWebSockets'
 import { useAuthStore } from './store/authStore'
 import { getCurrentUser } from './api/auth'
@@ -49,6 +51,7 @@ import { useState } from 'react'
 const Layout = ({ children }: { children: React.ReactNode }) => {
   useWebSockets()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const location = useLocation()
   
   return (
     <div className="flex h-screen bg-zinc-50 overflow-hidden relative">
@@ -65,8 +68,12 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
           </button>
           
           <div className="flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg bg-zinc-900 flex items-center justify-center">
-              <Brain size={14} className="text-white" />
+            <div className="h-8 w-8 overflow-hidden rounded-lg shadow-sm">
+              <img
+                src="/logo.png"
+                alt="WATOS Logo"
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="text-lg font-black tracking-tighter uppercase italic">WATOS</span>
           </div>
@@ -75,7 +82,18 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
         </header>
 
         <main className="flex-1 overflow-auto">
-          {children}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+              className="h-full"
+            >
+              {children}
+            </motion.div>
+          </AnimatePresence>
         </main>
       </div>
     </div>
@@ -108,8 +126,9 @@ function App() {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <Router>
-          <Routes>
+        <ConfirmProvider>
+          <Router>
+            <Routes>
             {/* ─── Public ─── */}
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
@@ -167,12 +186,12 @@ function App() {
             } />
 
             <Route path="/operator/org" element={
-              <ProtectedRoute roles={['admin', 'operator']}>
+              <ProtectedRoute roles={['admin']}>
                 <Layout><OrgSettings /></Layout>
               </ProtectedRoute>
             } />
             <Route path="/operator/audit" element={
-              <ProtectedRoute roles={['admin', 'operator']}>
+              <ProtectedRoute roles={['admin']}>
                 <Layout><AuditLog /></Layout>
               </ProtectedRoute>
             } />
@@ -229,6 +248,7 @@ function App() {
           </Routes>
           <Toaster />
         </Router>
+        </ConfirmProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   )

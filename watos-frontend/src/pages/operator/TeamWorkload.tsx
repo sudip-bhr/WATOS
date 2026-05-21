@@ -461,7 +461,7 @@ const TeamWorkload = () => {
               <div className="p-8 space-y-8">
                 <div className="space-y-4">
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">1. Select Target Member</h4>
-                  <Select value={targetUserId} onValueChange={setTargetUserId}>
+                  <Select value={targetUserId || undefined} onValueChange={setTargetUserId}>
                     <SelectTrigger className="h-12 rounded-2xl border-zinc-100 bg-zinc-50 font-bold text-zinc-900">
                       <SelectValue placeholder="Choose recipient..." />
                     </SelectTrigger>
@@ -471,9 +471,9 @@ const TeamWorkload = () => {
                           <div className="flex items-center justify-between w-full gap-4">
                             <span>{w.full_name}</span>
                             <span className={cn(
-                              "text-[9px] font-bold px-1.5 py-0.5 rounded-md",
-                              w.utilization > 0.8 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"
-                            )}>
+                                "text-[9px] font-bold px-1.5 py-0.5 rounded-md",
+                                w.utilization > 0.8 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"
+                              )}>
                               {Math.round(w.utilization * 100)}% Load
                             </span>
                           </div>
@@ -502,7 +502,12 @@ const TeamWorkload = () => {
                             </div>
                             <Button 
                               size="sm"
-                              className="shrink-0 h-9 px-4 rounded-xl font-bold uppercase text-[10px] tracking-widest gap-2 bg-zinc-900"
+                              className={cn(
+                                "shrink-0 h-9 px-4 rounded-xl font-bold uppercase text-[10px] tracking-widest gap-2 transition-all duration-200 border",
+                                !targetUserId || reassigningTaskId === task.id
+                                  ? "bg-zinc-100 text-zinc-400 border-zinc-200 cursor-not-allowed opacity-60"
+                                  : "bg-zinc-900 text-white border-zinc-900 hover:bg-zinc-800 active:scale-95 cursor-pointer"
+                              )}
                               onClick={() => manualReassign(task.id)}
                               disabled={!targetUserId || reassigningTaskId === task.id}
                             >

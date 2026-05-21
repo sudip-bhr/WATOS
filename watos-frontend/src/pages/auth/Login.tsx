@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Brain, ArrowRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { login as loginApi } from '@/api/auth'
 import { getRoleHome } from '@/lib/roles'
@@ -43,8 +43,12 @@ const Login = () => {
       <div className="absolute bottom-1/4 -right-1/4 w-[500px] h-[500px] bg-zinc-100/50 rounded-full blur-[120px] -z-10 animate-float-delayed" />
 
       <div className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" onClick={() => navigate('/')}>
-        <div className="h-9 w-9 rounded-xl bg-zinc-900 flex items-center justify-center shadow-lg shadow-zinc-900/10">
-          <Brain size={20} className="text-white" />
+        <div className="h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-zinc-900/5">
+          <img
+            src="/logo.png"
+            alt="WATOS Logo"
+            className="h-full w-full object-cover"
+          />
         </div>
         <span className="font-bold text-2xl tracking-tighter text-zinc-900">WATOS</span>
       </div>

@@ -46,13 +46,6 @@ const OperatorHome = () => {
       items: [
         { label: 'User Management', desc: 'Manage team accounts and roles.', path: '/operator/users', icon: Users, color: 'text-zinc-900', bg: 'bg-zinc-100 group-hover:bg-zinc-200' },
       ]
-    },
-    {
-      category: 'Organization',
-      items: [
-        { label: 'Org Settings', desc: 'Global configurations.', path: '/operator/org', icon: LayoutGrid, color: 'text-zinc-500', bg: 'bg-zinc-100 group-hover:bg-zinc-200' },
-        { label: 'Audit Log', desc: 'Activity monitoring.', path: '/operator/audit', icon: TrendingUp, color: 'text-zinc-900', bg: 'bg-zinc-100 group-hover:bg-zinc-200' },
-      ]
     }
   ]
 

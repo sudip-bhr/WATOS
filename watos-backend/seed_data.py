@@ -35,29 +35,135 @@ PROJECTS = [
     {"name": "API Microservices Migration", "desc": "Breaking the monolith into domain-driven microservices with gRPC and event sourcing."},
     {"name": "Frontend Platform Redesign", "desc": "React 19 migration with new design system, Storybook components, and accessibility overhaul."},
     {"name": "ML Pipeline Infrastructure", "desc": "Real-time inference endpoints, model registry, and SHAP explainability dashboard."},
+    {"name": "Cloud Cost Optimization", "desc": "Refactoring heavy queries, setting up spot instances, and analyzing AWS billing."},
+    {"name": "SOC2 Compliance Audit", "desc": "Security hardening, audit logging, and role-based access control (RBAC) implementation."},
 ]
 
-# ── Task Templates ──
-TASK_TEMPLATES = [
-    # Project 0 - API Migration
-    {"title": "Implement JWT refresh token rotation", "skills": ["Python", "Security Auditing"], "complexity": 6.0, "effort": 12.0, "status": "done"},
-    {"title": "Migrate user service to gRPC", "skills": ["Python", "System Design"], "complexity": 8.0, "effort": 20.0, "status": "in_progress"},
-    {"title": "Design rate-limiting middleware", "skills": ["Python", "Redis"], "complexity": 5.0, "effort": 8.0, "status": "review"},
-    {"title": "Set up API gateway with Kong", "skills": ["Docker", "Kubernetes"], "complexity": 7.0, "effort": 16.0, "status": "todo"},
-    {"title": "Write integration tests for auth flow", "skills": ["Python", "CI/CD"], "complexity": 4.0, "effort": 6.0, "status": "blocked"},
-    # Project 1 - Frontend
-    {"title": "Build component library with Storybook", "skills": ["React", "TypeScript"], "complexity": 6.5, "effort": 18.0, "status": "in_progress"},
-    {"title": "Implement dark mode theme system", "skills": ["React", "TypeScript"], "complexity": 4.0, "effort": 8.0, "status": "done"},
-    {"title": "Migrate state management to Zustand", "skills": ["React", "TypeScript"], "complexity": 7.0, "effort": 14.0, "status": "in_progress"},
-    {"title": "Accessibility audit and WCAG fixes", "skills": ["React", "Security Auditing"], "complexity": 5.5, "effort": 10.0, "status": "rejected"},
-    {"title": "Set up E2E tests with Playwright", "skills": ["TypeScript", "CI/CD"], "complexity": 5.0, "effort": 8.0, "status": "todo"},
-    # Project 2 - ML
-    {"title": "Set up Kubernetes HPA for inference pods", "skills": ["Kubernetes", "Docker", "AWS"], "complexity": 8.5, "effort": 22.0, "status": "in_progress"},
-    {"title": "Integrate SHAP explainability dashboard", "skills": ["Python", "ML/AI", "React"], "complexity": 7.5, "effort": 16.0, "status": "review"},  
-    {"title": "Build model versioning registry", "skills": ["Python", "PostgreSQL", "Docker"], "complexity": 6.0, "effort": 12.0, "status": "done"},
-    {"title": "Implement A/B testing for model rollout", "skills": ["Python", "ML/AI"], "complexity": 8.0, "effort": 18.0, "status": "blocked"},
-    {"title": "Design feature store schema", "skills": ["PostgreSQL", "System Design"], "complexity": 7.0, "effort": 14.0, "status": "todo"},
-]
+PROJECT_TASK_TEMPLATES = {
+    0: [
+        {"title": "Define Microservices Boundaries & Architecture", "skills": ["System Design", "Go"], "complexity": 6.0, "effort": 12.0, "status": "done", "assignee_idx": 1},
+        {"title": "Configure gRPC Protobuf Schemas", "skills": ["Go", "Node.js"], "complexity": 5.0, "effort": 10.0, "status": "done", "assignee_idx": 2},
+        {"title": "Setup Kafka Event Broker Sandbox", "skills": ["Docker", "Kubernetes"], "complexity": 7.0, "effort": 15.0, "status": "done", "assignee_idx": 0},
+        {"title": "Implement Identity & Auth Service", "skills": ["Security Auditing", "Redis"], "complexity": 8.0, "effort": 20.0, "status": "in_progress", "assignee_idx": 0},
+        {"title": "Migrate Core User API Service", "skills": ["Go", "PostgreSQL"], "complexity": 7.0, "effort": 16.0, "status": "in_progress", "assignee_idx": 3},
+        {"title": "Write Kafka Producer/Consumer Tests", "skills": ["Python", "CI/CD"], "complexity": 5.0, "effort": 8.0, "status": "in_progress", "assignee_idx": 4},
+        {"title": "Verify Event Consistency Mechanics", "skills": ["System Design", "Redis"], "complexity": 8.0, "effort": 18.0, "status": "blocked", "assignee_idx": 5, "force_high_delay": True},
+        {"title": "Draft API Service Documentation", "skills": ["Python"], "complexity": 3.0, "effort": 6.0, "status": "review", "assignee_idx": 6},
+        {"title": "Implement Distributed Tracing (Jaeger)", "skills": ["Docker", "AWS"], "complexity": 6.0, "effort": 12.0, "status": "todo", "assignee_idx": 7},
+        {"title": "Load Test High-Throughput Routes", "skills": ["Go", "CI/CD"], "complexity": 7.0, "effort": 14.0, "status": "todo", "assignee_idx": 8},
+        {"title": "Deploy Staging Microservices Mesh", "skills": ["Kubernetes", "Terraform"], "complexity": 9.0, "effort": 22.0, "status": "todo", "assignee_idx": 1, "force_sla_breach": True},
+        {"title": "API Production Go-Live & Monitoring", "skills": ["AWS", "CI/CD"], "complexity": 6.0, "effort": 8.0, "status": "todo", "assignee_idx": 2},
+    ],
+    1: [
+        {"title": "Establish Design System Tokens & Tailwind Config", "skills": ["React", "TypeScript"], "complexity": 4.0, "effort": 8.0, "status": "done", "assignee_idx": 2},
+        {"title": "Setup Storybook Component Sandbox", "skills": ["TypeScript"], "complexity": 5.0, "effort": 10.0, "status": "done", "assignee_idx": 6},
+        {"title": "Configure React 19 Compiler & Build Pipeline", "skills": ["TypeScript", "Docker"], "complexity": 7.0, "effort": 14.0, "status": "done", "assignee_idx": 0},
+        {"title": "Rebuild Global Navigation & Layout Components", "skills": ["React", "TypeScript"], "complexity": 6.0, "effort": 16.0, "status": "in_progress", "assignee_idx": 0},
+        {"title": "Migrate Dashboard Analytics Visualization Widgets", "skills": ["React", "TypeScript"], "complexity": 8.0, "effort": 24.0, "status": "in_progress", "assignee_idx": 5},
+        {"title": "Implement Theme System & Dark Mode Support", "skills": ["React", "TypeScript"], "complexity": 4.0, "effort": 8.0, "status": "in_progress", "assignee_idx": 7},
+        {"title": "Perform Cross-Browser Rendering Verification", "skills": ["TypeScript"], "complexity": 5.0, "effort": 10.0, "status": "blocked", "assignee_idx": 8},
+        {"title": "Audit Accessibility (WCAG 2.2 AA Compliance)", "skills": ["Security Auditing"], "complexity": 6.0, "effort": 12.0, "status": "review", "assignee_idx": 1},
+        {"title": "Refactor Legacy Form Validation Engine", "skills": ["React"], "complexity": 5.0, "effort": 10.0, "status": "todo", "assignee_idx": 2},
+        {"title": "Optimize Image Delivery & Font Loading", "skills": ["TypeScript"], "complexity": 4.0, "effort": 6.0, "status": "todo", "assignee_idx": 9},
+        {"title": "Conduct End-to-End Cypress Interface Tests", "skills": ["TypeScript", "CI/CD"], "complexity": 7.0, "effort": 18.0, "status": "todo", "assignee_idx": 3, "force_high_delay": True},
+        {"title": "Deploy Redesigned Frontend to CDN", "skills": ["AWS", "CI/CD"], "complexity": 5.0, "effort": 8.0, "status": "todo", "assignee_idx": 4},
+    ],
+    2: [
+        {"title": "Design MLflow Model Registry & Storage Schema", "skills": ["System Design", "ML/AI"], "complexity": 6.0, "effort": 12.0, "status": "done", "assignee_idx": 3},
+        {"title": "Clean and Preprocess Historical Datasets", "skills": ["Python", "ML/AI"], "complexity": 4.0, "effort": 10.0, "status": "done", "assignee_idx": 7},
+        {"title": "Setup Distributed Training with PyTorch", "skills": ["ML/AI", "Docker"], "complexity": 8.0, "effort": 24.0, "status": "done", "assignee_idx": 0},
+        {"title": "Train Core Workload Predictor Model", "skills": ["Python", "ML/AI"], "complexity": 7.0, "effort": 20.0, "status": "in_progress", "assignee_idx": 0},
+        {"title": "Implement SHAP Explainability Engine", "skills": ["Python", "ML/AI"], "complexity": 9.0, "effort": 28.0, "status": "in_progress", "assignee_idx": 0},
+        {"title": "Build FastAPI Inference Endpoint Wrapper", "skills": ["Python", "Docker"], "complexity": 5.0, "effort": 10.0, "status": "in_progress", "assignee_idx": 8},
+        {"title": "Setup Prometheus Metrics for Inference Latency", "skills": ["Docker", "CI/CD"], "complexity": 6.0, "effort": 12.0, "status": "blocked", "assignee_idx": 1},
+        {"title": "Implement Outlier Detection & Input Validation", "skills": ["Python", "Security Auditing"], "complexity": 5.0, "effort": 10.0, "status": "review", "assignee_idx": 2},
+        {"title": "Create Model Performance Summary Reports", "skills": ["Python"], "complexity": 3.0, "effort": 6.0, "status": "todo", "assignee_idx": 3},
+        {"title": "Conduct Shadow Model Staging Deployment", "skills": ["Kubernetes", "AWS"], "complexity": 7.0, "effort": 14.0, "status": "todo", "assignee_idx": 4},
+        {"title": "Configure Auto-Retraining Trigger Mechanism", "skills": ["Python", "CI/CD"], "complexity": 8.0, "effort": 22.0, "status": "todo", "assignee_idx": 5, "force_high_delay": True},
+        {"title": "Perform ML Inference Pipeline Release", "skills": ["Kubernetes", "CI/CD"], "complexity": 6.0, "effort": 8.0, "status": "todo", "assignee_idx": 6},
+    ],
+    3: [
+        {"title": "Perform Global Infrastructure Cost Audit", "skills": ["System Design", "AWS"], "complexity": 5.0, "effort": 10.0, "status": "done", "assignee_idx": 4},
+        {"title": "Identify Unused EBS Volumes & Orphaned EIPs", "skills": ["AWS"], "complexity": 3.0, "effort": 6.0, "status": "done", "assignee_idx": 8},
+        {"title": "Configure Auto-Scaling Groups & Launch Templates", "skills": ["AWS", "Docker"], "complexity": 6.0, "effort": 12.0, "status": "done", "assignee_idx": 1},
+        {"title": "Refactor High-CPU Database Queries", "skills": ["PostgreSQL"], "complexity": 8.0, "effort": 20.0, "status": "in_progress", "assignee_idx": 2},
+        {"title": "Migrate Dev Environments to AWS Spot Instances", "skills": ["AWS", "Docker"], "complexity": 7.0, "effort": 18.0, "status": "in_progress", "assignee_idx": 3},
+        {"title": "Implement ECS Task Cluster Scaling Policies", "skills": ["AWS", "Kubernetes"], "complexity": 7.0, "effort": 16.0, "status": "in_progress", "assignee_idx": 5, "force_high_delay": True},
+        {"title": "Setup Cost Allocation Tags for FinOps Tracking", "skills": ["AWS"], "complexity": 4.0, "effort": 8.0, "status": "blocked", "assignee_idx": 6},
+        {"title": "Establish S3 Lifecycle Storage Policies", "skills": ["AWS"], "complexity": 4.0, "effort": 8.0, "status": "review", "assignee_idx": 7},
+        {"title": "Configure CloudWatch Billing Alerts & Budgets", "skills": ["AWS", "CI/CD"], "complexity": 4.0, "effort": 8.0, "status": "todo", "assignee_idx": 8},
+        {"title": "Compress Historical Log Collections (S3 Glacier)", "skills": ["AWS"], "complexity": 5.0, "effort": 10.0, "status": "todo", "assignee_idx": 1},
+        {"title": "Perform Database Read Replica Optimization", "skills": ["PostgreSQL", "System Design"], "complexity": 8.0, "effort": 22.0, "status": "todo", "assignee_idx": 2, "force_sla_breach": True},
+        {"title": "Generate Final Cloud Cost Savings Report", "skills": ["Python"], "complexity": 4.0, "effort": 6.0, "status": "todo", "assignee_idx": 3},
+    ],
+    4: [
+        {"title": "Map SOC2 Control Framework to Architecture", "skills": ["System Design", "Security Auditing"], "complexity": 5.0, "effort": 10.0, "status": "done", "assignee_idx": 5},
+        {"title": "Implement Core System Audit Logging (AuditLog)", "skills": ["PostgreSQL", "Security Auditing"], "complexity": 7.0, "effort": 18.0, "status": "done", "assignee_idx": 1},
+        {"title": "Setup AWS KMS Key Encryption at Rest", "skills": ["AWS", "Security Auditing"], "complexity": 6.0, "effort": 12.0, "status": "done", "assignee_idx": 2},
+        {"title": "Enforce Multi-Factor Authentication (MFA) Middleware", "skills": ["Security Auditing", "Redis"], "complexity": 6.0, "effort": 14.0, "status": "in_progress", "assignee_idx": 3},
+        {"title": "Restrict Backend API Access (RBAC Controls)", "skills": ["Security Auditing", "System Design"], "complexity": 8.0, "effort": 24.0, "status": "in_progress", "assignee_idx": 4, "force_high_delay": True},
+        {"title": "Conduct Vulnerability Static Code Scans (SAST)", "skills": ["Security Auditing", "CI/CD"], "complexity": 5.0, "effort": 10.0, "status": "in_progress", "assignee_idx": 6},
+        {"title": "Perform External Network Penetration Tests", "skills": ["Security Auditing"], "complexity": 8.0, "effort": 20.0, "status": "blocked", "assignee_idx": 7},
+        {"title": "Draft Disaster Recovery Plan Documentation", "skills": ["System Design"], "complexity": 4.0, "effort": 8.0, "status": "review", "assignee_idx": 8},
+        {"title": "Implement Intrusion Detection (AWS GuardDuty)", "skills": ["AWS", "Security Auditing"], "complexity": 6.0, "effort": 12.0, "status": "todo", "assignee_idx": 1},
+        {"title": "Setup Secure SSL/TLS Cipher Suites (ALB)", "skills": ["AWS", "Security Auditing"], "complexity": 5.0, "effort": 10.0, "status": "todo", "assignee_idx": 2},
+        {"title": "Perform Team Access & Permissions Review", "skills": ["Security Auditing"], "complexity": 7.0, "effort": 16.0, "status": "todo", "assignee_idx": 3, "force_sla_breach": True},
+        {"title": "Gather Artifact Compliance Audit Evidence", "skills": ["Security Auditing"], "complexity": 5.0, "effort": 10.0, "status": "todo", "assignee_idx": 5},
+    ],
+}
+
+
+# ── Dynamic Task Generators ──
+def generate_task_archetype(archetype: str, proj_idx: int) -> dict:
+    """Generates task parameters based on predefined archetypes for edge cases."""
+    if archetype == "overloaded":
+        return {
+            "title": f"Critical Bugfix #{random.randint(100,999)} - Urgent",
+            "skills": random_skills(2),
+            "complexity": random.uniform(6.0, 9.0),
+            "effort": random.uniform(15.0, 25.0),
+            "status": "in_progress",
+            "is_overloaded": True
+        }
+    elif archetype == "underutilized":
+        return {
+            "title": "Minor typo in documentation",
+            "skills": ["Python"], # Simple task
+            "complexity": 1.0,
+            "effort": 1.0,
+            "status": "todo",
+            "is_underutilized": True
+        }
+    elif archetype == "high_delay_risk":
+        return {
+            "title": "Complex Database Migration (High Risk)",
+            "skills": ["PostgreSQL", "System Design"],
+            "complexity": 9.5,
+            "effort": 30.0,
+            "status": "in_progress",
+            "force_high_delay": True
+        }
+    elif archetype == "sla_breached":
+        return {
+            "title": "Resolve Prod Outage - Identity Service",
+            "skills": ["Security Auditing", "AWS"],
+            "complexity": 8.0,
+            "effort": 12.0,
+            "status": "in_progress",
+            "force_sla_breach": True
+        }
+    else:
+        # Standard routine task
+        statuses = ["todo", "in_progress", "review", "done", "blocked"]
+        weights = [30, 30, 15, 20, 5]
+        status = random.choices(statuses, weights=weights, k=1)[0]
+        return {
+            "title": f"Routine Feature #{random.randint(1000,9999)}",
+            "skills": random_skills(random.randint(1, 3)),
+            "complexity": random.uniform(2.0, 7.0),
+            "effort": random.uniform(4.0, 16.0),
+            "status": status
+        }
 
 # ── Subtask Templates ──
 SUBTASK_TEMPLATES = [
@@ -123,7 +229,7 @@ def random_future_date(days_ahead_min=1, days_ahead_max=21):
     return datetime.now(timezone.utc) + timedelta(days=days, hours=random.randint(0, 8))
 
 
-def compute_ml_fields(complexity, effort_hours, deadline, capacity=40.0, assigned_effort=20.0):
+def compute_ml_fields(complexity, effort_hours, deadline, capacity=40.0, assigned_effort=20.0, force_high_delay=False):
     """Compute realistic ML prediction fields using the documented formulas."""
     now = datetime.now(timezone.utc)
     days_to_deadline = max((deadline - now).total_seconds() / 86400, 0.1) if deadline else 7.0
@@ -143,21 +249,35 @@ def compute_ml_fields(complexity, effort_hours, deadline, capacity=40.0, assigne
     workload_ratio = assigned_effort / capacity
     urgency = 1.0 / (1.0 + days_to_deadline)
     delay_prob = min(max(0.5 * (1.0 / (1.0 + pow(2.718, -(workload_ratio - 0.8) * 5))) + 0.3 * urgency + random.gauss(0, 0.05), 0.01), 0.99)
+    
+    if force_high_delay:
+        delay_prob = random.uniform(0.92, 0.99)
+        workload_ratio = max(workload_ratio, 1.5)  # Force SHAP to blame workload
+        complexity = max(complexity, 9.0)
 
     # Priority score: α=0.5, β=0.3, γ=0.2
     priority_score = round(0.5 * urgency + 0.3 * delay_prob + 0.2 * (complexity / 5.0), 4)
 
     # SHAP explanation
+    
+    if force_high_delay:
+        human_readable = f"EXTREME RISK: Team member is overloaded at {workload_ratio:.0%} capacity and task is highly complex."
+    elif workload_ratio > 1.1:
+        human_readable = f"Workload exceeds capacity ({workload_ratio:.0%}) causing significant delay risk."
+    elif complexity > 8.0:
+        human_readable = "Task complexity is the primary driver of delay risk."
+    else:
+        human_readable = f"Routine risk. {'Tight deadline adds pressure.' if days_to_deadline < 5 else 'Deadline is comfortable.'}"
+        
     shap = {
         "base_value": round(random.uniform(3.0, 6.0), 2),
         "contributions": {
-            "workload_utilization": round(workload_ratio * random.uniform(0.5, 1.5), 3),
+            "workload_utilization": round((workload_ratio if workload_ratio > 1.0 else 0.5) * random.uniform(0.8, 1.5), 3),
             "complexity": round(complexity * random.uniform(0.1, 0.3), 3),
             "urgency": round(urgency * random.uniform(1.0, 3.0), 3),
             "historical_reliability": round(random.uniform(-0.5, 0.5), 3),
         },
-        "human_readable": f"Workload at {workload_ratio:.0%} capacity is the primary driver. "
-                          f"{'Tight deadline adds pressure.' if days_to_deadline < 5 else 'Deadline is comfortable.'}"
+        "human_readable": human_readable
     }
 
     return {

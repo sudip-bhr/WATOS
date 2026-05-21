@@ -141,6 +141,7 @@ h1, h2, h3, h4, h5, h6 {
 .text-gradient-subtle {
   background: linear-gradient(135deg, #18181b 0%, #71717a 100%);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -228,6 +229,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .btn-premium:hover {
+  background: transparent !important;
   color: #ffffff !important;
   border-color: rgba(67, 56, 202, 0.5);
   transform: translateY(-5px) scale(1.04);
@@ -253,3 +255,231 @@ h1, h2, h3, h4, h5, h6 {
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
+
+/* Modern ambient background glows and premium micro-interactions */
+.ambient-glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, rgba(139, 92, 246, 0.04) 40%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  top: -200px;
+  right: -100px;
+}
+
+.ambient-glow-secondary {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.04) 0%, rgba(244, 63, 94, 0.02) 50%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 0;
+  bottom: -100px;
+  left: -100px;
+}
+
+/* Elite card/hover states with smooth response */
+.card-premium-interactive {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s ease, 
+              background-color 0.3s ease;
+}
+
+.card-premium-interactive:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05), 
+              0 0 0 1px rgba(99, 102, 241, 0.05);
+  border-color: rgba(99, 102, 241, 0.2);
+  background-color: rgba(255, 255, 255, 0.95);
+}
+
+.card-premium-interactive:active {
+  transform: translateY(-1px) scale(0.985);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Premium input glow focus classes */
+.input-premium-focus {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.input-premium-focus:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.5) !important;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1),
+              inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+/* Micro bounce animation for subtle alerts or buttons */
+@keyframes micro-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.hover-bounce:hover {
+  animation: micro-bounce 0.8s ease-in-out infinite;
+}
+
+/* Radix UI Animate In/Out Utility Definitions */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes zoomIn {
+  from { transform: translate(-50%, -50%) scale(0.95); opacity: 0; }
+  to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+@keyframes zoomOut {
+  from { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  to { transform: translate(-50%, -50%) scale(0.95); opacity: 0; }
+}
+
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideOutToRight {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes slideInFromLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slideOutToLeft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes slideInFromTop {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideOutToTop {
+  from { transform: translateY(0); }
+  to { transform: translateY(-100%); }
+}
+
+@keyframes slideInFromBottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes slideOutToBottom {
+  from { transform: translateY(0); }
+  to { transform: translateY(100%); }
+}
+
+/* Map Radix states to Animations */
+[data-state="open"] {
+  &.animate-in {
+    animation-duration: 200ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
+  }
+}
+[data-state="closed"] {
+  &.animate-out {
+    animation-duration: 150ms;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: forwards;
+  }
+}
+
+/* Overlay animations */
+[data-state="open"].fixed.inset-0.bg-black\/80 {
+  animation-name: fadeIn;
+}
+[data-state="closed"].fixed.inset-0.bg-black\/80 {
+  animation-name: fadeOut;
+}
+
+/* Dialog content animations */
+div[data-state="open"].fixed.left-\[50\%\] {
+  animation-name: zoomIn;
+}
+div[data-state="closed"].fixed.left-\[50\%\] {
+  animation-name: zoomOut;
+}
+
+/* Sheet content animations */
+div[data-state="open"].inset-y-0.right-0 {
+  animation-name: slideInFromRight;
+  animation-duration: 300ms;
+}
+div[data-state="closed"].inset-y-0.right-0 {
+  animation-name: slideOutToRight;
+  animation-duration: 250ms;
+}
+
+div[data-state="open"].inset-y-0.left-0 {
+  animation-name: slideInFromLeft;
+  animation-duration: 300ms;
+}
+div[data-state="closed"].inset-y-0.left-0 {
+  animation-name: slideOutToLeft;
+  animation-duration: 250ms;
+}
+
+div[data-state="open"].inset-x-0.top-0 {
+  animation-name: slideInFromTop;
+  animation-duration: 300ms;
+}
+div[data-state="closed"].inset-x-0.top-0 {
+  animation-name: slideOutToTop;
+  animation-duration: 250ms;
+}
+
+div[data-state="open"].inset-x-0.bottom-0 {
+  animation-name: slideInFromBottom;
+  animation-duration: 300ms;
+}
+div[data-state="closed"].inset-x-0.bottom-0 {
+  animation-name: slideOutToBottom;
+  animation-duration: 250ms;
+}
+
+/* Toast Progress Bar & Glassmorphic Custom Styling */
+@keyframes toast-progress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.toast-progress-bar {
+  height: 3px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  animation: toast-progress linear forwards;
+}
+
+.toast-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(228, 228, 231, 0.6);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.dark .toast-glass {
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(39, 39, 42, 0.6);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+

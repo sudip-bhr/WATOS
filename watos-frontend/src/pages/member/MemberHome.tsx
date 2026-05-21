@@ -96,7 +96,7 @@ const MemberHome = () => {
             {format(new Date(), 'EEEE, MMMM d')}
           </p>
           <h1 className="text-2xl md:text-4xl font-black tracking-tight text-zinc-900">
-            {greeting}, {firstName} 👋
+            {greeting}, {firstName}
           </h1>
           {/* <p className="text-sm md:text-base text-zinc-500 font-medium">
             Here's your professional workload summary.

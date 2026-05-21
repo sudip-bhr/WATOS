@@ -104,6 +104,7 @@ async def create_task(
 async def list_tasks(
     db: AsyncSession = Depends(get_db),
     current_user=Depends(get_current_user),
+    assignee_id: uuid.UUID = None,
     status: str = None,
     project_id: uuid.UUID = None,
 ):
@@ -120,8 +121,15 @@ async def list_tasks(
     # Members only see their own tasks
     elif current_user.role == "member":
         query = query.where(Task.assignee_id == current_user.id)
+    
+    if assignee_id:
+        query = query.where(Task.assignee_id == assignee_id)
     if status:
-        query = query.where(Task.status == status)
+        if "," in status:
+            status_list = [s.strip() for s in status.split(",") if s.strip()]
+            query = query.where(Task.status.in_(status_list))
+        else:
+            query = query.where(Task.status == status)
     if project_id:
         query = query.where(Task.project_id == project_id)
     result = await db.execute(query.order_by(Task.created_at.desc()))

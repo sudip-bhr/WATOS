@@ -9,10 +9,12 @@ import { Skeleton } from '@/components/ui/skeleton'
 import client from '@/api/client'
 import { toast } from '@/hooks/use-toast'
 import { format } from 'date-fns'
+import { useConfirm } from '@/hooks/useConfirm'
 
 import type { MonthlyReport } from '@/types'
 
 const MonthlyReports = () => {
+  const confirm = useConfirm()
   const [reports, setReports] = useState<MonthlyReport[]>([])
   const [loading, setLoading] = useState(true)
   const [composing, setComposing] = useState(false)
@@ -105,7 +107,13 @@ const MonthlyReports = () => {
 
   const handleSubmit = async () => {
     if (!currentDraft) return
-    if (!window.confirm('Are you sure you want to submit this report? It cannot be edited after submission.')) return
+    const ok = await confirm({
+      title: 'Submit Monthly Report?',
+      description: 'Are you sure you want to submit this report? It cannot be edited after submission.',
+      confirmText: 'Submit Report',
+      cancelText: 'Keep Editing'
+    })
+    if (!ok) return
     try {
       await client.patch(`/monthly-reports/${currentDraft.id}`, { ...form, status: 'submitted' })
       toast({ title: 'Report submitted successfully' })

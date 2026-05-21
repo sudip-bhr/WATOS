@@ -278,8 +278,12 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-24">
           <div className="md:col-span-2 space-y-10">
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center">
-                <Brain size={20} className="text-white" />
+              <div className="h-10 w-10 overflow-hidden rounded-xl shadow-sm">
+                <img
+                  src="/logo.png"
+                  alt="WATOS Logo"
+                  className="h-full w-full object-cover"
+                />
               </div>
               <span className="font-bold text-2xl tracking-tighter">WATOS</span>
             </div>

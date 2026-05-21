@@ -87,8 +87,12 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
               className="flex items-center gap-3 cursor-pointer group" 
               onClick={() => { navigate(user ? getRoleHome(user.role) : '/'); onClose?.(); }}
             >
-              <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center shadow-xl shadow-zinc-900/20 group-hover:scale-110 transition-transform shrink-0">
-                <Brain size={18} className="text-white" />
+              <div className="h-10 w-10 overflow-hidden rounded-xl shadow-xl shadow-zinc-900/5 group-hover:scale-110 transition-transform shrink-0">
+                <img
+                  src="/logo.png"
+                  alt="WATOS Logo"
+                  className="h-full w-full object-cover"
+                />
               </div>
               <span className="text-2xl font-black tracking-tighter uppercase italic whitespace-nowrap">WATOS</span>
             </div>
@@ -134,11 +138,15 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
           <>
             <button
               onClick={() => setIsCollapsed(false)}
-              className="flex items-center justify-center h-12 w-12 rounded-xl bg-zinc-900 text-white shadow-xl shadow-zinc-900/20 hover:scale-110 transition-transform"
+              className="flex items-center justify-center h-12 w-12 rounded-xl overflow-hidden shadow-xl shadow-zinc-900/10 hover:scale-110 transition-transform p-0 border border-zinc-200/50"
               title="Expand Sidebar"
               aria-label="Expand Sidebar"
             >
-              <Brain size={20} />
+              <img
+                src="/logo.png"
+                alt="WATOS Logo"
+                className="h-full w-full object-cover"
+              />
             </button>
 
             {/* Notification Bell (Collapsed) */}

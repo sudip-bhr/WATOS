@@ -17,10 +17,64 @@ from app.core.config import settings
 
 router = APIRouter()
 
+class CreateNotifRequest(BaseModel):
+    type: str
+    message: str
+    related_entity_id: Optional[uuid.UUID] = None
+    action_url: Optional[str] = None
+
+
 class PushSubRequest(BaseModel):
     endpoint: str
     p256dh: str
     auth: str
+
+
+@router.post("/", status_code=201)
+async def create_notification_endpoint(
+    payload: CreateNotifRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
+    from app.models.user import User
+    from app.services.notification_service import create_notification
+
+    # Query active, non-deleted operators in the same organization
+    stmt = select(User).where(
+        User.role == "operator",
+        User.organization_id == current_user.organization_id,
+        User.is_active == True,
+        User.is_deleted == False
+    )
+    result = await db.execute(stmt)
+    operators = result.scalars().all()
+
+    # Fallback to any active operator in the system if organization specific query yields nothing
+    if not operators:
+        stmt_fallback = select(User).where(
+            User.role == "operator",
+            User.is_active == True,
+            User.is_deleted == False
+        )
+        result_fallback = await db.execute(stmt_fallback)
+        operators = result_fallback.scalars().all()
+
+    # If still no operators, notify current_user themselves so the message is not lost
+    if not operators:
+        operators = [current_user]
+
+    for op in operators:
+        await create_notification(
+            db=db,
+            user_id=str(op.id),
+            notif_type=payload.type,
+            message=payload.message,
+            action_url=payload.action_url,
+            related_entity_id=payload.related_entity_id,
+        )
+
+    return {"status": "success", "notified_count": len(operators)}
+
 
 @router.get("/vapid-public-key")
 async def get_vapid_key():

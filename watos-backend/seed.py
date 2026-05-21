@@ -34,10 +34,10 @@ from app.models.notification import Notification
 from app.models.ml_config import MLConfig
 
 from seed_data import (
-    SEED_PASSWORD, SEED_ORG_PREFIX, SKILLS, PROJECTS, TASK_TEMPLATES,
+    SEED_PASSWORD, SEED_ORG_PREFIX, SKILLS, PROJECTS, generate_task_archetype,
     SUBTASK_TEMPLATES, COMMENT_TEMPLATES, NOTIF_TEMPLATES,
     generate_unique_slug, pick_name, random_skills, random_past_date,
-    random_future_date, compute_ml_fields,
+    random_future_date, compute_ml_fields, PROJECT_TASK_TEMPLATES,
 )
 
 # ── Colors ──
@@ -90,7 +90,7 @@ async def verify_seed(session: AsyncSession):
         ("Task Dependencies", select(sqla_func.count()).select_from(TaskDependency)),
         ("ML Config", select(sqla_func.count()).select_from(MLConfig)),
     ]
-    expected = [1, 2, 3, 10, 3, 15, None, None, None, None, None, 3, 1]
+    expected = [1, 2, 3, 10, 5, 60, None, None, None, None, None, 65, 1]
 
     print(f"\n{B}{'─'*62}{E}")
     print(f"{B}{'WATOS Seed Verification Report':^62}{E}")
@@ -197,13 +197,18 @@ async def seed(dry_run=False):
             return u
 
         admins = [make_user("admin", "admin", 8, 40.0) for _ in range(2)]
-        operators = [make_user("operator", "ops", 6, 40.0)]
+        operators = [make_user("operator", "ops", 6, 40.0) for _ in range(3)]
         members = [
-            make_user("member", "dev", 4, 40.0),   # Backend — will be overloaded
-            make_user("member", "dev", 4, 40.0),   # Frontend — near capacity
-            make_user("member", "dev", 3, 38.0),   # ML — healthy
-            make_user("member", "dev", 3, 42.0),   # DevOps — underutilized
-            make_user("member", "dev", 5, 45.0),   # Full-stack — healthy
+            make_user("member", "dev", 4, 40.0),   # Backend 1
+            make_user("member", "dev", 4, 40.0),   # Frontend 1
+            make_user("member", "dev", 3, 38.0),   # ML 1
+            make_user("member", "dev", 3, 42.0),   # DevOps 1
+            make_user("member", "dev", 5, 45.0),   # Full-stack 1
+            make_user("member", "dev", 4, 40.0),   # Backend 2
+            make_user("member", "dev", 4, 40.0),   # Frontend 2
+            make_user("member", "dev", 3, 38.0),   # ML 2
+            make_user("member", "dev", 3, 42.0),   # DevOps 2
+            make_user("member", "dev", 5, 45.0),   # Full-stack 2
         ]
         all_users = admins + operators + members
 
@@ -235,61 +240,71 @@ async def seed(dry_run=False):
             print(f"  {G}✓{E} Project: {p.name}")
 
         # ═══════════════════════════════════════════
-        # PHASE 4: Tasks (15)
+        # PHASE 4: Tasks (60)
         # ═══════════════════════════════════════════
         print(f"\n{B}Phase 4:{E} Tasks...")
-        # Workload tracking for imbalance
-        member_efforts = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0}
-        # Target efforts: M0=48, M1=38, M2=30, M3=15, M4=35
-        member_assignment_order = [0, 0, 0, 0, 1, 1, 1, 2, 2, 2, 4, 4, 4, 3, 3]
-        random.shuffle(member_assignment_order)
-
+        # Pre-calculate true final workload for each member to pass to ML prediction fields
+        member_efforts = {i: 0.0 for i in range(10)}
+        for proj_idx, templates in PROJECT_TASK_TEMPLATES.items():
+            for tpl in templates:
+                m_idx = tpl["assignee_idx"]
+                member_efforts[m_idx] += tpl["effort"]
+        
         tasks = []
-        for i, tpl in enumerate(TASK_TEMPLATES):
-            proj_idx = i // 5  # 5 tasks per project
-            member_idx = member_assignment_order[i] if i < len(member_assignment_order) else random.randint(0, 4)
-            assignee = members[member_idx]
-            member_efforts[member_idx] = member_efforts.get(member_idx, 0) + tpl["effort"]
+        for proj_idx in range(5):
+            proj = projects[proj_idx]
+            templates = PROJECT_TASK_TEMPLATES[proj_idx]
+            for task_offset, tpl in enumerate(templates):
+                assignee_idx = tpl["assignee_idx"]
+                assignee = members[assignee_idx]
 
-            # Time-series: stagger creation dates
-            created = random_past_date(45, 5)
-            if tpl["status"] == "done":
-                deadline = created + timedelta(days=random.randint(5, 15))
-                completed = deadline - timedelta(days=random.randint(0, 3))
-                actual = tpl["effort"] * random.uniform(0.8, 1.3)
-            elif tpl["status"] == "blocked":
-                deadline = random_future_date(3, 14)
-                completed = None
-                actual = None
-            else:
-                deadline = random_future_date(2, 21)
-                completed = None
-                actual = tpl["effort"] * random.uniform(0.1, 0.6) if tpl["status"] == "in_progress" else None
+                # Time-series: stagger creation dates
+                created = random_past_date(45, 5)
+                if tpl["status"] == "done":
+                    deadline = created + timedelta(days=random.randint(5, 15))
+                    completed = deadline - timedelta(days=random.randint(0, 3))
+                    actual = tpl["effort"] * random.uniform(0.8, 1.2)
+                elif tpl["status"] == "blocked":
+                    deadline = random_future_date(3, 14)
+                    completed = None
+                    actual = None
+                else:
+                    deadline = random_future_date(2, 21)
+                    completed = None
+                    actual = tpl["effort"] * random.uniform(0.1, 0.6) if tpl["status"] == "in_progress" else None
 
-            ml = compute_ml_fields(
-                tpl["complexity"], tpl["effort"], deadline,
-                capacity=assignee.capacity_hours,
-                assigned_effort=member_efforts[member_idx],
-            )
+                force_high_delay = tpl.get("force_high_delay", False)
+                ml = compute_ml_fields(
+                    tpl["complexity"], tpl["effort"], deadline,
+                    capacity=assignee.capacity_hours,
+                    assigned_effort=member_efforts[assignee_idx],
+                    force_high_delay=force_high_delay
+                )
 
-            sla_hours = random.choice([None, None, None, 24, 48, 72])
-            escalation = random.randint(1, 3) if sla_hours and tpl["status"] in ("blocked", "in_progress") else 0
+                sla_hours = random.choice([None, None, None, 24, 48, 72])
+                
+                if tpl.get("force_sla_breach"):
+                    sla_hours = 24
+                    deadline = random_past_date(2, 1) # Missed deadline
+                    escalation = 3
+                else:
+                    escalation = random.randint(1, 3) if sla_hours and tpl["status"] in ("blocked", "in_progress") else 0
 
-            t = Task(
-                organization_id=org.id if not dry_run else None,
-                project_id=projects[proj_idx].id if not dry_run else None,
-                title=tpl["title"], description=f"Sprint task: {tpl['title']}",
-                assignee_id=assignee.id if not dry_run else None,
-                created_by=admins[proj_idx % 2].id if not dry_run else None,
-                status=tpl["status"], complexity=tpl["complexity"],
-                effort_hours=tpl["effort"], actual_hours=round(actual, 2) if actual else None,
-                deadline=deadline, completed_at=completed,
-                required_skills=tpl["skills"], sla_hours=sla_hours, escalation_level=escalation,
-                **ml,
-            )
-            tasks.append(t)
-            if not dry_run:
-                session.add(t)
+                t = Task(
+                    organization_id=org.id if not dry_run else None,
+                    project_id=proj.id if not dry_run else None,
+                    title=tpl["title"], description=f"Sprint task: {tpl['title']}",
+                    assignee_id=assignee.id if not dry_run else None,
+                    created_by=admins[proj_idx % 2].id if not dry_run else None,
+                    status=tpl["status"], complexity=tpl["complexity"],
+                    effort_hours=tpl["effort"], actual_hours=round(actual, 2) if actual else None,
+                    deadline=deadline, completed_at=completed,
+                    required_skills=tpl["skills"], sla_hours=sla_hours, escalation_level=escalation,
+                    **ml,
+                )
+                tasks.append(t)
+                if not dry_run:
+                    session.add(t)
 
         if not dry_run:
             await session.flush()
@@ -301,23 +316,35 @@ async def seed(dry_run=False):
             print(f"  {G}✓{E} {s}: {c} tasks")
 
         # ═══════════════════════════════════════════
-        # PHASE 5: Dependencies (3)
+        # PHASE 5: Dependencies (65)
         # ═══════════════════════════════════════════
         print(f"\n{B}Phase 5:{E} Task Dependencies...")
-        dep_pairs = [(0, 4), (5, 9), (10, 13)]  # blocker → blocked
+        # Intra-project dependencies (13 per project) to build a complex parallel DAG layout
+        relative_deps = [
+            (0, 1), (0, 2),
+            (1, 3), (2, 3),
+            (3, 4), (3, 7),
+            (4, 5), (5, 6),
+            (7, 8), (8, 9),
+            (6, 10), (9, 10),
+            (10, 11)
+        ]
         deps_created = 0
         if not dry_run:
-            for blocker_i, blocked_i in dep_pairs:
-                if blocker_i < len(tasks) and blocked_i < len(tasks):
+            for p in range(5):
+                offset = p * 12
+                for rel_blocker, rel_blocked in relative_deps:
+                    blocker_idx = offset + rel_blocker
+                    blocked_idx = offset + rel_blocked
                     dep = TaskDependency(
-                        blocker_task_id=tasks[blocker_i].id,
-                        blocked_task_id=tasks[blocked_i].id,
+                        blocker_task_id=tasks[blocker_idx].id,
+                        blocked_task_id=tasks[blocked_idx].id,
                     )
                     session.add(dep)
                     deps_created += 1
             await session.flush()
         else:
-            deps_created = len(dep_pairs)
+            deps_created = len(relative_deps) * 5
         print(f"  {G}✓{E} {deps_created} dependency chains created")
 
         # ═══════════════════════════════════════════
@@ -425,7 +452,8 @@ async def seed(dry_run=False):
                 ("PATCH", "users", "User skills updated"),
                 ("POST", "tasks", "Task assigned"),
             ]
-            for t in tasks:
+            # Limit audit logs so we don't create thousands
+            for t in tasks[:30]:
                 action, resource, detail = random.choice(audit_actions)
                 al = AuditLog(
                     organization_id=org.id, user_id=random.choice(admins + operators).id,
@@ -445,7 +473,7 @@ async def seed(dry_run=False):
                 audit_count += 1
             await session.flush()
         else:
-            audit_count = 18
+            audit_count = 33
         print(f"  {G}✓{E} {audit_count} audit logs created")
 
         # ═══════════════════════════════════════════
@@ -470,6 +498,14 @@ async def seed(dry_run=False):
         else:
             notif_count = 15
         print(f"  {G}✓{E} {notif_count} notifications created")
+
+        # ═══════════════════════════════════════════
+        # PHASE 12: ML Task Clustering
+        # ═══════════════════════════════════════════
+        if not dry_run:
+            print(f"\n{B}Phase 12:{E} Running ML Task Clustering...")
+            from app.ml.clustering import run_clustering_async
+            await run_clustering_async(session)
 
         # ═══════════════════════════════════════════
         # COMMIT

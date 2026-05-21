@@ -533,7 +533,10 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
               )}>
                 <div className="flex items-center gap-2">
                   <Shield size={16} className={slaInfo.breached ? "text-rose-500" : "text-zinc-400"} />
-                  <Label className="text-[10px] uppercase font-black tracking-[0.2em]" style={{ color: slaInfo.breached ? 'rgb(225 29 72)' : 'rgb(113 113 122)' }}>
+                  <Label className={cn(
+                    "text-[10px] uppercase font-black tracking-[0.2em]",
+                    slaInfo.breached ? "text-rose-600" : "text-zinc-500"
+                  )}>
                     SLA Protocol — {task.sla_hours}h Window
                   </Label>
                 </div>

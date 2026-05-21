@@ -11,6 +11,7 @@ import { toast } from '@/hooks/use-toast'
 import type { User as UserType } from '@/types'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/authStore'
+import { useConfirm } from '@/hooks/useConfirm'
 
 interface EditState {
   full_name: string
@@ -27,6 +28,7 @@ const ROLE_COLORS: Record<string, string> = {
 }
 
 const UserManagement = () => {
+  const confirm = useConfirm()
   const { user: currentUser } = useAuthStore()
   const [users, setUsers] = useState<UserType[]>([])
   const [loading, setLoading] = useState(true)
@@ -127,7 +129,14 @@ const UserManagement = () => {
   }
 
   const handleDelete = async (userId: string) => {
-    if (!window.confirm('Deactivate this user? They will lose access to the platform.')) return
+    const ok = await confirm({
+      title: "Deactivate User?",
+      description: "Are you sure you want to deactivate this user? They will lose access to the platform.",
+      confirmText: "Deactivate User",
+      cancelText: "Cancel",
+      variant: "destructive"
+    })
+    if (!ok) return
     try {
       await client.delete(`/users/${userId}`)
       toast({ title: 'User deactivated' })
@@ -384,13 +393,13 @@ const UserManagement = () => {
                     type="button"
                     onClick={() => setEditState({ ...editState, is_active: !editState.is_active })}
                     className={cn(
-                      'relative w-11 h-6 rounded-full transition-colors',
+                      'relative w-11 h-6 rounded-full transition-colors duration-200 ease-in-out',
                       editState.is_active ? 'bg-emerald-500' : 'bg-zinc-300'
                     )}
                   >
                     <div className={cn(
-                      'absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-all',
-                      editState.is_active ? 'left-[22px]' : 'left-0.5'
+                      'absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform duration-200 ease-in-out',
+                      editState.is_active ? 'translate-x-5' : 'translate-x-0'
                     )} />
                   </button>
                 </div>
@@ -425,7 +434,7 @@ const UserManagement = () => {
               <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
                 <UserPlus size={20} className="text-zinc-400" /> New User
               </h2>
-              <button onClick={() => setShowAddForm(false)} className="h-10 w-10 rounded-xl hover:bg-zinc-100 flex items-center justify-center sm:hidden">
+              <button onClick={() => setShowAddForm(false)} className="h-10 w-10 rounded-xl hover:bg-zinc-100 flex items-center justify-center transition-colors">
                 <X size={20} className="text-zinc-400" />
               </button>
             </div>

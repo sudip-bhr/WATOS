@@ -65,7 +65,7 @@ const MyTasks = () => {
               className={cn('px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all',
                 filter === f ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-400 hover:text-zinc-600'
               )}>
-              {f === 'all' ? 'All Items' : '⚠ High Risk'}
+              {f === 'all' ? 'All Items' : 'High Risk'}
             </button>
           ))}
         </div>
