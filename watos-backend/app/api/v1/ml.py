@@ -159,9 +159,11 @@ async def retrain_models(
         # Fallback: run synchronously if Celery unavailable
         from app.ml.trainer import train_duration_model, train_delay_model
         from app.ml.synthetic_data import generate_synthetic_data
+        from app.ml.clustering import run_clustering_async
         df = generate_synthetic_data(500)
         train_duration_model(df)
         train_delay_model(df)
+        await run_clustering_async(db)
         return RetrainResponse(status="completed_sync", task_id="sync")
 
 

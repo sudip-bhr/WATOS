@@ -9,13 +9,15 @@ import { cn } from '@/lib/utils'
 import { useTaskStore } from '@/store/taskStore'
 import { useAuthStore } from '@/store/authStore'
 import { toast } from '@/hooks/use-toast'
+import { getClusterStyle, getComplexityLabel, getComplexityStyle } from '@/lib/clusters'
 
 interface TaskCardProps {
   task: Task
   index: number
+  highlightClusters?: boolean
 }
 
-const TaskCard = memo(({ task, index }: TaskCardProps) => {
+const TaskCard = memo(({ task, index, highlightClusters = true }: TaskCardProps) => {
   const { user } = useAuthStore()
   const [submitting, setSubmitting] = useState(false)
   const isMember = user?.role === 'member'
@@ -63,6 +65,10 @@ const TaskCard = memo(({ task, index }: TaskCardProps) => {
   }
 
   const showSubmitButton = isMember && (task.status === 'in_progress' || task.status === 'rejected')
+  const clusterStyle = getClusterStyle(task.cluster_id)
+  const hasCluster = task.cluster_id !== undefined && task.cluster_id !== null
+  const complexityLabel = getComplexityLabel(task.complexity)
+  const complexityStyle = getComplexityStyle(complexityLabel)
 
   return (
     <Draggable draggableId={task.id} index={index} isDragDisabled={isMember && task.status === 'review'}>
@@ -77,12 +83,20 @@ const TaskCard = memo(({ task, index }: TaskCardProps) => {
           )}
         >
           <div className={cn(
-            "group bg-white/70 backdrop-blur-md rounded-[2.2rem] border border-zinc-100 transition-all duration-500 cursor-pointer overflow-hidden relative active:scale-95",
-            snapshot.isDragging ? "shadow-4xl border-zinc-900/10 scale-105 -rotate-2" : "hover:shadow-2xl hover:shadow-zinc-200/50 hover:border-zinc-200 hover:-translate-y-1"
+            "group transition-all duration-500 cursor-pointer overflow-hidden relative active:scale-95 rounded-[2.2rem]",
+            highlightClusters && hasCluster
+              ? cn(clusterStyle.bg, "border", clusterStyle.border)
+              : "bg-white/70 backdrop-blur-md border border-zinc-100",
+            snapshot.isDragging ? "shadow-4xl border-zinc-900/10 scale-105 -rotate-2" : "hover:shadow-2xl hover:shadow-zinc-200/50 hover:-translate-y-1"
           )}>
             {/* Top Intensity Bar for High Risk */}
             {isHighRisk && (
               <div className="absolute top-0 left-0 w-full h-1 bg-zinc-900 animate-pulse" />
+            )}
+
+            {/* Left Accent Bar for Cluster */}
+            {highlightClusters && hasCluster && (
+              <div className={cn("absolute left-0 top-0 bottom-0 w-1 rounded-l-[2.2rem]", clusterStyle.accent)} />
             )}
 
             <div className="p-6 space-y-5">
@@ -90,8 +104,8 @@ const TaskCard = memo(({ task, index }: TaskCardProps) => {
                 <h4 className="font-black text-sm leading-snug text-zinc-900 tracking-tight transition-all group-hover:text-zinc-950">
                   {task.title}
                 </h4>
-                <div className="shrink-0 bg-zinc-900 text-white text-[9px] font-black px-2 py-1 rounded-lg shadow-sm">
-                  C.{task.complexity.toFixed(1)}
+                <div className={cn("shrink-0 text-[8px] font-black px-2 py-1 rounded-lg shadow-sm uppercase tracking-wider", complexityStyle.badge)}>
+                  {complexityLabel}
                 </div>
               </div>
 
@@ -116,6 +130,7 @@ const TaskCard = memo(({ task, index }: TaskCardProps) => {
                     {Math.round(task.delay_prob * 100)}% Risk
                   </Badge>
                 )}
+                
                 <div className="inline-flex items-center text-[9px] h-6 px-3 bg-zinc-50 border border-zinc-100/50 text-zinc-400 rounded-full font-bold uppercase tracking-widest group-hover:border-zinc-200 transition-colors">
                   <Clock className="mr-1.5 h-3 w-3" />
                   {task.predicted_hours?.toFixed(1) ?? '—'}H
@@ -129,6 +144,21 @@ const TaskCard = memo(({ task, index }: TaskCardProps) => {
                   )}>
                     <Shield className="mr-1 h-3 w-3" />
                     {slaTag.label}
+                  </div>
+                )}
+
+                {/* Cluster Badge */}
+                {hasCluster && (
+                  <div 
+                    title="ML-generated workload group"
+                    className={cn(
+                      "inline-flex items-center text-[9px] h-6 px-2.5 rounded-full font-black uppercase tracking-widest transition-all cursor-help select-none",
+                      clusterStyle.badgeBg,
+                      clusterStyle.badgeText
+                    )}
+                  >
+                    <span className={cn("w-1.5 h-1.5 rounded-full mr-1.5 shrink-0", clusterStyle.accent)} />
+                    {clusterStyle.name}
                   </div>
                 )}
               </div>

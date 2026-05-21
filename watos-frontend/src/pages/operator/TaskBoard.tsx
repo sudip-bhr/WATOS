@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useTaskStore } from '@/store/taskStore'
-import { DragDropContext, Droppable, type DropResult, type DragStart, type DragUpdate } from '@hello-pangea/dnd'
+import { DragDropContext, Droppable, type DropResult } from '@hello-pangea/dnd'
 import TaskCard from '@/components/tasks/TaskCard'
 import TaskDetails from '@/components/tasks/TaskDetails'
 import TaskForm from '@/components/tasks/TaskForm'
@@ -8,9 +8,10 @@ import type { Task } from '@/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Search, LayoutGrid, Lock } from 'lucide-react'
+import { Plus, Search, LayoutGrid, Brain } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/authStore'
+import { getClusterStyle, getClusterComplexityCategory } from '@/lib/clusters'
 
 const COLUMNS: { id: Task['status']; label: string; accent: string }[] = [
   { id: 'todo',        label: 'To Do',          accent: 'bg-zinc-100 text-zinc-600' },
@@ -33,6 +34,18 @@ const TaskBoard = () => {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null)
   const [showForm, setShowForm] = useState(false)
   const [search, setSearch] = useState('')
+  const [highlightClusters, setHighlightClusters] = useState(true)
+  const [selectedClusterFilter, setSelectedClusterFilter] = useState<number | null>(null)
+
+  const uniqueClusters = useMemo(() => {
+    const set = new Set<number>()
+    tasks.forEach(t => {
+      if (t.cluster_id !== undefined && t.cluster_id !== null) {
+        set.add(t.cluster_id)
+      }
+    })
+    return Array.from(set).sort((a, b) => a - b)
+  }, [tasks])
 
   const isMember = user?.role === 'member'
 
@@ -50,7 +63,11 @@ const TaskBoard = () => {
     ? tasks.filter(t => t.assignee_id === user?.id && MEMBER_COLUMNS.includes(t.status))
     : tasks
 
-  const filtered = filteredByRole.filter(t =>
+  const filteredByCluster = selectedClusterFilter !== null
+    ? filteredByRole.filter(t => t.cluster_id === selectedClusterFilter)
+    : filteredByRole
+
+  const filtered = filteredByCluster.filter(t =>
     t.title.toLowerCase().includes(search.toLowerCase())
   )
 
@@ -124,7 +141,7 @@ const TaskBoard = () => {
     setIsDragging(true)
   }, [])
 
-  const onDragUpdate = useCallback((update: DragUpdate) => {
+  const onDragUpdate = useCallback((update: any) => {
     if (update.client?.selection) {
       mousePosRef.current = { x: update.client.selection.x, y: update.client.selection.y }
     }
@@ -167,7 +184,7 @@ const TaskBoard = () => {
               <p className="text-[10px] md:text-xs text-zinc-400 font-medium mt-0.5">
                 {isMember
                   ? 'Your tasks'
-                  : `${tasks.length} total · ${tasks.filter(t => t.status !== 'done').length} active`
+                  : `${tasks.length} total tasks · ${tasks.filter(t => t.status !== 'done').length} active tasks`
                 }
               </p>
             </div>
@@ -186,12 +203,6 @@ const TaskBoard = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto md:ml-auto">
-          {isMember && (
-            <div className="flex items-center gap-1.5 text-[9px] md:text-[10px] font-black uppercase tracking-widest text-zinc-400 bg-white/50 backdrop-blur-sm border border-zinc-200 rounded-xl px-2 md:px-3 py-1.5 md:py-2">
-              <Lock size={10} />
-              <span>Submit via card</span>
-            </div>
-          )}
 
           <div className="relative flex-1 md:flex-none min-w-[140px]">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
@@ -202,6 +213,24 @@ const TaskBoard = () => {
               className="pl-9 h-9 rounded-xl border-zinc-200 bg-white/50 backdrop-blur-sm focus:bg-white transition-all duration-300 w-full md:w-48 text-sm focus:ring-4 focus:ring-zinc-900/5"
             />
           </div>
+
+          {/* Highlight toggle switch */}
+          {uniqueClusters.length > 0 && (
+            <button
+              onClick={() => setHighlightClusters(h => !h)}
+              className={cn(
+                "flex items-center gap-2 h-9 px-3.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all border shrink-0 cursor-pointer",
+                highlightClusters
+                  ? "bg-indigo-50/80 border-indigo-200 text-indigo-700 shadow-sm"
+                  : "bg-white border-zinc-200 text-zinc-500 hover:text-zinc-900 hover:border-zinc-300"
+              )}
+              title="Toggle color highlights for ML workload clusters"
+            >
+              <Brain size={13} className={cn("transition-transform duration-500 shrink-0", highlightClusters && "rotate-12 scale-110 text-indigo-500")} />
+              <span className="hidden sm:inline">Highlight Clusters: {highlightClusters ? 'ON' : 'OFF'}</span>
+              <span className="sm:hidden">Clusters: {highlightClusters ? 'ON' : 'OFF'}</span>
+            </button>
+          )}
 
           {/* Desktop New Task button */}
           {!isMember && (
@@ -214,6 +243,51 @@ const TaskBoard = () => {
           )}
         </div>
       </div>
+
+      {/* Interactive Cluster Legend Bar */}
+      {uniqueClusters.length > 0 && (
+        <div className="px-4 md:px-8 py-3 border-b border-zinc-200/40 bg-white/40 backdrop-blur-md flex flex-wrap items-center gap-2.5 shrink-0 relative z-20">
+          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 flex items-center gap-1.5 mr-1">
+            <Brain size={11} className="text-zinc-400 animate-pulse" /> Cluster Legend & Filter:
+          </span>
+          <button
+            onClick={() => setSelectedClusterFilter(null)}
+            className={cn(
+              "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer border",
+              selectedClusterFilter === null
+                ? "bg-zinc-900 text-white border-zinc-950 shadow-md shadow-zinc-900/15"
+                : "bg-white border-zinc-200 text-zinc-500 hover:text-zinc-950 hover:border-zinc-300"
+            )}
+          >
+            All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
+          </button>
+          {uniqueClusters.map(cid => {
+            const style = getClusterStyle(cid)
+            const isSelected = selectedClusterFilter === cid
+            const clusterTasks = tasks.filter(t => t.cluster_id === cid)
+            const count = clusterTasks.length
+            const complexityCategory = getClusterComplexityCategory(clusterTasks)
+            return (
+              <button
+                key={cid}
+                onClick={() => setSelectedClusterFilter(isSelected ? null : cid)}
+                className={cn(
+                  "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 border cursor-pointer",
+                  isSelected
+                    ? "bg-white text-zinc-900 shadow-sm font-black"
+                    : "bg-white/50 text-zinc-500 border-zinc-200 hover:bg-white hover:border-zinc-300 hover:text-zinc-900 hover:shadow-md hover:-translate-y-0.5"
+                )}
+                style={isSelected ? { borderColor: style.fill, boxShadow: `0 0 0 2px ${style.fill}20` } : {}}
+              >
+                <span className={cn("w-1.5 h-1.5 rounded-full", style.accent)} />
+                <span>{style.name}</span>
+                <span className="text-[8px] font-normal text-zinc-400 normal-case">({complexityCategory})</span>
+                <span className="bg-zinc-100 text-zinc-600 px-1 py-0.5 rounded-md font-mono text-[8px]">{count}</span>
+              </button>
+            )
+          })}
+        </div>
+      )}
 
       {/* Board Background & Texture */}
       <DragDropContext onDragStart={onDragStart} onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
@@ -291,7 +365,7 @@ const TaskBoard = () => {
                               onClick={() => setSelectedTaskId(task.id)}
                               className="transition-transform duration-300 hover:scale-[1.02] active:scale-[0.98]"
                             >
-                              <TaskCard task={task} index={index} />
+                              <TaskCard task={task} index={index} highlightClusters={highlightClusters} />
                             </div>
                           ))}
                           {provided.placeholder}

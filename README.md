@@ -188,6 +188,39 @@ The `confidence_service` attaches confidence bands to every prediction:
 | 20 – 100 | Medium | Improving | Progress indicator shown |
 | > 100 | High | Confident | Full ML features enabled |
 
+### 4.6 Task Clustering (Unsupervised Learning)
+WATOS groups tasks dynamically using unsupervised machine learning to facilitate team workload analysis, pattern detection, and anomaly/outlier spotting.
+
+#### **Core Features (Feature Space)**
+Clustering is computed in a 3-dimensional feature space (`CLUSTER_FEATURES`):
+1.  **Complexity**: Task difficulty score (1.0 to 10.0).
+2.  **Effort Hours**: Estimated standard/expected duration hours.
+3.  **Priority Score**: Combined score calculated from urgency, complexity, and delay risk.
+
+#### **Algorithm Workflow & Architecture**
+1.  **Minimum Constraints**: A minimum of 4 tasks is required to form clusters. If `len(tasks) < 4`, the algorithm assigns all tasks to cluster `0`.
+2.  **Normalization**: Missing feature values are filled with `0`. The 3D feature matrix is normalized using Scikit-learn's `StandardScaler` to ensure features with wider ranges (e.g., effort hours vs complexity) do not disproportionately affect distance metrics.
+3.  **Density-Based Attempt (DBSCAN)**:
+    -   The system first fits a DBSCAN model (`eps=0.5`, `min_samples=3`) on the scaled features.
+    -   *Rationale*: Density-based clustering automatically identifies arbitrarily shaped clusters and flags outliers (noise tasks) with a label of `-1`.
+4.  **Centroid-Based Fallback (K-Means)**:
+    -   If DBSCAN is unable to partition the tasks effectively (i.e. puts all tasks into a single cluster or categorizes all tasks as noise, resulting in a single unique label), the algorithm falls back to K-Means.
+    -   **Optimal $k$ Search**: To select the number of clusters $k$ dynamically, the system performs a heuristic elbow analysis (`find_optimal_k`):
+        -   Iterates $k$ from `2` to `min(10, number of tasks)`.
+        -   Measures model `inertia_` (within-cluster sum of squares) for each $k$.
+        -   Computes consecutive inertia differences (`deltas = np.diff(inertias)`) and their ratios (`ratios = deltas[1:] / (deltas[:-1] + 1e-9)`).
+        -   Chooses the $k$ that maximizes the ratio of consecutive delta reductions, bounded between `2` and `10`.
+        -   Fits the final `KMeans` model with this optimal $k$ and outputs the cluster labels.
+
+#### **Implementation Map (Where it is applied)**
+-   **Clustering Engine**: Defined in [`clustering.py`](file:///c:/WATOS/watos-backend/app/ml/clustering.py) (`cluster_tasks` & `find_optimal_k`).
+-   **API Endpoint**: Handled by the GET `/api/v1/ml/clusters` router in [`ml.py` (API)](file:///c:/WATOS/watos-backend/app/api/v1/ml.py), returning a structured list of tasks mapped to their current `cluster_id`.
+-   **Pydantic Schemas**: `ClusterResponse` is declared in [`ml.py` (Schemas)](file:///c:/WATOS/watos-backend/app/schemas/ml.py).
+-   **Database Integration**: 
+    -   `cluster_id` is defined as an `Integer` column on the `Task` model in [`task.py` (Model)](file:///c:/WATOS/watos-backend/app/models/task.py).
+    -   `clustering` is supported as a tracked model type in `MLModelVersion` in [`ml_model_version.py`](file:///c:/WATOS/watos-backend/app/models/ml_model_version.py).
+-   **Frontend Types**: The TypeScript `Task` type in [`index.ts`](file:///c:/WATOS/watos-frontend/src/types/index.ts) contains the optional `cluster_id` property.
+
 ---
 
 ## 5. Security & Access Control

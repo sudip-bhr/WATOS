@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
-import { 
+import {
   FolderKanban, Plus, Trash2, Pencil, X, Check, BarChart3,
   ChevronRight, Clock, AlertTriangle, CheckCircle2, ListPlus, User
 } from 'lucide-react'
@@ -198,7 +198,6 @@ const Projects = () => {
       <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Projects</h1>
-          <p className="text-sm md:text-base text-zinc-500 mt-1">Create projects, define tasks and assign members.</p>
         </div>
         {canEdit && (
           <Button
@@ -290,13 +289,19 @@ const Projects = () => {
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         <div className="space-y-1">
                           <Label className="text-[10px] text-zinc-400">Complexity</Label>
-                          <Input
-                            type="number"
-                            min={1} max={5} step={0.5}
-                            value={task.complexity}
-                            onChange={e => updateInlineTask(task.id, 'complexity', parseFloat(e.target.value) || 1)}
-                            className="rounded-lg border-zinc-200 bg-white h-9 text-sm"
-                          />
+                          <select
+                            value={task.complexity <= 2.5 ? 'Low' : task.complexity <= 3.5 ? 'Medium' : 'High'}
+                            onChange={e => {
+                              const label = e.target.value
+                              const val = label === 'Low' ? 1.5 : label === 'Medium' ? 3.0 : 4.5
+                              updateInlineTask(task.id, 'complexity', val)
+                            }}
+                            className="w-full h-9 rounded-lg border border-zinc-200 bg-white px-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-zinc-900"
+                          >
+                            <option value="Low">Low</option>
+                            <option value="Medium">Medium</option>
+                            <option value="High">High</option>
+                          </select>
                         </div>
                         <div className="space-y-1">
                           <Label className="text-[10px] text-zinc-400">Effort (hrs)</Label>
@@ -326,15 +331,15 @@ const Projects = () => {
                                 <button
                                   key={m.id}
                                   onClick={() => {
-                                    const next = isSelected 
+                                    const next = isSelected
                                       ? task.assignee_ids.filter(id => id !== m.id)
                                       : [...task.assignee_ids, m.id]
                                     updateInlineTask(task.id, 'assignee_ids', next)
                                   }}
                                   className={cn(
                                     "px-2 py-1.5 rounded-lg text-[10px] font-medium transition-all border",
-                                    isSelected 
-                                      ? "bg-zinc-900 border-zinc-900 text-white" 
+                                    isSelected
+                                      ? "bg-zinc-900 border-zinc-900 text-white"
                                       : "bg-white border-zinc-200 text-zinc-600 hover:border-zinc-300"
                                   )}
                                 >

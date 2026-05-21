@@ -13,6 +13,7 @@ import { format } from 'date-fns'
 import { Label } from '../ui/label'
 import { Input } from '../ui/input'
 import { cn } from '@/lib/utils'
+import { getComplexityLabel, getComplexityStyle } from '@/lib/clusters'
 import { getSubtasks, createSubtask, updateSubtask, deleteSubtask } from '@/api/subtasks'
 import type { Subtask } from '@/api/subtasks'
 import { getComments, createComment, getAttachments, uploadAttachment, watchTask, unwatchTask } from '@/api/collaboration'
@@ -186,6 +187,9 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
 
   if (!task) return null
 
+  const complexityLabel = getComplexityLabel(task.complexity)
+  const complexityStyle = getComplexityStyle(complexityLabel)
+
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0 bg-white border-l border-zinc-200 shadow-2xl sm:rounded-l-[2.5rem]">
@@ -309,7 +313,7 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
                 Intelligence Dashboard
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 relative z-10">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 relative z-10">
                 <div className="space-y-3">
                   <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-black uppercase tracking-widest">
                     <Clock size={12} /> Predicted Effort
@@ -329,12 +333,26 @@ const TaskDetails = ({ task, isOpen, onClose }: TaskDetailsProps) => {
                   <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-black uppercase tracking-widest">
                     <BarChart3 size={12} /> Delay Risk
                   </div>
-                  <div className="text-4xl font-black text-zinc-900 tabular-nums">
+                  <div className="text-4xl font-black text-zinc-900 tabular-nums leading-none">
                     {task.delay_prob ? Math.round(task.delay_prob * 100) : 0}%
                   </div>
                   <Badge variant={task.delay_prob > 0.4 ? 'warning' : 'success'} className="h-6 px-3 rounded-full text-[9px] font-black uppercase tracking-widest border-none">
                      {task.delay_prob > 0.4 ? 'High Risk' : 'Low Risk'}
                   </Badge>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2 text-[10px] text-zinc-400 font-black uppercase tracking-widest">
+                    <Brain size={12} /> Task Complexity
+                  </div>
+                  <div className="text-4xl font-black text-zinc-900 leading-none">
+                    {complexityLabel}
+                  </div>
+                  <div className="flex">
+                    <span className={cn("text-[9px] font-black uppercase tracking-widest px-2.5 py-0.5 rounded-full", complexityStyle.badge)}>
+                      {task.complexity.toFixed(1)} score
+                    </span>
+                  </div>
                 </div>
               </div>
 
