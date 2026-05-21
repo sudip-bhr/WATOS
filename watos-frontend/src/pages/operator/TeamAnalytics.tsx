@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Brain, Download, FileText, TrendingUp, AlertTriangle, Crosshair, Users, CheckCircle2, Zap, Activity } from 'lucide-react'
+import { Brain, FileText, TrendingUp, AlertTriangle, Crosshair, Users, CheckCircle2, Zap } from 'lucide-react'
 import client from '@/api/client'
 import PertChart from '@/components/analytics/PertChart'
+import ClusterChart from '@/components/analytics/ClusterChart'
 import { useTaskStore } from '@/store/taskStore'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
@@ -188,20 +188,6 @@ const TeamAnalytics = () => {
     }).finally(() => setLoading(false))
   }, [fetchTasks])
 
-  const exportReport = async () => {
-    try {
-      const response = await client.get('/reports/generate?format=json', { responseType: 'blob' })
-      const url = window.URL.createObjectURL(new Blob([response.data]))
-      const link = document.createElement('a')
-      link.href = url
-      link.setAttribute('download', 'watos_report.json')
-      document.body.appendChild(link)
-      link.click()
-    } catch (err) {
-      console.error('Export failed', err)
-    }
-  }
-
   const activeTasks = tasks.filter(t => t.status !== 'done')
   const highRiskCount = activeTasks.filter(t => t.delay_prob > 0.6).length
   const avgComplexity = activeTasks.length ? activeTasks.reduce((acc, curr) => acc + curr.complexity, 0) / activeTasks.length : 0
@@ -221,29 +207,10 @@ const TeamAnalytics = () => {
   return (
     <div className="p-4 md:p-8 space-y-10 md:space-y-12 max-w-7xl mx-auto pb-20">
       {/* Header with Glassmorphism Effect */}
-      <div className="bg-white rounded-3xl border border-zinc-100 p-8 md:p-10 shadow-sm relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-5 pointer-events-none">
-          <Brain size={160} />
-        </div>
-        <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-8">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-              <Activity size={12} className="text-zinc-400" /> System Intelligence
-            </div>
-            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900">Team Analytics</h1>
-            <p className="text-sm md:text-base text-zinc-500 font-medium max-w-xl leading-relaxed">
-              Real-time performance tracking and predictive skill gap analysis for optimized team delivery.
-            </p>
+      <div className="space-y-3">
+            <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900">Team Analytics</h1>           
           </div>
-          <Button 
-            onClick={exportReport} 
-            className="w-full md:w-auto gap-2 bg-zinc-900 text-white hover:bg-zinc-800 h-11 px-6 rounded-xl font-bold uppercase tracking-wider text-[10px] shadow-sm transition-all"
-          >
-            <Download size={14} /> Export Intel
-          </Button>
-        </div>
-      </div>
-
+    
       {tasksLoading || loading ? (
         <div className="space-y-8">
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -299,6 +266,19 @@ const TeamAnalytics = () => {
                 </div>
               </CardContent>
             </Card>
+          </div>
+
+          {/* ── ML Workload Group Clustering Section ── */}
+          <div className="space-y-8">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-3">
+                <Brain className="text-indigo-500 animate-pulse" size={24} /> ML Workload Grouping
+              </h2>
+              <p className="text-sm text-zinc-500 font-medium">
+                Predictive clustering based on task complexity, effort hours, and priority scores.
+              </p>
+            </div>
+            <ClusterChart tasks={tasks} />
           </div>
 
           {/* ── Member Performance Section ── */}

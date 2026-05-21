@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Brain, TrendingUp, Users, AlertCircle, ArrowRight, Zap, Bell, CheckCircle2, Loader2, BarChart3, MoveRight, UserMinus, UserPlus, Info } from 'lucide-react'

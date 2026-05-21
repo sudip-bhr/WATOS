@@ -7,6 +7,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import StatCard from '@/components/shared/StatCard'
 import { isAfter, parseISO, isWithinInterval, subDays } from 'date-fns'
 import { cn } from '@/lib/utils'
+import { getComplexityLabel } from '@/lib/clusters'
 
 const itemVariants = {
   hidden: { opacity: 0, y: 16 },
@@ -108,7 +109,7 @@ const MyPerformance = () => {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm opacity-60">Effort: {riskiest.effort_hours}h · Complexity: {riskiest.complexity.toFixed(1)}</p>
+                <p className="text-sm opacity-60">Effort: {riskiest.effort_hours}h · Complexity: {getComplexityLabel(riskiest.complexity)} ({riskiest.complexity.toFixed(1)})</p>
               )}
             </div>
           ) : (

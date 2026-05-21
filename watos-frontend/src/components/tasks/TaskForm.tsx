@@ -129,14 +129,21 @@ const TaskForm = ({ task, defaultProjectId, onSuccess }: TaskFormProps) => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="complexity">Complexity (1-5)</Label>
-            <Input 
-              id="complexity" 
-              type="number" 
-              min="1" max="5" step="0.5"
-              value={formData.complexity} 
-              onChange={e => setFormData({...formData, complexity: parseFloat(e.target.value)})} 
-            />
+            <Label htmlFor="complexity">Complexity</Label>
+            <select
+              id="complexity"
+              value={formData.complexity <= 2.5 ? 'Low' : formData.complexity <= 3.5 ? 'Medium' : 'High'}
+              onChange={e => {
+                const label = e.target.value
+                const val = label === 'Low' ? 1.5 : label === 'Medium' ? 3.0 : 4.5
+                setFormData({...formData, complexity: val})
+              }}
+              className="w-full h-10 rounded-lg border border-zinc-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-900"
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
           </div>
           <div className="space-y-2">
             <Label htmlFor="effort">Base Effort (hrs)</Label>

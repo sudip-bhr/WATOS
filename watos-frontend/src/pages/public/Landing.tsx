@@ -1,9 +1,8 @@
 import { useNavigate, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import {
-  Brain, ArrowRight, Activity,
-  ChevronRight, Play, Cpu,
-  BarChart3, Layers, Zap, Check,
+  Brain, ArrowRight,
+  ChevronRight, Layers, Check,
   Globe
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
@@ -47,8 +46,12 @@ const Landing = () => {
       <nav className="fixed top-0 w-full z-50 border-b border-zinc-100/50 bg-white/60 backdrop-blur-2xl">
         <div className="max-w-7xl mx-auto px-8 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <div className="h-10 w-10 rounded-xl bg-zinc-900 flex items-center justify-center transition-transform group-hover:rotate-12">
-              <Brain size={20} className="text-white" />
+            <div className="h-10 w-10 overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-105">
+              <img
+                src="/logo.png"
+                alt="WATOS Logo"
+                className="h-full w-full object-cover"
+              />
             </div>
             <span className="font-bold text-2xl tracking-tighter">WATOS</span>
           </div>
@@ -182,13 +185,12 @@ const Landing = () => {
       </section>
 
       {/* Product Preview Slider */}
-      <section id="preview" className="py-48 px-6 overflow-hidden relative">
+      <section id="preview" className="py-20 md:py-28 px-6 overflow-hidden relative">
         {/* Glow Effects */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl max-h-5xl bg-indigo-50/20 rounded-full blur-[180px] -z-10" />
 
-        <div className="max-w-7xl mx-auto mb-24 text-center space-y-6">
-
-          <h2 className="text-5xl md:text-6xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
+        <div className="max-w-7xl mx-auto mb-12 text-center space-y-4">
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
         </div>
 
         <div className="max-w-7xl mx-auto">
@@ -206,32 +208,30 @@ const Landing = () => {
               modifier: 2.5,
               slideShadows: false,
             }}
-            autoplay={{ delay: 5000 }}
+            autoplay={{ delay: 3000 }}
             pagination={{ clickable: true }}
-            className="pb-32 overflow-visible!"
+            className="pb-16 overflow-visible!"
           >
             {[
-              { title: "Task Board", img: "", caption: "AI-assisted task management and rebalancing." },
-              { title: "Analytics", img: "", caption: "Deep neural analysis of project telemetry." },
-              { title: "PERT View", img: "", caption: "Automated critical path and dependency tracking." }
+              { img: "/screenshots/Project_overview.png", title: "Project Overview" },
+              { img: "/screenshots/Analytics2.png", title: "Predictive Analytics" },
+              { img: "/screenshots/MemberAssigned.png", title: "Resource Allocation" },
+              { img: "/screenshots/Workload.png", title: "Workload Balancing" }
             ].map((slide, idx) => (
-              <SwiperSlide key={idx} className="w-[90%] md:w-[75%] lg:w-[65%]">
-                <div className="group relative rounded-[3rem] overflow-hidden border border-white/50 shadow-[0_48px_96px_-24px_rgba(0,0,0,0.12)] transition-all duration-1000 bg-white">
+              <SwiperSlide key={idx} className="w-[85%] md:w-[60%] lg:w-[50%] max-w-[760px]">
+                <div className="showcase-card group relative rounded-xl md:rounded-2xl overflow-hidden border border-zinc-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_1px_rgba(0,0,0,0.06)] bg-zinc-50 select-none">
+                  {/* Top-left small title (light weight, subtle tracking) */}
+                  <div className="absolute top-5 left-5 md:top-6 md:left-6 z-20 pointer-events-none">
+                    <span className="text-[10px] font-medium tracking-[0.2em] text-zinc-400 uppercase select-none">{slide.title}</span>
+                  </div>
+
                   <img
                     src={slide.img}
                     alt={slide.title}
-                    className="w-full aspect-[16/10] object-cover grayscale-[20%] group-hover:grayscale-0 transition-all duration-1000 scale-[1.02] group-hover:scale-100"
+                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
                   />
-                  {/* Glassy Overlay Label */}
-                  <div className="absolute top-10 left-10">
-                    <div className="px-6 py-3 rounded-2xl bg-white/40 backdrop-blur-3xl border border-white/40 shadow-2xl">
-                      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-900">{slide.title}</span>
-                    </div>
-                  </div>
-                  {/* Bottom Caption Overlay */}
-                  <div className="absolute inset-x-0 bottom-0 p-12 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-8 group-hover:translate-y-0">
-                    <p className="text-white text-base font-medium tracking-wide leading-relaxed max-w-md">{slide.caption}</p>
-                  </div>
+
+
                 </div>
               </SwiperSlide>
             ))}

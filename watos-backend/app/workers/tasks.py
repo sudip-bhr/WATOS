@@ -73,6 +73,9 @@ def retrain_models(triggered_by_user_id: str = None):
     # Promote to active if it's the latest version
     promote_latest_versions_sync()
 
+    # Run clustering and persist to DB
+    run_clustering_sync()
+
     return {
         "status": "done",
         "duration": duration_metrics,
@@ -119,3 +122,37 @@ def promote_latest_versions_sync():
 def send_notification_email(to_email: str, subject: str, body: str):
     """Send email via fastapi-mail (stub — configure SMTP in .env)."""
     print(f"[EMAIL] To: {to_email} | Subject: {subject}")
+
+
+def run_clustering_sync() -> None:
+    """
+    Fetch all active tasks, cluster them using ML features,
+    and persist cluster_id values back to the DB synchronously (using an async wrapper).
+    """
+    import asyncio
+    from app.db.session import AsyncSessionLocal
+    from app.ml.clustering import run_clustering_async
+
+    async def _run():
+        async with AsyncSessionLocal() as db:
+            await run_clustering_async(db)
+
+    try:
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = None
+
+        if loop and loop.is_running():
+            # If loop is already running, run it in a separate thread to avoid blocking/nesting issues
+            import threading
+            def run_in_thread():
+                asyncio.run(_run())
+            t = threading.Thread(target=run_in_thread)
+            t.start()
+            t.join()
+        else:
+            asyncio.run(_run())
+    except Exception as e:
+        print(f"Error in run_clustering_sync: {e}")
+

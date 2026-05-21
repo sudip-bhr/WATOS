@@ -43,3 +43,52 @@ def cluster_tasks(df: pd.DataFrame) -> list:
         labels = km.fit_predict(X_scaled)
         
     return labels.tolist()
+
+
+async def run_clustering_async(db) -> None:
+    """
+    Fetch all active tasks, cluster them using ML features,
+    and persist cluster_id values back to the DB asynchronously.
+    """
+    # Import related models to ensure SQLAlchemy's foreign keys are resolved
+    from app.models.user import User
+    from app.models.project import Project
+    from app.models.organization import Organization
+    from sqlalchemy import select
+    from app.models.task import Task
+    
+    try:
+        # Fetch active tasks
+        stmt = select(Task).where(Task.is_deleted == False)
+        result = await db.execute(stmt)
+        tasks = result.scalars().all()
+        
+        if not tasks or len(tasks) < 4:
+            print(f"Skipping task clustering: only {len(tasks)} valid tasks exist (minimum 4 required).")
+            return
+        
+        # Build DataFrame with features
+        task_data = []
+        for t in tasks:
+            task_data.append({
+                "id": t.id,
+                "complexity": t.complexity if t.complexity is not None else 1.0,
+                "effort_hours": t.effort_hours if t.effort_hours is not None else 0.0,
+                "priority_score": t.priority_score if t.priority_score is not None else 1.0
+            })
+            
+        df = pd.DataFrame(task_data)
+        
+        # Compute cluster labels
+        labels = cluster_tasks(df)
+        
+        # Assign cluster labels to database objects
+        for t, label in zip(tasks, labels):
+            t.cluster_id = label
+            
+        await db.commit()
+        print(f"Successfully clustered and persisted {len(tasks)} tasks async.")
+    except Exception as e:
+        print(f"Error in run_clustering_async: {e}")
+        await db.rollback()
+

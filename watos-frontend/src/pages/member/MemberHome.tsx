@@ -98,9 +98,9 @@ const MemberHome = () => {
           <h1 className="text-2xl md:text-4xl font-black tracking-tight text-zinc-900">
             {greeting}, {firstName} 👋
           </h1>
-          <p className="text-sm md:text-base text-zinc-500 font-medium">
+          {/* <p className="text-sm md:text-base text-zinc-500 font-medium">
             Here's your professional workload summary.
-          </p>
+          </p> */}
         </div>
       </motion.div>
 
