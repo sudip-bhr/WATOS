@@ -23,24 +23,24 @@ const itemVariants = {
 
 // Custom Progress Arc Component
 const ProgressArc = ({ percentage, label }: { percentage: number, label: string }) => {
-  const radius = 50 // Reduced radius for better fit
+  const radius = 70 // larger radius for bigger arc
   const circumference = 2 * Math.PI * radius
   const strokeDashoffset = circumference - (percentage / 100) * circumference
 
   return (
     <div className="relative flex flex-col items-center justify-center">
-      <svg width="120" height="120" viewBox="0 0 160 160" className="transform -rotate-90">
+      <svg width="180" height="180" viewBox="0 0 200 200" className="transform -rotate-90">
         <circle
-          cx="80" cy="80" r={radius}
+          cx="100" cy="100" r={radius}
           stroke="currentColor"
-          strokeWidth="12"
+          strokeWidth="14"
           fill="transparent"
           className="text-zinc-100"
         />
         <circle
-          cx="80" cy="80" r={radius}
+          cx="100" cy="100" r={radius}
           stroke="currentColor"
-          strokeWidth="12"
+          strokeWidth="14"
           fill="transparent"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
@@ -50,12 +50,13 @@ const ProgressArc = ({ percentage, label }: { percentage: number, label: string 
         />
       </svg>
       <div className="absolute flex flex-col items-center justify-center top-0 left-0 w-full h-full">
-        <span className="text-2xl font-black text-zinc-900">{percentage}%</span>
-        <span className="text-[8px] font-bold uppercase tracking-widest text-zinc-400 mt-1">{label}</span>
+        <span className="text-3xl font-black text-zinc-900">{percentage}%</span>
+        <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-400 mt-1">{label}</span>
       </div>
     </div>
   )
 }
+
 
 const MemberHome = () => {
   const navigate = useNavigate()
@@ -68,10 +69,10 @@ const MemberHome = () => {
   const myTasks = tasks.filter(t => t.assignee_id === user?.id)
   const done = myTasks.filter(t => t.status === 'done' || t.status === 'approved')
   const active = myTasks.filter(t => t.status !== 'done' && t.status !== 'approved')
-  
+
   const needsRevision = myTasks.filter(t => t.status === 'rejected')
   const inReview = myTasks.filter(t => t.status === 'review')
-  
+
   const completionPercentage = myTasks.length > 0 ? Math.round((done.length / myTasks.length) * 100) : 0
 
   const upcoming = [...active]
@@ -96,11 +97,8 @@ const MemberHome = () => {
             {format(new Date(), 'EEEE, MMMM d')}
           </p>
           <h1 className="text-2xl md:text-4xl font-black tracking-tight text-zinc-900">
-            {greeting}, {firstName}
+            {greeting}, {firstName}!
           </h1>
-          {/* <p className="text-sm md:text-base text-zinc-500 font-medium">
-            Here's your professional workload summary.
-          </p> */}
         </div>
       </motion.div>
 
@@ -109,7 +107,7 @@ const MemberHome = () => {
 
         {/* Action Queue & Completion Arc */}
         <motion.div variants={itemVariants} className="lg:col-span-2 space-y-8">
-          
+
           {/* Progress Overview Panel */}
           <div className="bg-white p-6 md:p-8 rounded-3xl border border-zinc-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="space-y-2 max-w-sm text-center md:text-left">
@@ -121,16 +119,16 @@ const MemberHome = () => {
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4 pt-4">
                 <div className="bg-amber-50 px-3 py-1.5 rounded-xl border border-amber-100 flex items-center gap-2">
-                   <AlertCircle size={14} className="text-amber-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest text-amber-700">{needsRevision.length} Revisions</span>
+                  <AlertCircle size={14} className="text-amber-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-amber-700">{needsRevision.length} Revisions</span>
                 </div>
                 <div className="bg-blue-50 px-3 py-1.5 rounded-xl border border-blue-100 flex items-center gap-2">
-                   <Clock size={14} className="text-blue-500" />
-                   <span className="text-[10px] font-black uppercase tracking-widest text-blue-700">{inReview.length} In Review</span>
+                  <Clock size={14} className="text-blue-500" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-blue-700">{inReview.length} In Review</span>
                 </div>
               </div>
             </div>
-            
+
             <div className="shrink-0 md:mr-4">
               <ProgressArc percentage={completionPercentage} label="Completion" />
             </div>
@@ -178,7 +176,7 @@ const MemberHome = () => {
 
             {loading ? (
               <div className="space-y-3">
-                {[1,2,3].map(i => <Skeleton key={i} className="h-20 rounded-2xl" />)}
+                {[1, 2, 3].map(i => <Skeleton key={i} className="h-20 rounded-2xl" />)}
               </div>
             ) : upcoming.length === 0 ? (
               <div className="p-10 text-center bg-zinc-50 border border-dashed border-zinc-200 rounded-3xl">
@@ -214,7 +212,7 @@ const MemberHome = () => {
                           {isOverdue
                             ? `${Math.abs(daysLeft)}d overdue`
                             : daysLeft === 0 ? 'Due today'
-                            : `${daysLeft}d remaining`}
+                              : `${daysLeft}d remaining`}
                           {' · '}
                           {format(parseISO(task.deadline), 'MMM d')}
                         </p>
@@ -223,7 +221,7 @@ const MemberHome = () => {
                       <span className={cn(
                         "shrink-0 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest",
                         task.status === 'review' ? "bg-amber-50 text-amber-600" :
-                        "bg-zinc-100 text-zinc-500"
+                          "bg-zinc-100 text-zinc-500"
                       )}>
                         {task.status.replace('_', ' ')}
                       </span>
@@ -242,14 +240,14 @@ const MemberHome = () => {
           <div className="bg-zinc-900 rounded-3xl p-6 text-white shadow-xl shadow-zinc-900/20">
             <h2 className="text-xs font-black uppercase tracking-widest text-zinc-400 mb-4">Operator Pulse</h2>
             <div className="space-y-4">
-               <div className="bg-zinc-800/50 p-4 rounded-2xl border border-zinc-700/50">
-                 <p className="text-sm font-medium leading-relaxed text-zinc-200">
-                   "Great job hitting the deliverables last week. Let's focus on clearing the review queue before the sprint ends."
-                 </p>
-                 <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-3">
-                   — Auto-summarized from Operator
-                 </p>
-               </div>
+              <div className="bg-zinc-800/50 p-4 rounded-2xl border border-zinc-700/50">
+                <p className="text-sm font-medium leading-relaxed text-zinc-200">
+                  "Great job hitting the deliverables last week. Let's focus on clearing the review queue before the sprint ends."
+                </p>
+                <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mt-3">
+                  — Auto-summarized from Operator
+                </p>
+              </div>
             </div>
           </div>
 

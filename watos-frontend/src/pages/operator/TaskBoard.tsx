@@ -49,6 +49,29 @@ const TaskBoard = () => {
 
   const isMember = user?.role === 'member'
 
+  // Helper to determine if the current role can drop to a given status column
+  const canDropTo = (status: Task['status']): boolean => {
+    const role = (user?.role ?? '').toLowerCase()
+    console.log('canDropTo check:', { role, status })
+    if (role === 'member') {
+      // Members may only move tasks to 'in_progress'
+      return status === 'in_progress'
+    }
+    if (role === 'admin') {
+      // Admins can move tasks to 'rejected' (Needs Revision)
+      if (status === 'rejected') {
+        console.log('Admin allowed to drop to Needs Revision')
+        return true
+      }
+      return false
+    }
+    if (role === 'operator') {
+      // Operators can approve tasks
+      return status === 'approved'
+    }
+    return false
+  }
+
   useEffect(() => { fetchTasks() }, [fetchTasks])
 
   // Resolve live task from store (critical: operator review panel sees correct status)
@@ -148,6 +171,7 @@ const TaskBoard = () => {
   }, [])
 
   const onDragEnd = useCallback(async (result: DropResult) => {
+    console.log('DragEnd:', { result });
     setIsDragging(false)
     setDragOverColumnId(null)
     const { destination, draggableId } = result
@@ -156,19 +180,25 @@ const TaskBoard = () => {
     const task = tasks.find(t => t.id === draggableId)
     if (!task || task.status === newStatus) return
     
-    if (isMember) {
-      if (task.status === 'review') return // Cannot move out of review
-      if (newStatus === 'todo' || newStatus === 'approved' || newStatus === 'rejected') {
-        return // Members cannot move to these states
-      }
+    // Enforce role permissions on drop
+    if (!canDropTo(newStatus)) {
+      return;
     }
 
-    try {
-      await updateTaskStatus(draggableId, newStatus)
-    } catch (e) {
-      console.error(e)
+    // Existing member restrictions (additional safety)
+    if (user?.role === 'member') {
+      if (task?.status === 'review') return; // Cannot move out of review
     }
-  }, [tasks, isMember, updateTaskStatus])
+
+    // Role-specific fetch and update
+    console.log('Admin drop attempt:', { role: user?.role, taskId: draggableId, newStatus });
+    try {
+      await updateTaskStatus(draggableId, newStatus);
+    } catch (e) {
+      console.error(e);
+    }
+    console.log('DragEnd completed for', { taskId: draggableId, newStatus });
+  }, [tasks, user, updateTaskStatus, canDropTo])
 
   return (
     <div className="h-screen flex flex-col">
@@ -256,7 +286,7 @@ const TaskBoard = () => {
               "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer border",
               selectedClusterFilter === null
                 ? "bg-zinc-900 text-white border-zinc-950 shadow-md shadow-zinc-900/15"
-                : "bg-white border-zinc-200 text-zinc-500 hover:text-zinc-950 hover:border-zinc-300"
+                : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-950 hover:border-zinc-300"
             )}
           >
             All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
@@ -339,7 +369,7 @@ const TaskBoard = () => {
                   </div>
 
                   {/* Droppable Column Area */}
-                  <Droppable droppableId={col.id} isDropDisabled={isMember}>
+                  <Droppable droppableId={col.id} isDropDisabled={!canDropTo(col.id)}>
                     {(provided, snapshot) => (
                       <div
                         ref={provided.innerRef}
