@@ -61,7 +61,7 @@ const Register = () => {
       <div className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" onClick={() => navigate('/')}>
         <div className="h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-zinc-900/5">
           <img
-            src="/logo.png"
+            src="/logo2.png"
             alt="WATOS Logo"
             className="h-full w-full object-cover"
           />

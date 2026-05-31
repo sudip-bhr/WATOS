@@ -89,7 +89,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
             >
               <div className="h-10 w-10 overflow-hidden rounded-xl shadow-xl shadow-zinc-900/5 group-hover:scale-110 transition-transform shrink-0">
                 <img
-                  src="/logo.png"
+                  src="/logo2.png"
                   alt="WATOS Logo"
                   className="h-full w-full object-cover"
                 />
@@ -143,7 +143,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
               aria-label="Expand Sidebar"
             >
               <img
-                src="/logo.png"
+                src="/logo2.png"
                 alt="WATOS Logo"
                 className="h-full w-full object-cover"
               />

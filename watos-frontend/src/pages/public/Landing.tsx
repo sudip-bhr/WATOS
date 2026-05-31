@@ -48,7 +48,7 @@ const Landing = () => {
           <div className="flex items-center gap-3 group cursor-pointer">
             <div className="h-10 w-10 overflow-hidden rounded-xl transition-transform duration-300 group-hover:scale-105">
               <img
-                src="/logo.png"
+                src="/logo2.png"
                 alt="WATOS Logo"
                 className="h-full w-full object-cover"
               />
@@ -97,7 +97,7 @@ const Landing = () => {
             Deliver.
           </h1>
           <p className="text-xl text-zinc-500 max-w-2xl mx-auto leading-relaxed font-medium">
-            The high-precision workload analysis system that turns complex project telemetry into actionable intelligence. Built for teams that value clarity and performance.
+            Turn project data into clear, actionable insights. Spot trends early, improve performance, and make confident decisions that keep your projects on track.
           </p>
           <div className="flex flex-wrap justify-center gap-5 pt-6">
             {isAuthenticated ? (
@@ -110,6 +110,53 @@ const Landing = () => {
               </Button>
             )}
           </div>
+        </div>
+      </section>  
+      <section id="preview" className="pt-4 pb-20 px-6 overflow-hidden relative"> 
+          {/* screenshot */}
+             <div className="max-w-7xl mx-auto">
+          <Swiper
+            modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
+            effect="coverflow"
+            grabCursor={true}
+            centeredSlides={true}
+            slidesPerView={'auto'}
+            loop={true}
+            coverflowEffect={{
+              rotate: 0,
+              stretch: 0,
+              depth: 100,
+              modifier: 2.5,
+              slideShadows: false,
+            }}
+            autoplay={{ delay: 3000 }}
+            pagination={{ clickable: true }}
+            className="pb-16 overflow-visible!"
+          >
+            {[
+              { img: "/screenshots/Project_overview.png" },
+              { img: "/screenshots/Analytics2.png" },
+              { img: "/screenshots/MemberAssigned.png" },
+              { img: "/screenshots/Workload.png" }
+            ].map((slide, idx) => (
+              <SwiperSlide key={idx} className="w-[85%] md:w-[60%] lg:w-[50%] max-w-[760px]">
+                <div className="showcase-card group relative rounded-xl md:rounded-2xl overflow-hidden border border-zinc-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_1px_rgba(0,0,0,0.06)] bg-zinc-50 select-none">
+                  {/* Top-left small title (light weight, subtle tracking) */}
+                  <div className="absolute top-5 left-5 md:top-6 md:left-6 z-20 pointer-events-none">
+                    <span className="text-[10px] font-medium tracking-[0.2em] text-zinc-400 uppercase select-none">{slide.title}</span>
+                  </div>
+
+                  <img
+                    src={slide.img}
+                    alt={slide.title}
+                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
+                  />
+
+
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
 
       </section>
@@ -182,62 +229,7 @@ const Landing = () => {
             ))}
           </div>
         </div>
-      </section>
-
-      {/* Product Preview Slider */}
-      <section id="preview" className="py-20 md:py-28 px-6 overflow-hidden relative">
-        {/* Glow Effects */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-5xl max-h-5xl bg-indigo-50/20 rounded-full blur-[180px] -z-10" />
-
-        <div className="max-w-7xl mx-auto mb-12 text-center space-y-4">
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tighter text-gradient-subtle">The Workspace Experience</h2>
-        </div>
-
-        <div className="max-w-7xl mx-auto">
-          <Swiper
-            modules={[EffectCoverflow, Pagination, Autoplay, Navigation]}
-            effect="coverflow"
-            grabCursor={true}
-            centeredSlides={true}
-            slidesPerView={'auto'}
-            loop={true}
-            coverflowEffect={{
-              rotate: 0,
-              stretch: 0,
-              depth: 100,
-              modifier: 2.5,
-              slideShadows: false,
-            }}
-            autoplay={{ delay: 3000 }}
-            pagination={{ clickable: true }}
-            className="pb-16 overflow-visible!"
-          >
-            {[
-              { img: "/screenshots/Project_overview.png", title: "Project Overview" },
-              { img: "/screenshots/Analytics2.png", title: "Predictive Analytics" },
-              { img: "/screenshots/MemberAssigned.png", title: "Resource Allocation" },
-              { img: "/screenshots/Workload.png", title: "Workload Balancing" }
-            ].map((slide, idx) => (
-              <SwiperSlide key={idx} className="w-[85%] md:w-[60%] lg:w-[50%] max-w-[760px]">
-                <div className="showcase-card group relative rounded-xl md:rounded-2xl overflow-hidden border border-zinc-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_1px_rgba(0,0,0,0.06)] bg-zinc-50 select-none">
-                  {/* Top-left small title (light weight, subtle tracking) */}
-                  <div className="absolute top-5 left-5 md:top-6 md:left-6 z-20 pointer-events-none">
-                    <span className="text-[10px] font-medium tracking-[0.2em] text-zinc-400 uppercase select-none">{slide.title}</span>
-                  </div>
-
-                  <img
-                    src={slide.img}
-                    alt={slide.title}
-                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
-                  />
-
-
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </section>
+      </section> 
 
       {/* CTA Section */}
       <section className="py-52 px-6 relative overflow-hidden">
@@ -280,7 +272,7 @@ const Landing = () => {
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 overflow-hidden rounded-xl shadow-sm">
                 <img
-                  src="/logo.png"
+                  src="/logo2.png"
                   alt="WATOS Logo"
                   className="h-full w-full object-cover"
                 />
