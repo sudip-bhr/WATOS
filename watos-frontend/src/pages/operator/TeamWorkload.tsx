@@ -40,7 +40,7 @@ const TeamWorkload = () => {
   const [loading, setLoading] = useState(true)
   const [notifyingIds, setNotifyingIds] = useState<Set<string>>(new Set())
   const [executingIds, setExecutingIds] = useState<Set<string>>(new Set())
-  
+
   // Manual rebalancing state
   const [selectedUser, setSelectedUser] = useState<UserWorkload | null>(null)
   const [userTasks, setUserTasks] = useState<Task[]>([])
@@ -90,8 +90,8 @@ const TeamWorkload = () => {
   const executeSuggestion = async (sug: RebalancingSuggestion) => {
     setExecutingIds(prev => new Set(prev).add(sug.task_id))
     try {
-      await client.patch(`/tasks/${sug.task_id}`, { 
-        assignee_id: sug.suggested_assignee_id 
+      await client.patch(`/tasks/${sug.task_id}`, {
+        assignee_id: sug.suggested_assignee_id
       })
       toast({ title: 'Task reassigned', description: `"${sug.task_title}" → ${sug.suggested_assignee_name}` })
       fetchData()
@@ -124,11 +124,11 @@ const TeamWorkload = () => {
     setIsModalOpen(true)
     setLoadingTasks(true)
     try {
-      const res = await client.get('/tasks', { 
-        params: { 
-          assignee_id: u.user_id, 
-          status: 'todo,in_progress' 
-        } 
+      const res = await client.get('/tasks', {
+        params: {
+          assignee_id: u.user_id,
+          status: 'todo,in_progress'
+        }
       })
       setUserTasks(res.data)
     } catch {
@@ -145,7 +145,7 @@ const TeamWorkload = () => {
       await client.patch(`/tasks/${taskId}`, { assignee_id: targetUserId })
       const targetName = workloads.find(w => w.user_id === targetUserId)?.full_name
       toast({ title: 'Task shifted', description: `Successfully moved to ${targetName}` })
-      
+
       // Update local state to reflect change immediately
       setUserTasks(prev => prev.filter(t => t.id !== taskId))
       fetchData()
@@ -167,11 +167,9 @@ const TeamWorkload = () => {
           <BarChart3 size={160} />
         </div>
         <div className="relative z-10 space-y-3">
-          <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-            <Zap size={12} className="text-zinc-400" /> Optimization Core
-          </div>
+
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-zinc-900">
-            {isAdmin ? 'Capacity Governance' : 'Workload Optimization'}
+            {isAdmin ? 'Workload Oversight' : 'Workload Optimization'}
           </h1>
           <p className="text-sm md:text-base text-zinc-500 font-medium max-w-2xl leading-relaxed">
             {isAdmin
@@ -209,7 +207,7 @@ const TeamWorkload = () => {
                 </div>
               </CardContent>
             </Card>
-            
+
             {/* Overloaded Members */}
             <Card className={cn(
               "border-none rounded-[2rem] shadow-sm overflow-hidden transition-all duration-300 group h-full",
@@ -268,7 +266,7 @@ const TeamWorkload = () => {
                 <Zap className="h-4 w-4 text-zinc-900 fill-current" />
                 <h2 className="text-lg font-bold tracking-tight">Proactive Re-balancing</h2>
               </div>
-              
+
               <div className="space-y-4">
                 {suggestions.length === 0 ? (
                   <div className="p-8 border-2 border-dashed rounded-3xl text-center space-y-2 border-zinc-100 bg-white">
@@ -290,7 +288,7 @@ const TeamWorkload = () => {
                           -{Math.round(sug.risk_reduction * 100)}% Risk
                         </Badge>
                       </div>
-                      
+
                       <div className="flex items-center gap-4 bg-zinc-50 p-4 rounded-xl border border-zinc-100">
                         <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">Reassign:</div>
                         <div className="flex items-center gap-2 text-sm font-bold">
@@ -305,7 +303,7 @@ const TeamWorkload = () => {
                       <p className="text-xs text-zinc-500 mt-4 leading-relaxed italic border-l-2 border-zinc-100 pl-4">
                         "{sug.reason}"
                       </p>
-                      
+
                       <div className="mt-6 pt-4 border-t border-zinc-100 flex justify-end gap-3">
                         {/* Admin-only: Notify Operator */}
                         {isAdmin && (
@@ -323,9 +321,9 @@ const TeamWorkload = () => {
                             )}
                           </Button>
                         )}
-                        <Button 
-                          size="sm" 
-                          variant="default" 
+                        <Button
+                          size="sm"
+                          variant="default"
                           className="text-[10px] font-bold uppercase tracking-widest h-9 px-6 rounded-xl"
                           onClick={() => executeSuggestion(sug)}
                           disabled={executingIds.has(sug.task_id)}
@@ -351,67 +349,67 @@ const TeamWorkload = () => {
                   Real-time Load
                 </span>
               </div>
-              
+
               <div className="space-y-4">
                 {workloads.map((u) => (
                   <Card key={u.user_id} className="border-none shadow-2xl shadow-zinc-200/40 bg-white rounded-4xl overflow-hidden">
                     <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-start">
-                        <div className="flex items-center gap-4">
-                          <div className={cn(
-                            "h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold text-white shadow-lg",
-                            u.utilization > 0.8 ? "bg-rose-500 shadow-rose-500/20" : 
-                            u.utilization > 0.5 ? "bg-amber-500 shadow-amber-500/20" : 
-                            "bg-emerald-500 shadow-emerald-500/20"
-                          )}>
-                            {u.full_name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-start">
+                          <div className="flex items-center gap-4">
+                            <div className={cn(
+                              "h-12 w-12 rounded-2xl flex items-center justify-center text-xs font-bold text-white shadow-lg",
+                              u.utilization > 0.8 ? "bg-rose-500 shadow-rose-500/20" :
+                                u.utilization > 0.5 ? "bg-amber-500 shadow-amber-500/20" :
+                                  "bg-emerald-500 shadow-emerald-500/20"
+                            )}>
+                              {u.full_name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="text-sm font-bold text-zinc-900 flex items-center gap-2">
+                                {u.full_name}
+                                {u.utilization > 0.8 && (
+                                  <Badge variant="destructive" className="h-4 text-[8px] font-bold uppercase px-1.5 rounded-md">Critical</Badge>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
+                                {u.assigned_tasks} Parallel Tasks
+                              </div>
+                            </div>
                           </div>
-                          <div>
-                            <div className="text-sm font-bold text-zinc-900 flex items-center gap-2">
-                              {u.full_name}
-                              {u.utilization > 0.8 && (
-                                <Badge variant="destructive" className="h-4 text-[8px] font-bold uppercase px-1.5 rounded-md">Critical</Badge>
-                              )}
+                          <div className="text-right">
+                            <div className={cn(
+                              "text-lg font-bold",
+                              u.utilization > 0.8 ? "text-rose-600" : "text-zinc-900"
+                            )}>
+                              {Math.round(u.utilization * 100)}%
                             </div>
-                            <div className="text-[10px] text-zinc-400 font-bold uppercase tracking-widest mt-0.5">
-                              {u.assigned_tasks} Parallel Tasks
-                            </div>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-7 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg"
+                              onClick={() => openRebalanceModal(u)}
+                            >
+                              <MoveRight size={12} className="mr-1.5" /> Rebalance
+                            </Button>
                           </div>
                         </div>
-                        <div className="text-right">
-                          <div className={cn(
-                            "text-lg font-bold",
-                            u.utilization > 0.8 ? "text-rose-600" : "text-zinc-900"
-                          )}>
-                            {Math.round(u.utilization * 100)}%
-                          </div>
-                          <Button 
-                            variant="ghost" 
-                            size="sm" 
-                            className="h-7 px-3 text-[10px] font-bold uppercase tracking-widest text-zinc-400 hover:text-zinc-900 hover:bg-zinc-50 rounded-lg"
-                            onClick={() => openRebalanceModal(u)}
-                          >
-                            <MoveRight size={12} className="mr-1.5" /> Rebalance
-                          </Button>
+
+                        <div className="relative h-2 w-full bg-zinc-100 rounded-full overflow-hidden">
+                          <div
+                            className={cn(
+                              "absolute inset-y-0 left-0 transition-all duration-1000",
+                              u.utilization > 0.8 ? "bg-rose-500" : u.utilization > 0.5 ? "bg-amber-400" : "bg-emerald-500"
+                            )}
+                            style={{ width: `${Math.min(u.utilization * 100, 100)}%` }}
+                          />
                         </div>
                       </div>
-                      
-                      <div className="relative h-2 w-full bg-zinc-100 rounded-full overflow-hidden">
-                        <div 
-                          className={cn(
-                            "absolute inset-y-0 left-0 transition-all duration-1000",
-                            u.utilization > 0.8 ? "bg-rose-500" : u.utilization > 0.5 ? "bg-amber-400" : "bg-emerald-500"
-                          )}
-                          style={{ width: `${Math.min(u.utilization * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
                     </CardContent>
                   </Card>
                 ))}
               </div>
-              
+
               {/* ── System Intelligence: Optimization Core ── */}
               <Card className="border border-zinc-100 shadow-sm bg-white rounded-3xl overflow-hidden">
                 <CardContent className="p-8 space-y-6">
@@ -471,9 +469,9 @@ const TeamWorkload = () => {
                           <div className="flex items-center justify-between w-full gap-4">
                             <span>{w.full_name}</span>
                             <span className={cn(
-                                "text-[9px] font-bold px-1.5 py-0.5 rounded-md",
-                                w.utilization > 0.8 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"
-                              )}>
+                              "text-[9px] font-bold px-1.5 py-0.5 rounded-md",
+                              w.utilization > 0.8 ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600"
+                            )}>
                               {Math.round(w.utilization * 100)}% Load
                             </span>
                           </div>
@@ -500,7 +498,7 @@ const TeamWorkload = () => {
                               <div className="text-sm font-bold text-zinc-900 truncate">{task.title}</div>
                               <div className="text-[10px] text-zinc-400 font-bold uppercase mt-1">Priority: {task.priority_score}</div>
                             </div>
-                            <Button 
+                            <Button
                               size="sm"
                               className={cn(
                                 "shrink-0 h-9 px-4 rounded-xl font-bold uppercase text-[10px] tracking-widest gap-2 transition-all duration-200 border",

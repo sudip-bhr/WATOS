@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useState, useEffect, type ReactNode } from 'react'
 import client from '@/api/client'
-import { 
-  ShieldCheck, Users, Brain, LayoutGrid, 
+import {
+  ShieldCheck, Users, Brain, LayoutGrid,
   ChevronRight, Activity, Database, AlertTriangle, UserCog
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -70,7 +70,7 @@ const AdminHome = () => {
           </div>
           <div>
             <h1 className="text-2xl md:text-3xl font-black tracking-tight text-zinc-900">Admin Console</h1>
-            <p className="text-sm md:text-base text-zinc-500 font-medium mt-1">Superuser access to WATOS monitoring and health.</p>
+            <p className="text-sm md:text-base text-zinc-500 font-medium mt-1">Superuser access to WATOS monitoring.</p>
           </div>
         </motion.div>
 
@@ -143,7 +143,7 @@ const AdminHome = () => {
             <p className="text-[10px] uppercase font-black tracking-widest opacity-50 mt-1">All services operational</p>
           </div>
         </div>
-        
+
         <div className="flex gap-4">
           <div className="px-4 py-2 bg-white/5 rounded-xl border border-white/10">
             <p className="text-[9px] uppercase font-black tracking-widest text-zinc-400 mb-0.5">Active Users</p>
