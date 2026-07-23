@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Brain, FileText, TrendingUp, AlertTriangle, Crosshair, Users, CheckCircle2, Zap } from 'lucide-react'
+import { Brain, FileText, TrendingUp, AlertTriangle, Crosshair, Users, CheckCircle2, Zap, Info } from 'lucide-react'
 import client from '@/api/client'
 import PertChart from '@/components/analytics/PertChart'
 import ClusterChart from '@/components/analytics/ClusterChart'
@@ -232,7 +232,7 @@ const TeamAnalytics = () => {
                 </div>
                 <div>
                   <div className="text-4xl font-bold text-zinc-900">{activeTasks.length}</div>
-                  <p className="text-xs text-zinc-500 font-medium mt-1">Workload tasks in pipeline</p>
+                  <p className="text-xs text-zinc-500 font-medium mt-1">Tasks in pipeline</p>
                 </div>
               </CardContent>
             </Card>
@@ -269,30 +269,113 @@ const TeamAnalytics = () => {
           </div>
 
           {/* ── ML Workload Group Clustering Section ── */}
-          <div className="space-y-8">
-            <div className="space-y-1">
-              <h2 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-3">
-                <Brain className="text-indigo-500 animate-pulse" size={24} /> ML Workload Grouping
-              </h2>
-              <p className="text-sm text-zinc-500 font-medium">
-                Predictive clustering based on task complexity, effort hours, and priority scores.
-              </p>
-            </div>
-            <ClusterChart tasks={tasks} />
+         <div className="space-y-8">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-3">
+              <Brain className="text-indigo-500 animate-pulse" size={24} />
+
+              <span className="flex items-center gap-2">
+                ML Workload Grouping
+
+                <div className="relative group">
+                  <button
+                    type="button"
+                    aria-label="About ML Workload Grouping"
+                    className="text-zinc-400 cursor-help hover:text-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30 rounded"
+                  >
+                    <Info size={16} aria-hidden="true" />
+                  </button>
+
+                  <div
+                    className="
+                    absolute left-1/2 top-full z-50
+                    mt-3 w-72
+                    -translate-x-1/2
+                    rounded-xl
+                    border border-amber-200
+                    bg-amber-50
+                    px-4 py-3
+                    text-sm leading-relaxed
+                    text-amber-900
+                    shadow-xl
+                    opacity-0 invisible
+                    transition-all duration-150
+                    group-hover:visible
+                    group-hover:opacity-100
+                    group-focus-within:visible
+                    group-focus-within:opacity-100
+                    "
+                  >
+                    <div className="absolute -top-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-l border-t border-amber-200 bg-amber-50"></div>
+                    Predictive clustering based on task complexity,
+                    effort hours, and priority scores.
+                  </div>
+                </div>
+              </span>
+            </h2>
           </div>
 
+
+          <ClusterChart tasks={tasks} />
+        </div>
+
+            
+            
           {/* ── Member Performance Section ── */}
           <div className="space-y-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
                 <h2 className="text-2xl font-bold tracking-tight text-zinc-900 flex items-center gap-3">
-                  <Users className="text-zinc-400" size={24} /> Performance Audit
+                  <Users className="text-zinc-400" size={24} />
+
+                  <span className="flex items-center gap-2">
+                    Member Performance
+
+                    <div className="relative group">
+                      <button
+                        type="button"
+                        aria-label="About Member Performance"
+                        className="text-zinc-400 cursor-help hover:text-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30 rounded"
+                      >
+                        <Info size={16} aria-hidden="true" />
+                      </button>
+
+                      <div
+                        className="
+                          absolute left-1/2 top-full z-50
+                          mt-3 w-80
+                          -translate-x-1/2
+                          rounded-xl
+                          border border-amber-200
+                          bg-amber-50
+                          px-4 py-3
+                          text-sm leading-relaxed
+                          text-amber-900
+                          shadow-xl
+                          opacity-0 invisible
+                          transition-all duration-150
+                          group-hover:visible
+                          group-hover:opacity-100
+                          group-focus-within:visible
+                          group-focus-within:opacity-100
+                        "
+                      >
+                        <div className="absolute -top-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-l border-t border-amber-200 bg-amber-50"></div>
+
+                        View each team member's workload, efficiency,
+                        task completion and weekly performance trends.
+                      </div>
+                    </div>
+                  </span>
                 </h2>
-                <p className="text-sm text-zinc-500 font-medium">Detailed throughput and reliability metrics for every team member.</p>
               </div>
             </div>
 
-            <div className="bg-white rounded-4xl border border-zinc-100 shadow-2xl shadow-zinc-200/40 overflow-hidden">
+
+  
+  
+
+          <div className="bg-white rounded-4xl border border-zinc-100 shadow-2xl shadow-zinc-200/40 overflow-hidden">
               <div className="overflow-x-auto custom-scrollbar">
                 <div className="min-w-[1000px]">
                   <table className="w-full border-separate border-spacing-0">

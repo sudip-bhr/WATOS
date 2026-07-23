@@ -8,7 +8,7 @@ import type { Task } from '@/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Plus, Search, LayoutGrid, Brain } from 'lucide-react'
+import { Plus, Search, LayoutGrid, Brain, ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/authStore'
 import { getClusterStyle, getClusterComplexityCategory } from '@/lib/clusters'
@@ -36,6 +36,7 @@ const TaskBoard = () => {
   const [search, setSearch] = useState('')
   const [highlightClusters, setHighlightClusters] = useState(true)
   const [selectedClusterFilter, setSelectedClusterFilter] = useState<number | null>(null)
+  const [showClusterFilters, setShowClusterFilters] = useState(true);
 
   const uniqueClusters = useMemo(() => {
     const set = new Set<number>()
@@ -276,46 +277,110 @@ const TaskBoard = () => {
 
       {/* Interactive Cluster Legend Bar */}
       {uniqueClusters.length > 0 && (
-        <div className="px-4 md:px-8 py-3 border-b border-zinc-200/40 bg-white/40 backdrop-blur-md flex flex-wrap items-center gap-2.5 shrink-0 relative z-20">
-          <span className="text-[9px] font-black uppercase tracking-[0.2em] text-zinc-400 flex items-center gap-1.5 mr-1">
-            <Brain size={11} className="text-zinc-400 animate-pulse" /> Cluster Legend & Filter:
-          </span>
-          <button
-            onClick={() => setSelectedClusterFilter(null)}
+        <div className="border-b border-zinc-200/40 bg-white/40 backdrop-blur-md shrink-0 relative z-20">
+
+          {/* Header */}
+          <div className="px-4 md:px-8 py-3 flex items-center justify-between">
+            <button
+              type="button"
+              aria-expanded={showClusterFilters}
+              aria-controls="cluster-filters"
+              onClick={() => setShowClusterFilters(v => !v)}
+              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors"
+            >
+              <Brain size={12} className="text-indigo-500" />
+
+              Cluster Filters
+
+              {showClusterFilters ? (
+                <ChevronDown size={15} />
+              ) : (
+                <ChevronRight size={15} />
+              )}
+            </button>
+
+            <span className="text-[9px] font-bold uppercase tracking-wider text-zinc-400">
+              {uniqueClusters.length} Clusters
+            </span>
+          </div>
+
+          {/* Animated Filter List */}
+          <div
             className={cn(
-              "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer border",
-              selectedClusterFilter === null
-                ? "bg-zinc-900 text-white border-zinc-950 shadow-md shadow-zinc-900/15"
-                : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-950 hover:border-zinc-300"
+              "overflow-hidden transition-all duration-300 ease-in-out",
+              showClusterFilters
+                ? "max-h-[500px] opacity-100"
+                : "max-h-0 opacity-0"
             )}
           >
-            All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
-          </button>
-          {uniqueClusters.map(cid => {
-            const style = getClusterStyle(cid)
-            const isSelected = selectedClusterFilter === cid
-            const clusterTasks = tasks.filter(t => t.cluster_id === cid)
-            const count = clusterTasks.length
-            const complexityCategory = getClusterComplexityCategory(clusterTasks)
-            return (
+            <div className="px-4 md:px-8 pb-3 flex flex-wrap items-center gap-2.5">
+
+              {/* All Clusters */}
               <button
-                key={cid}
-                onClick={() => setSelectedClusterFilter(isSelected ? null : cid)}
+                onClick={() => setSelectedClusterFilter(null)}
                 className={cn(
-                  "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 border cursor-pointer",
-                  isSelected
-                    ? "bg-white text-zinc-900 shadow-sm font-black"
-                    : "bg-white/50 text-zinc-500 border-zinc-200 hover:bg-white hover:border-zinc-300 hover:text-zinc-900 hover:shadow-md hover:-translate-y-0.5"
+                  "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all cursor-pointer border",
+                  selectedClusterFilter === null
+                    ? "bg-zinc-900 text-white border-zinc-950 shadow-md shadow-zinc-900/15"
+                    : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50 hover:border-zinc-300"
                 )}
-                style={isSelected ? { borderColor: style.fill, boxShadow: `0 0 0 2px ${style.fill}20` } : {}}
               >
-                <span className={cn("w-1.5 h-1.5 rounded-full", style.accent)} />
-                <span>{style.name}</span>
-                <span className="text-[8px] font-normal text-zinc-400 normal-case">({complexityCategory})</span>
-                <span className="bg-zinc-100 text-zinc-600 px-1 py-0.5 rounded-md font-mono text-[8px]">{count}</span>
-              </button>
-            )
-          })}
+                All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
+
+              {uniqueClusters.map((cid) => {
+                const style = getClusterStyle(cid);
+                const isSelected = selectedClusterFilter === cid;
+                const clusterTasks = tasks.filter(
+                  (t) => t.cluster_id === cid
+                );
+                const count = clusterTasks.length;
+                const complexityCategory =
+                  getClusterComplexityCategory(clusterTasks);
+
+                return (
+                  <button
+                    key={cid}
+                    onClick={() =>
+                      setSelectedClusterFilter(
+                        isSelected ? null : cid
+                      )
+                    }
+                    className={cn(
+                      "px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 border cursor-pointer",
+                      isSelected
+                        ? "bg-white text-zinc-900 shadow-sm"
+                        : "bg-white/50 text-zinc-500 border-zinc-200 hover:bg-white hover:border-zinc-300 hover:text-zinc-900 hover:shadow-md hover:-translate-y-0.5"
+                    )}
+                    style={
+                      isSelected
+                        ? {
+                            borderColor: style.fill,
+                            boxShadow: `0 0 0 2px ${style.fill}20`,
+                          }
+                        : {}
+                    }
+                  >
+                    <span
+                      className={cn(
+                        "w-1.5 h-1.5 rounded-full",
+                        style.accent
+                      )}
+                    />
+
+                    <span>{style.name}</span>
+
+                    <span className="text-[8px] font-normal text-zinc-400 normal-case">
+                      ({complexityCategory})
+                    </span>
+
+                    <span className="bg-zinc-100 text-zinc-600 px-1 py-0.5 rounded-md font-mono text-[8px]">
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
       )}
 
