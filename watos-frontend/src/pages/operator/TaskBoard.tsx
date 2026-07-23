@@ -282,7 +282,10 @@ const TaskBoard = () => {
           {/* Header */}
           <div className="px-4 md:px-8 py-3 flex items-center justify-between">
             <button
-              onClick={() => setShowClusterFilters(!showClusterFilters)}
+              type="button"
+              aria-expanded={showClusterFilters}
+              aria-controls="cluster-filters"
+              onClick={() => setShowClusterFilters(v => !v)}
               className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 hover:text-zinc-900 transition-colors"
             >
               <Brain size={12} className="text-indigo-500" />
