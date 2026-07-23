@@ -325,16 +325,7 @@ const TaskBoard = () => {
                     : "bg-white border-zinc-200 text-zinc-500 hover:bg-zinc-50 hover:border-zinc-300"
                 )}
               >
-                All Clusters (
-                {
-                  tasks.filter(
-                    (t) =>
-                      t.cluster_id !== undefined &&
-                      t.cluster_id !== null
-                  ).length
-                }
-                )
-              </button>
+                All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
 
               {uniqueClusters.map((cid) => {
                 const style = getClusterStyle(cid);
