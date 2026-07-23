@@ -332,10 +332,13 @@ const TeamAnalytics = () => {
                     Member Performance
 
                     <div className="relative group">
-                      <Info
-                        size={16}
-                        className="text-zinc-400 cursor-help hover:text-zinc-700 transition-colors"
-                      />
+                      <button
+                        type="button"
+                        aria-label="About Member Performance"
+                        className="text-zinc-400 cursor-help hover:text-zinc-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/30 rounded"
+                      >
+                        <Info size={16} aria-hidden="true" />
+                      </button>
 
                       <div
                         className="
@@ -353,6 +356,8 @@ const TeamAnalytics = () => {
                           transition-all duration-150
                           group-hover:visible
                           group-hover:opacity-100
+                          group-focus-within:visible
+                          group-focus-within:opacity-100
                         "
                       >
                         <div className="absolute -top-2 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 border-l border-t border-amber-200 bg-amber-50"></div>
