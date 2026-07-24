@@ -235,7 +235,7 @@ const TaskBoard = () => {
 
         <div className="flex flex-wrap items-center gap-3 w-full md:w-auto md:ml-auto">
 
-          <div className="relative flex-1 md:flex-none min-w-[140px]">
+          <div className="relative flex-1 md:flex-none min-w-35">
             <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
             <Input
               placeholder="Search..."
@@ -309,7 +309,7 @@ const TaskBoard = () => {
             className={cn(
               "overflow-hidden transition-all duration-300 ease-in-out",
               showClusterFilters
-                ? "max-h-[500px] opacity-100"
+                ? "max-h-125 opacity-100"
                 : "max-h-0 opacity-0"
             )}
           >
@@ -326,6 +326,7 @@ const TaskBoard = () => {
                 )}
               >
                 All Clusters ({tasks.filter(t => t.cluster_id !== undefined && t.cluster_id !== null).length})
+              </button>
 
               {uniqueClusters.map((cid) => {
                 const style = getClusterStyle(cid);
@@ -395,7 +396,7 @@ const TaskBoard = () => {
           {loading ? (
             <div className="flex gap-6 md:gap-8 relative z-10 px-4 md:px-8 py-6">
               {displayColumns.map(c => (
-                <div key={c.id} className="w-[300px] md:w-80 shrink-0 space-y-4">
+                <div key={c.id} className="w-75 md:w-80 shrink-0 space-y-4">
                   <div className="px-2">
                     <Skeleton className="h-6 w-32 rounded-lg opacity-40" />
                   </div>
@@ -406,7 +407,7 @@ const TaskBoard = () => {
           ) : (
             <div className="flex gap-6 md:gap-8 h-full relative z-10 px-4 md:px-8 py-6">
               {displayColumns.map(col => (
-                <div key={col.id} data-col-id={col.id} className="w-[300px] md:w-80 shrink-0 flex flex-col group/column">
+                <div key={col.id} data-col-id={col.id} className="w-75 md:w-80 shrink-0 flex flex-col group/column">
                   {/* Column Header */}
                   <div className="flex items-center justify-between mb-4 px-3">
                     <div className="flex items-center gap-2.5">

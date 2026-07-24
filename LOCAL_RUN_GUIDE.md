@@ -125,6 +125,7 @@ The "Intelligence" part of WATOS (SLA monitoring, delay prediction) runs asynchr
 In a **new terminal** (venv active):
 ```bash
 cd watos-backend
+source venv/bin/activate   # ← must activate venv first!
 # Start the worker to process ML tasks
 celery -A app.workers.tasks worker --loglevel=info
 ```
