@@ -173,7 +173,7 @@ const MonthlyReports = () => {
                 value={form.achievements} 
                 onChange={e => setForm({...form, achievements: e.target.value})}
                 placeholder="What was accomplished this month?"
-                className="min-h-[100px] md:min-h-[120px] bg-zinc-50 border-zinc-200 resize-y text-sm"
+                className="min-h-25 md:min-h-30 bg-zinc-50 border-zinc-200 resize-y text-sm"
               />
             </div>
 
@@ -185,7 +185,7 @@ const MonthlyReports = () => {
                 value={form.challenges} 
                 onChange={e => setForm({...form, challenges: e.target.value})}
                 placeholder="What challenges delayed progress?"
-                className="min-h-[100px] md:min-h-[120px] bg-zinc-50 border-zinc-200 resize-y text-sm"
+                className="min-h-25 md:min-h-30 bg-zinc-50 border-zinc-200 resize-y text-sm"
               />
             </div>
 
@@ -197,7 +197,7 @@ const MonthlyReports = () => {
                 value={form.support_needed} 
                 onChange={e => setForm({...form, support_needed: e.target.value})}
                 placeholder="Any resources needed?"
-                className="min-h-[80px] md:min-h-[100px] bg-zinc-50 border-zinc-200 resize-y text-sm"
+                className="min-h-20 md:min-h-25 bg-zinc-50 border-zinc-200 resize-y text-sm"
               />
             </div>
           </div>

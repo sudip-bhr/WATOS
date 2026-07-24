@@ -275,7 +275,7 @@ const Sidebar = ({ mobileOpen, onClose }: SidebarProps) => {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed inset-y-0 left-0 w-[280px] z-50 lg:hidden"
+              className="fixed inset-y-0 left-0 w-70 z-50 lg:hidden"
             >
               {sidebarContent}
             </motion.div>

@@ -209,7 +209,7 @@ const UserManagement = () => {
               {[1, 2, 3, 4, 5].map(i => <Skeleton key={i} className="h-16 w-full rounded-xl" />)}
             </div>
           ) : (
-            <div className="min-w-[800px]">
+            <div className="min-w-200">
               <table className="w-full text-sm text-left">
                 <thead className="text-[10px] uppercase font-black tracking-widest text-zinc-400 bg-zinc-50 border-b border-zinc-100 sticky top-0 z-10">
                   <tr>

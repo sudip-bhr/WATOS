@@ -24,7 +24,7 @@ const Unauthorized = () => {
         <div className="flex justify-center mb-8">
           <div className="relative">
             <div className="absolute inset-0 bg-rose-100 blur-3xl rounded-full scale-150 opacity-40 animate-pulse" />
-            <div className="h-28 w-28 bg-white/70 backdrop-blur-xl shadow-2xl shadow-rose-900/5 rounded-[2rem] border border-white flex items-center justify-center relative z-10 animate-float">
+            <div className="h-28 w-28 bg-white/70 backdrop-blur-xl shadow-2xl shadow-rose-900/5 rounded-4xl border border-white flex items-center justify-center relative z-10 animate-float">
               <ShieldOff size={48} className="text-rose-500" />
             </div>
           </div>

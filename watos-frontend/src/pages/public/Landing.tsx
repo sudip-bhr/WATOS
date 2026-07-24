@@ -86,9 +86,9 @@ const Landing = () => {
       {/* Hero Section */}
       <section className="relative pt-52 pb-40 overflow-hidden flex flex-col items-center">
         {/* Organic Background Elements */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[800px] bg-linear-to-b from-zinc-50 to-white -z-10" />
-        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-indigo-100/30 rounded-full blur-[140px] -z-10 animate-float" />
-        <div className="absolute top-40 right-1/4 w-[400px] h-[400px] bg-slate-100/40 rounded-full blur-[120px] -z-10 animate-float-delayed" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-300 h-200 bg-linear-to-b from-zinc-50 to-white -z-10" />
+        <div className="absolute top-20 left-1/4 w-125 h-125 bg-indigo-100/30 rounded-full blur-[140px] -z-10 animate-float" />
+        <div className="absolute top-40 right-1/4 w-100 h-100 bg-slate-100/40 rounded-full blur-[120px] -z-10 animate-float-delayed" />
 
         <div className="max-w-4xl mx-auto px-6 text-center space-y-10">
 
@@ -134,12 +134,12 @@ const Landing = () => {
             className="pb-16 overflow-visible!"
           >
             {[
-              { img: "/screenshots/Project_overview.png" },
-              { img: "/screenshots/Analytics2.png" },
-              { img: "/screenshots/MemberAssigned.png" },
-              { img: "/screenshots/Workload.png" }
+              { title: "Project Overview", img: "/screenshots/Project_overview.png" },
+              { title: "Analytics", img: "/screenshots/Analytics2.png" },
+              { title: "Member Assigned", img: "/screenshots/MemberAssigned.png" },
+              { title: "Workload", img: "/screenshots/Workload.png" }
             ].map((slide, idx) => (
-              <SwiperSlide key={idx} className="w-[85%] md:w-[60%] lg:w-[50%] max-w-[760px]">
+              <SwiperSlide key={idx} className="w-[85%] md:w-[60%] lg:w-[50%] max-w-190">
                 <div className="showcase-card group relative rounded-xl md:rounded-2xl overflow-hidden border border-zinc-100 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.05),0_0_1px_rgba(0,0,0,0.06)] bg-zinc-50 select-none">
                   {/* Top-left small title (light weight, subtle tracking) */}
                   <div className="absolute top-5 left-5 md:top-6 md:left-6 z-20 pointer-events-none">
@@ -149,7 +149,7 @@ const Landing = () => {
                   <img
                     src={slide.img}
                     alt={slide.title}
-                    className="w-full aspect-[16/9] object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
+                    className="w-full aspect-video object-cover transition-transform duration-1000 ease-out scale-100 group-hover:scale-[1.025]"
                   />
 
 
@@ -198,7 +198,7 @@ const Landing = () => {
 
       {/* How It Works */}
       <section id="how-it-works" className="py-48 px-6 bg-zinc-50/30 border-y border-zinc-100/50 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-slate-50 rounded-full blur-[120px] -z-10" />
+        <div className="absolute top-0 right-0 w-150 h-150 bg-slate-50 rounded-full blur-[120px] -z-10" />
 
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-2xl mx-auto mb-32 space-y-6">
@@ -207,7 +207,7 @@ const Landing = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-20 items-start relative">
             {/* Connecting Line (Desktop) */}
-            <div className="hidden md:block absolute top-16 left-[15%] right-[15%] h-[2px] bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
+            <div className="hidden md:block absolute top-16 left-[15%] right-[15%] h-0.5 bg-linear-to-r from-transparent via-zinc-200 to-transparent -z-10" />
 
             {[
               { step: "01", title: "Ingest Tasks", desc: "Input your team's workload or connect existing project boards.", icon: <Globe size={28} /> },
@@ -223,7 +223,7 @@ const Landing = () => {
                 </div>
                 <div className="space-y-4">
                   <h4 className="text-2xl font-bold tracking-tight">{step.title}</h4>
-                  <p className="text-zinc-500 text-base max-w-[280px] mx-auto leading-relaxed font-medium">{step.desc}</p>
+                  <p className="text-zinc-500 text-base max-w-70 mx-auto leading-relaxed font-medium">{step.desc}</p>
                 </div>
               </div>
             ))}
@@ -234,11 +234,11 @@ const Landing = () => {
       {/* CTA Section */}
       <section className="py-52 px-6 relative overflow-hidden">
         {/* Organic Background Blowouts */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-50/40 rounded-full blur-[160px] -z-10 animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-200 h-200 bg-indigo-50/40 rounded-full blur-[160px] -z-10 animate-pulse" />
 
         <div className="max-w-5xl mx-auto text-center space-y-14 relative">
 
-          <h2 className="text-6xl md:text-8xl font-bold tracking-tighter leading-[1] text-gradient-subtle">
+          <h2 className="text-6xl md:text-8xl font-bold tracking-tighter leading-none text-gradient-subtle">
             Ready to optimize <br />
             your workflow?
           </h2>

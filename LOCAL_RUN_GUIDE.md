@@ -89,7 +89,7 @@ The backend handles the API logic, authentication, and the Intelligence Engine.
 1. **Initialize Virtual Environment**:
    ```bash
    cd watos-backend
-   python -m venv venv
+   python3 -m venv venv
    source venv/bin/activate  # Windows: venv\Scripts\activate
    ```
 

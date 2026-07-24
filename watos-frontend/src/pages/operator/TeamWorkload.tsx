@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Brain, TrendingUp, Users, AlertCircle, ArrowRight, Zap, Bell, CheckCircle2, Loader2, BarChart3, MoveRight, UserMinus, UserPlus, Info } from 'lucide-react'
+import { Brain, TrendingUp, Users, AlertCircle, ArrowRight, Zap, Bell, CheckCircle2, Loader2, MoveRight, UserMinus, UserPlus, Info } from 'lucide-react'
 import client from '@/api/client'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -173,7 +173,7 @@ const TeamWorkload = () => {
       {loading ? (
         <div className="space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {[1, 2, 3].map(i => <Skeleton key={i} className="h-40 rounded-[2rem]" />)}
+            {[1, 2, 3].map(i => <Skeleton key={i} className="h-40 rounded-4xl" />)}
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Skeleton className="h-96 rounded-3xl" />
@@ -184,7 +184,7 @@ const TeamWorkload = () => {
         <>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {/* Avg Utilization */}
-            <Card className="border-none bg-emerald-50 text-emerald-900 rounded-[2rem] shadow-sm overflow-hidden group h-full">
+            <Card className="border-none bg-emerald-50 text-emerald-900 rounded-4xl shadow-sm overflow-hidden group h-full">
               <CardContent className="p-6 flex flex-col justify-between h-full">
                 <div className="flex justify-between items-start">
                   <div className="h-10 w-10 rounded-xl bg-emerald-100 flex items-center justify-center border border-emerald-200">
@@ -213,7 +213,7 @@ const TeamWorkload = () => {
             {/* Overloaded Members */}
             <Card
               className={cn(
-                "border-none rounded-[2rem] shadow-sm overflow-hidden transition-all duration-300 group h-full",
+                "border-none rounded-4xl shadow-sm overflow-hidden transition-all duration-300 group h-full",
                 overloadedCount > 0
                   ? "bg-amber-50 shadow-amber-900/5"
                   : "bg-white/80 backdrop-blur-md border border-zinc-200/50"
@@ -270,7 +270,7 @@ const TeamWorkload = () => {
             </Card>
 
             {/* ML Suggestions */}
-            <Card className="border-none bg-sky-50 text-sky-900 rounded-[2rem] shadow-sm overflow-hidden group h-full">
+            <Card className="border-none bg-sky-50 text-sky-900 rounded-4xl shadow-sm overflow-hidden group h-full">
               <CardContent className="p-6 flex flex-col justify-between h-full">
                 <div className="flex justify-between items-start">
                   <div className="h-10 w-10 rounded-xl bg-sky-100 border border-sky-200 flex items-center justify-center">
@@ -480,7 +480,7 @@ const TeamWorkload = () => {
 
           {/* ── Manual Rebalancing Modal ── */}
           <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogContent className="sm:max-w-[500px] rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden bg-white">
+            <DialogContent className="sm:max-w-125 rounded-[2.5rem] border-none shadow-2xl p-0 overflow-hidden bg-white">
               <div className="bg-zinc-900 p-8 text-white relative">
                 <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
                   <UserMinus size={60} />
@@ -522,7 +522,7 @@ const TeamWorkload = () => {
 
                 <div className="space-y-4">
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">2. Select Task to Shift</h4>
-                  <ScrollArea className="h-[300px] pr-4 -mr-4">
+                  <ScrollArea className="h-75 pr-4 -mr-4">
                     {loadingTasks ? (
                       <div className="space-y-3">
                         {[1, 2, 3].map(i => <Skeleton key={i} className="h-20 rounded-2xl" />)}

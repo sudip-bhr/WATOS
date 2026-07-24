@@ -55,8 +55,8 @@ const Register = () => {
       <div className="noise-texture" />
       
       {/* Background organic glow */}
-      <div className="absolute top-1/4 -right-1/4 w-[500px] h-[500px] bg-indigo-50/30 rounded-full blur-[120px] -z-10 animate-float" />
-      <div className="absolute bottom-1/4 -left-1/4 w-[500px] h-[500px] bg-zinc-100/50 rounded-full blur-[120px] -z-10 animate-float-delayed" />
+      <div className="absolute top-1/4 -right-1/4 w-125 h-125 bg-indigo-50/30 rounded-full blur-[120px] -z-10 animate-float" />
+      <div className="absolute bottom-1/4 -left-1/4 w-125 h-125 bg-zinc-100/50 rounded-full blur-[120px] -z-10 animate-float-delayed" />
 
       <div className="absolute top-8 left-8 flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" onClick={() => navigate('/')}>
         <div className="h-9 w-9 overflow-hidden rounded-xl shadow-lg shadow-zinc-900/5">
